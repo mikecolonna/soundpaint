@@ -1,4 +1,4 @@
-package edu.brown.cs.tratchfo;
+package edu.brown.cs.soundpaint;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,13 +30,11 @@ import spark.QueryParamsMap;
 
 /**
 * The Main class of our project. This is where execution begins.
-*
-* @author jj
+* Command line and GUI interfaces are intialized viathis class.
 */
 public final class Main {
 
  private static final int DEFAULT_PORT = 4567;
-
 
  /**
   * The initial method called when execution begins.
@@ -73,13 +71,9 @@ public final class Main {
    
    try{
    	BufferedReader _reader = new BufferedReader(new InputStreamReader(System.in));
- 
    	String comm_line;
-   	
-   	
    	try{
 	    	while((comm_line = _reader.readLine()) != null){
-	    		
 	    		//make interpreter
 	    	}
    	}finally{
@@ -88,12 +82,6 @@ public final class Main {
    }catch(IOException e){
    	System.out.println(e);
    }
-   	
-   	
-
-   	
-   
-   
  }
  
 
