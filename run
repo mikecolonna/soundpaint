@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# To run our code, we must have it in our classpath.
+
+TARGET=$(ls target/*.jar 2>/dev/null)
+if [ -z "$TARGET" ]; then
+    echo "No jar file in target/, try 'mvn package'".
+    exit 1
+fi
+
+# We put the CLASSPATH in .classpath if the pom.xml is newer
+# than out existing .classpath file. (We avoid this command if
+# .classpath is fresh, since it's rather slow.)
+if [ ! .mvn-classpath -nt pom.xml ]; then
+  mvn dependency:build-classpath -Dmdep.outputFile=.mvn-classpath -q
+fi
+
+# Now, we set $CP to the contents of the .classpath file.
+CP=$(cat .mvn-classpath)
+
+# Find Main.java. It should be in a package below your username package.
+MAIN=$(ls src/main/java/edu/brown/cs/*/Main.java)
+[ -z "$MAIN" ] && echo "You need a Main.java" && exit 1
+[ ! -e "$MAIN" ] && echo "You can only have one Main.java" && exit 1
+MAINPKG=$(basename $(dirname $MAIN))
+
+# Windows support
+PATHSEP=":"
+if [ "$OSTYPE" = 'cygwin' -o "$OSTYPE" = 'msys' ]; then
+    PATHSEP=";"
+fi
+
+# Execute the program
+java -ea -cp "$TARGET$PATHSEP$CP" edu.brown.cs.$MAINPKG.Main "$@"
