@@ -35,6 +35,9 @@ import spark.QueryParamsMap;
 public final class Main {
 
  private static final int DEFAULT_PORT = 4567;
+ private CommandProcessor commandProcessor = new CommandProcessor();
+ private GuiProcessor guiProcessor = new GuiProcessor();
+ private Manager manager = new Manager();
 
  /**
   * The initial method called when execution begins.
@@ -67,46 +70,15 @@ public final class Main {
      runSparkServer((int) options.valueOf("port"));
    }
 
-   // TODO: Process commands in a REPL
-   
-   try{
-   	BufferedReader _reader = new BufferedReader(new InputStreamReader(System.in));
-   	String comm_line;
-   	try{
-	    	while((comm_line = _reader.readLine()) != null){
-	    		//make interpreter
-	    	}
-   	}finally{
-   		_reader.close();
-   	}
-   }catch(IOException e){
-   	System.out.println(e);
-   }
- }
- 
-
- private static FreeMarkerEngine createEngine() {
-   Configuration config = new Configuration();
-   File templates = new File("src/main/resources/spark/template/freemarker");
-   try {
-     config.setDirectoryForTemplateLoading(templates);
-   } catch (IOException ioe) {
-     System.out.printf("ERROR: Unable use %s for template loading.%n",
-         templates);
-     System.exit(1);
-   }
-   return new FreeMarkerEngine(config);
+   commandProcessor.addCommands(manager::getPatternCommandMap);
+   commandProcessor.repl();
  }
 
  private void runSparkServer(int port) {
    Spark.port(port);
    Spark.externalStaticFileLocation("src/main/resources/static");
    Spark.exception(Exception.class, new ExceptionPrinter());
-
-   FreeMarkerEngine freeMarker = createEngine();
-
-   // Setup Spark Routes
-   Spark.get("/projects", new FrontHandler(), freeMarker);
+   guiProcessor.setRoutes(manager::installRoutes);
  }
  
 
