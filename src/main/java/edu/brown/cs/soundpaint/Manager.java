@@ -28,12 +28,9 @@ public class Manager {
    * by the CLI
    */
   public Map<Pattern, Command> getPatternCommandMap() {
-	  ImmutableMap.Builder<Pattern, Command> toReturn = 
-			  new ImmutableMap.Builder<Pattern, Command>();
-	  toReturn.put(Pattern.compile("help"), this::helpCommand);
-	  toReturn.put(Pattern.compile("sound.*"),this::soundCommand);
-	  
-	  return toReturn.build();
+    return new ImmutableMap.Builder<Pattern, Command>()
+        .put(Pattern.compile("help"), this::helpCommand)
+        .build();
   }
 
 
@@ -41,10 +38,6 @@ public class Manager {
     System.out.println("Welcome to SoundPaint's command line interface.");
     System.out.println("When commands are made available for use, they will be"
         + " listed here");
-  }
-  
-  public void soundCommand(List<String> tokens, String cmd) {
-	  System.out.println("sound command here!");
   }
 
   /**
