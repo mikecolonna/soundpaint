@@ -72,3 +72,11 @@ local.properties
 ########
 
 .DS_Store
+
+
+
+########
+# LIB  #
+########
+
+lib/*

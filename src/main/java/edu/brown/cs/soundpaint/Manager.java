@@ -3,6 +3,7 @@ package edu.brown.cs.soundpaint;
 import com.google.common.collect.ImmutableMap;
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
+import org.opencv.core.Core;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,8 @@ public class Manager {
     System.out.println("Welcome to SoundPaint's command line interface.");
     System.out.println("When commands are made available for use, they will be"
         + " listed here");
+    System.out.println("OpenCV " + Core.VERSION);
+
   }
 
   /**
