@@ -21,16 +21,19 @@ public class Manager {
   }
 
   /**
-   * Returns the Pattern-Command mapping that defines the bacon
+   * Returns the Pattern-Command mapping that defines the soundpaint
    * program's CLI behavior.
    *
    * @return A map of all the Patterns and Commands that need to be recognized
    * by the CLI
    */
   public Map<Pattern, Command> getPatternCommandMap() {
-    return new ImmutableMap.Builder<Pattern, Command>()
-        .put(Pattern.compile("help"), this::helpCommand)
-        .build();
+	  ImmutableMap.Builder<Pattern, Command> toReturn = 
+			  new ImmutableMap.Builder<Pattern, Command>();
+	  toReturn.put(Pattern.compile("help"), this::helpCommand);
+	  toReturn.put(Pattern.compile("sound.*"),this::soundCommand);
+	  
+	  return toReturn.build();
   }
 
 
@@ -38,6 +41,10 @@ public class Manager {
     System.out.println("Welcome to SoundPaint's command line interface.");
     System.out.println("When commands are made available for use, they will be"
         + " listed here");
+  }
+  
+  public void soundCommand(List<String> tokens, String cmd) {
+	  System.out.println("sound command here!");
   }
 
   /**
