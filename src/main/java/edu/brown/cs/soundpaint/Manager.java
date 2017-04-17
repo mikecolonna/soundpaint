@@ -36,7 +36,7 @@ public class Manager {
   }
 
   /**
-   * Returns the Pattern-Command mapping that defines the bacon
+   * Returns the Pattern-Command mapping that defines the soundpaint
    * program's CLI behavior.
    *
    * @return A map of all the Patterns and Commands that need to be recognized
