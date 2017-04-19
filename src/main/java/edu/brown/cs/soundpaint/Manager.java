@@ -1,5 +1,6 @@
 package edu.brown.cs.soundpaint;
 
+import edu.brown.cs.video.FilterProcessor;
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.tratchfo.SoundRead;
@@ -16,9 +17,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+<<<<<<< HEAD
 import org.bytedeco.javacv.FrameGrabber.Exception;
 
+=======
+>>>>>>> 445e02ebc0233f477a0795d346b4866d0ee5528b
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -27,6 +32,8 @@ import java.util.regex.Pattern;
  * Created by tynan on 4/15/17.
  */
 public class Manager {
+  
+  private FilterProcessor filterProcessor;
 
   /** Installs all Spark routes.
    * @param fme the FreeMarkerEngine that some routes bind to.
@@ -43,10 +50,13 @@ public class Manager {
    * by the CLI
    */
   public Map<Pattern, Command> getPatternCommandMap() {
-    return  new ImmutableMap.Builder<Pattern, Command>()
-    		.put(Pattern.compile("help"), this::helpCommand)
-    		.put(Pattern.compile("sequence\\s+(.+)"), this::sequenceCommand)
-    		.put(Pattern.compile("sound\\s+(.+)"), this::soundCommand).build();
+    return new ImmutableMap.Builder<Pattern, Command>()
+        .put(Pattern.compile("help"), this::helpCommand)
+        .put(Pattern.compile("sequence\\s+(.+)"), this::sequenceCommand)
+        .put(Pattern.compile("filter\\s+(.+)"), this::filterCommand)
+        .put(Pattern.compile("process\\s+(.+)"), this::processCommand)
+        .put(Pattern.compile("sound\\s+(.+)"), this::soundCommand)
+        .build();
   }
 
 
@@ -67,8 +77,6 @@ public class Manager {
 
       List<BufferedImage> sequence = BitmapSequence.getBitmapSequenceFromPath(tokens.get(1));
 
-
-
       new File(outputPath).mkdir();
       for (int i = 0; i < sequence.size(); i++) {
         String path = outputPath + i + ".png";
@@ -83,25 +91,47 @@ public class Manager {
     } else {
       System.out.println("ERROR: Please input two arguments to the sequence command.");
     }
-
-
-
   }
+
   public void soundCommand(List<String> tokens, String cmd) {
-	  if (tokens.size() == 2) {
-	     
+	  if (tokens.size() == 2) {	     
 	   //read file
 		  SoundRead sr = new SoundRead();
 		  sr.read(tokens.get(1));
-	      
-	      
-	   
-	  
-	  
+
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");
 	  }
   }
+
+  
+  public void filterCommand(List<String> tokens, String cmd) {
+    if (tokens.size() == 2) {
+      String filters = tokens.get(1);
+      filterProcessor = new FilterProcessor(filters);
+      System.out.printf("Filter set to %s.\n", filters);
+    } else {
+      System.out.println("ERROR: Please input 1 argument to the 'filter' command.");
+    }
+  }
+  
+  public void processCommand(List<String> tokens, String cmd) {
+    if (filterProcessor == null) {
+      System.out.println("ERROR: Please specify filters using the 'filter' command.");
+      return;
+    }
+    
+    if (tokens.size() == 3) {
+      String inputPath = tokens.get(1);
+      String outputPath = tokens.get(2);
+      
+      filterProcessor.process(inputPath, outputPath);
+    } else {
+      System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
+    }
+  }
+  
+
   /**
    * Handle requests to the front page of the GUI.
    */
