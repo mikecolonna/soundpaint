@@ -13,7 +13,7 @@
     <body>
         <div class="container-fluid">
             <h1>
-                ${message}
+                ${content}
             </h1>
         </div>
 

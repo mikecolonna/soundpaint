@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>${title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../../../static/css/normalize.css">
+        <link rel="stylesheet" href="../../../static/css/html5bp.css">
+        <link rel="stylesheet" href="../../../static/css/main.css">
+        <link rel="stylesheet" href="../../../static/css/bootstrap.min.css">
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="../../../static/js/jquery-2.1.1.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    </head>
+    <body>
+    <div class="container" id="register">
+        <ul class="flex-outer">
+          <li>
+            <p style="margin-bottom=2%;"> Please fill in the fields with your information</p>
+          </li>
+          <li>
+            <input type="text" id="first_name" name="first_name" placeholder="First Name*">
+            <label for="first_name" class="my-label">First Name*</label>
+            <label for="first_name" class="my-error">required</label>
+          </li>
+          <li>
+            <input type="text" id="last_name" name="last_name" placeholder="Last Name*">
+            <label for="last_name" class="my-label">Last Name*</label>
+            <label for="last_name" class="my-error">required</label>
+          </li>
+          <li>
+            <input type="email" id="email" name="email" placeholder="Email*">
+            <label for="email" class="my-label">Email*</label>
+            <label for="email" class="my-error">required</label>
+          </li>
+          <li>
+            <input type="password" id="password" name="password" placeholder="Password*">
+            <label for="password" class="my-label">Password*</label>
+            <label for="password" class="my-error">required</label>
+          </li>
+          <li>
+            <input type="password" id="password2" name="password2" placeholder="Retype Password*">
+            <label for="password2" class="my-label">Retype Password*</label>
+            <label for="password2" class="my-error">required</label>
+          </li>
+          <li style="justify-content: center; margin-top: 3%">
+            <button class="my-button activated-prev" type="button" id="prev-2-mentor">Previous</button>
+            <button class="my-button activated-red" type="button" id="next-2-mentor">Continue</button>
+          </li>
+        </ul>
+    </div>
+<script type="text/javascript">
+  $('.container').find('input, select, option').on('keyup blur focus click', function (e) {
+  
+  var $this = $(this)
+    if (e.type === 'keyup') {
+      if ($this.val() === '') {
+        $(this).parent().children().eq(1).animate({ opacity: 0 });
+      } else {
+        $(this).parent().children().eq(1).animate({ opacity: .9 });
+      }
+    } else if (e.type === 'blur') {
+      if($this.val() === '' || $this.val() == null) {
+        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
+      } else {
+        $(this).parent().children().eq(1).animate({ opacity: .9 });   
+      }   
+    } else if (e.type === 'focus') {
+      if($this.val() === '' || $this.val() == null) {
+        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
+      } 
+      else if($this.val() !== '') {
+        $(this).parent().children().eq(1).animate({ opacity: .9 }); 
+      }
+    } else if (e.type === 'click') {
+      if($this.val() === '' || $this.val() == null) {
+        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
+      } 
+      else if($this.val() !== '') {
+        $(this).parent().children().eq(1).animate({ opacity: .9 }); 
+      }
+    }
+});
+</script>
+    </body>
+</html>
