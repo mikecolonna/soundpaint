@@ -1,8 +1,12 @@
 package edu.brown.cs.soundpaint;
 
 import com.google.common.collect.ImmutableMap;
+
+import edu.brown.cs.tratchfo.SoundRead;
 import edu.brown.cs.video.BitmapSequence;
+
 import org.bytedeco.javacv.*;
+
 import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -11,8 +15,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import org.bytedeco.javacv.FrameGrabber.Exception;
 
+import org.bytedeco.javacv.FrameGrabber.Exception;
 
 import java.nio.Buffer;
 import java.util.List;
@@ -39,10 +43,10 @@ public class Manager {
    * by the CLI
    */
   public Map<Pattern, Command> getPatternCommandMap() {
-    return new ImmutableMap.Builder<Pattern, Command>()
-        .put(Pattern.compile("help"), this::helpCommand)
-        .put(Pattern.compile("sequence\\s+(.+)"), this::sequenceCommand)
-        .build();
+    return  new ImmutableMap.Builder<Pattern, Command>()
+    		.put(Pattern.compile("help"), this::helpCommand)
+    		.put(Pattern.compile("sequence\\s+(.+)"), this::sequenceCommand)
+    		.put(Pattern.compile("sound\\s+(.+)"), this::soundCommand).build();
   }
 
 
@@ -83,6 +87,21 @@ public class Manager {
 
 
   }
+  public void soundCommand(List<String> tokens, String cmd) {
+	  if (tokens.size() == 2) {
+	     
+	   //read file
+		  SoundRead sr = new SoundRead();
+		  sr.read(tokens.get(1));
+	      
+	      
+	   
+	  
+	  
+	  }else {
+	      System.out.println("ERROR: Please input an arguments to the sequence command.");
+	  }
+  }
   /**
    * Handle requests to the front page of the GUI.
    */
@@ -95,5 +114,6 @@ public class Manager {
       return new ModelAndView(variables, "main.ftl");
     }
   }
+  
 
 }
