@@ -1,6 +1,7 @@
 package edu.brown.cs.soundpaint;
 
 import edu.brown.cs.video.FilterProcessor;
+
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.video.BitmapSequence;
 
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 public class Manager {
   
   private FilterProcessor filterProcessor;
+  private List<BufferedImage> sequence;
 
   /** Installs all Spark routes.
    * @param fme the FreeMarkerEngine that some routes bind to.
@@ -69,7 +71,7 @@ public class Manager {
         return;
       }
 
-      List<BufferedImage> sequence = BitmapSequence.getBitmapSequenceFromPath(tokens.get(1));
+      sequence = BitmapSequence.getBitmapSequenceFromPath(tokens.get(1));
 
       new File(outputPath).mkdir();
       for (int i = 0; i < sequence.size(); i++) {
@@ -88,12 +90,17 @@ public class Manager {
   }
   
   public void filterCommand(List<String> tokens, String cmd) {
-    if (tokens.size() == 2) {
+    if (tokens.size() >= 2) {
       String filters = tokens.get(1);
+      filters = filters.substring(1, filters.length() - 1);
+      
+      System.out.println(filters);
+      
       filterProcessor = new FilterProcessor(filters);
       System.out.printf("Filter set to %s.\n", filters);
     } else {
-      System.out.println("ERROR: Please input 1 argument to the 'filter' command.");
+      System.out.println(
+          "ERROR: Please input at least 1 argument to the 'filter' command.");
     }
   }
   

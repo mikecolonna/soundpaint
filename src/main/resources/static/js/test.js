@@ -1,5 +1,5 @@
-  //var ctx = new AudioContext();
-  /*var audio = document.getElementById('myAudio');
+  var ctx = new AudioContext();
+  var audio = document.getElementById('myAudio');
   var audioSrc = ctx.createMediaElementSource(audio);
   var analyser = ctx.createAnalyser();
 

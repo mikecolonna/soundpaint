@@ -47,7 +47,7 @@ public class CommandProcessor {
     for (Pattern pattern : patternCommandMap.keySet()) {
       if (pattern.matcher(input).matches()) {
         patternCommandMap.get(pattern).execute(
-            Arrays.asList(input.split(" ")), input);
+            Arrays.asList(input.split("[ ]+(?=([^\"]*\"[^\"]*\")*[^\"]*$)")), input);
         return;
       }
     }

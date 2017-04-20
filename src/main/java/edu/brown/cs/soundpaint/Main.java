@@ -1,5 +1,6 @@
 package edu.brown.cs.soundpaint;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -14,8 +15,11 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 import spark.TemplateViewRoute;
+import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
+
+import freemarker.template.Configuration;
 
 /**
 * The Main class of our project. This is where execution begins.
@@ -67,6 +71,10 @@ public final class Main {
    Spark.port(port);
    Spark.externalStaticFileLocation("src/main/resources/static");
    Spark.exception(Exception.class, new ExceptionPrinter());
+   
+   FreeMarkerEngine freeMarker = createEngine();
+   
+   Spark.get("/", new FrontHandler(), freeMarker);
    guiProcessor.setRoutes(manager::installRoutes);
  }
  
@@ -83,6 +91,19 @@ public final class Main {
          "CS0320 - Projects","message","");
      return new ModelAndView(variables, "main.ftl");
    }
+ }
+ 
+ private static FreeMarkerEngine createEngine() {
+   Configuration config = new Configuration();
+   File templates = new File("src/main/resources/spark/template/freemarker");
+   try {
+     config.setDirectoryForTemplateLoading(templates);
+   } catch (IOException ioe) {
+     System.out.printf("ERROR: Unable use %s for template loading.%n",
+         templates);
+     System.exit(1);
+   }
+   return new FreeMarkerEngine(config);
  }
 
  /**
