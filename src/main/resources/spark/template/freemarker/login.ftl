@@ -1,7 +1,7 @@
 <#assign content>
 
 <div class="container" style="text-align: center">
-  <img src="../../../static/images/panda_before.jpg" style="width:30%">
+  <img src="images/panda_before.jpg" style="width:30%">
   <form>
     <ul class="flex-outer" style="text-align: left">
       <li>
