@@ -49,11 +49,10 @@ public class Manager {
     return new ImmutableMap.Builder<Pattern, Command>()
         .put(Pattern.compile("help"), this::helpCommand)
         .put(Pattern.compile("sequence\\s+(.+)"), this::sequenceCommand)
-        .put(Pattern.compile("filter\\s+(.+)"), this::filterCommand)
+        .put(Pattern.compile("filter\\s+\"(.*?)\""), this::filterCommand)
         .put(Pattern.compile("process\\s+(.+)"), this::processCommand)
         .build();
   }
-
 
   public void helpCommand(List<String> tokens, String cmd) {
     System.out.println("Welcome to SoundPaint's command line interface.");

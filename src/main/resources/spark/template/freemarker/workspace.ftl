@@ -4,3 +4,4 @@
 
 </#assign>
 <#include "main.ftl">
+<#include "canvas.ftl">

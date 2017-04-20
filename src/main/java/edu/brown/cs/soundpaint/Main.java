@@ -81,7 +81,7 @@ public final class Main {
    public ModelAndView handle(Request req, Response res) {
      Map<String, Object> variables = ImmutableMap.of("title",
          "CS0320 - Projects","message","");
-     return new ModelAndView(variables, "query.ftl");
+     return new ModelAndView(variables, "main.ftl");
    }
  }
 
