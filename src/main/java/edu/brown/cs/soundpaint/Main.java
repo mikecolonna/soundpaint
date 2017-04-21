@@ -23,7 +23,7 @@ import freemarker.template.Configuration;
 
 /**
 * The Main class of our project. This is where execution begins.
-* Command line and GUI interfaces are intialized viathis class.
+* Command line and GUI interfaces are initialized via this class.
 */
 public final class Main {
 
