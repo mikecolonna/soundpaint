@@ -70,6 +70,7 @@ public class SoundRead {
 	            }
 	         }
 	         while (framesRead != 0);
+	        System.out.println("TOTAL LENGTH SECS: " + count/sampleRate);
 	        
 	         // Close the wavFile
 	         wavFile.close();

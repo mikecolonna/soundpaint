@@ -18,11 +18,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-<<<<<<< HEAD
-import org.bytedeco.javacv.FrameGrabber.Exception;
 
-=======
->>>>>>> 445e02ebc0233f477a0795d346b4866d0ee5528b
+import org.bytedeco.javacv.FrameGrabber.Exception;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
