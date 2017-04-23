@@ -1,11 +1,11 @@
 package edu.brown.cs.soundpaint;
 
-import edu.brown.cs.video.FilterProcessor;
+import edu.brown.cs.tratchfo.SoundParameter;
+import edu.brown.cs.video.*;
 
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.tratchfo.SoundRead;
-import edu.brown.cs.video.BitmapSequence;
 
 import org.bytedeco.javacv.*;
 
@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -30,7 +31,9 @@ import java.util.regex.Pattern;
  * Created by tynan on 4/15/17.
  */
 public class Manager {
-  
+
+  //TODO: Find a way to move all these commands and handlers to separate modules
+
   private FilterProcessor filterProcessor;
   private List<BufferedImage> sequence;
 
@@ -58,6 +61,7 @@ public class Manager {
         .put(Pattern.compile("filter\\s+\"(.*?)\""), this::filterCommand)
         .put(Pattern.compile("process\\s+(.+)"), this::processCommand)
         .put(Pattern.compile("sound\\s+(.+)"), this::soundCommand)
+        .put(Pattern.compile("render\\s+(.+)"), this::renderCommand)
         .build();
   }
 
@@ -132,6 +136,20 @@ public class Manager {
       String outputPath = tokens.get(2);
       
       filterProcessor.process(inputPath, outputPath);
+    } else {
+      System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
+    }
+  }
+
+  public void renderCommand(List<String> tokens, String cmd) {
+
+    Map<SoundParameter, VideoFilterSpecification> filterMap = new HashMap<>();
+    VideoFilterSpecification colorSpec = new VideoFilterSpecification(VideoParameter.COLOR, 1.0);
+
+    filterMap.put(null, colorSpec);
+
+    if (tokens.size() == 2) {
+      RenderEngine.renderVideo(filterMap, new FFmpegFrameGrabber(tokens.get(1)));
     } else {
       System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
     }
