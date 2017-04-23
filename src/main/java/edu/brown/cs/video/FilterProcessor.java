@@ -1,8 +1,8 @@
 package edu.brown.cs.video;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Queue;
 
+import edu.brown.cs.filter.Filter;
 import org.bytedeco.javacv.FFmpegFrameFilter;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -10,15 +10,22 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameFilter;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
-import org.bytedeco.javacv.FrameGrabber.Exception;
 
+/**
+ * @author mike 4/17/17
+ */
 public class FilterProcessor {
 
   // internal filter graph
   private FrameFilter filterer;
+  //private Queue<Filter> filters;
   
-  public FilterProcessor(String filters) {
-    filterer = new FFmpegFrameFilter(filters, 0, 0);
+  public FilterProcessor(Filter filter) {
+    filterer = new FFmpegFrameFilter(filter.getFilterString(), 0, 0);
+  }
+
+  public FilterProcessor(String filter) {
+    filterer = new FFmpegFrameFilter(filter, 0, 0);
   }
   
   public void process(String inputPath, String outputPath) {
@@ -46,9 +53,19 @@ public class FilterProcessor {
       recorder.start();
       
       Frame curr = videoGrabber.grab();
+      //Java2DFrameConverter frameConverter = new Java2DFrameConverter();
       while (curr != null) {
+        /*BufferedImage img = frameConverter.convert(curr);
+        for (Filter f : filters) {
+          BufferedImage out = f.filter(img);
+          img = out;
+        }
+        recorder.record(frameConverter.convert(img));*/
         filterer.push(curr);
-        recorder.record(filterer.pull());
+        Frame filtered = filterer.pull();
+        
+        // More calls to record() = slow-mo (more frames recorded)
+        recorder.record(filtered);
         curr = videoGrabber.grab(); // get next frame
       }
       recorder.stop();
@@ -67,4 +84,6 @@ public class FilterProcessor {
       System.out.println("ERROR: Could not export frame to output.");
     }
   }
+  
+  
 }
