@@ -162,6 +162,7 @@ public class Manager {
   private static class FrontHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+    	System.out.println("Heere");
       Map<String, Object> variables = ImmutableMap.of("title",
           "Soundpaint - CS32 Final Project","message","Created by Brendan,"
               + " Mike, Tymani, and Tynan");
