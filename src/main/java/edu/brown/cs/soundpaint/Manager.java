@@ -37,16 +37,6 @@ public class Manager {
   private FilterProcessor filterProcessor;
   private List<BufferedImage> sequence;
 
-  /** Installs all Spark routes.
-   * @param fme the FreeMarkerEngine that some routes bind to.
-   */
-  public void installRoutes(FreeMarkerEngine fme) {
-    Spark.get("/home", new FrontHandler(), fme);
-    Spark.get("/login", new FrontLoginHandler(), fme);
-    Spark.get("/register", new FrontRegisterHandler(), fme);
-    Spark.get("/workspace", new FrontWorkSpaceHandler(), fme);
-  }
-
   /**
    * Returns the Pattern-Command mapping that defines the soundpaint
    * program's CLI behavior.
@@ -155,59 +145,6 @@ public class Manager {
     }
   }
   
-
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-    	System.out.println("Heere");
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "home_news.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontLoginHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "login.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontRegisterHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "register.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontWorkSpaceHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "workspace.ftl");
-    }
-  }
   
 
 }
