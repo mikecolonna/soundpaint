@@ -39,7 +39,7 @@ $(document).ready(() => {
 
     for (var i = 0; i < 1000; i++) {
       var cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
-      var cubeMaterial = new THREE.MeshBasicMaterial({color:frequencyData[i]*0xff3300, wireframe : true});
+      var cubeMaterial = new THREE.MeshNormalMaterial({color:frequencyData[i]*0xff3300, wireframe : true});
       var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       cube.castShadow = true;
       cube.receiveShadow = true;
@@ -74,7 +74,7 @@ $(document).ready(() => {
         var b = 0;
         var g = frequencyData[e.id]/255;
 
-        e.material.color.setRGB(r, g, b);
+        //e.material.color.setRGB(1, 0, 0);
       }
     });
 

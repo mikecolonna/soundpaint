@@ -1,17 +1,3 @@
-/*.imgcontainer {
-  text-align: center;
-  width:100%;
-  height: 25%;
-}
-
-.signInButton {
-  padding: 0 0 0 3px !important;
-}	
-
-#review > ul > li > p {
-  width: 100%;
-}*/
-
 .flex-outer > li > .my-cb-label{
   margin: 0;
   position: absolute !important;
@@ -56,13 +42,6 @@
   pointer-events: none;
 }
 
-
-@import 'https://fonts.googleapis.com/css?family=Arvo|Open+Sans:400,700|PT+Sans:400,700|Raleway|Revalia';
-@font-face {
-  font-family: 'Bebas Kai';
-  src: url("../fonts/bebaskai-regular-webfont.woff2") format("woff2"), url("../fonts/bebaskai-regular-webfont.woff") format("woff");
-  font-weight: normal;
-  font-style: normal; }
 
 html, body {
   margin: 0;
@@ -296,168 +275,24 @@ select:invalid { color: gray; }
 .flex-inner li {
   width: 100px;
 } 
-/* ------------------------------------------------------------------------------------ */
 
-#container {
-  position: relative;}
-  #container header {
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0.9;
-    background: #333a4a;
-    height: 10vh;
-    z-index: 100;
-    border-bottom: 5px solid #c65c58;
-    box-sizing: content-box;
-    font-family: "Arvo", "Rockwell", "Courier Bold", "Courier", "Georgia", "Times", "Times New Roman", serif; }
-    @media only screen and (min-width: 768px) {
-      #container header {
-        position: fixed; } }
-    @media only screen and (max-width: 414px) {
-      #container header {
-        height:15vh; } }
-    #container header > div:not(.separator) {
-      padding: 0 15%;
-      text-align: center; }
-      @media only screen and (min-width: 768px) {
-        #container header > div:not(.separator) {
-          text-align: left; } }
-    #container header img {
-      height: 50px;
-      margin: 15px 0;
-      border: 0;
-      float: left; }
-      @media only screen and (min-width: 768px) {
-        #container header img {
-          height: 70px; } }
-    #container header p {
-      color: white; 
-      float: right;
-      margin-top: 5%;
-    }
-      @media only screen and (max-height: 600px) {
-        #container header p {
-          margin-top: 2%; } }
-    #container header .separator {
-      width: 1px;
-      height: 70px;
-      background: #828282;
-      float: left;
-      margin: 15px; }
-    #container header ul {
-      list-style-type: none;
-      padding: 20px;
-      float: right;
-      width: auto;
-      position: fixed;
-      right: 10px;
-      top: 69px;
-      z-index: 102;
-      opacity: 0.9;
-      background: #333a4a;
-      display: none; }
-      #container header ul li a {
-        color: #00B7FF; }
-      @media only screen and (min-width: 768px) {
-        #container header ul {
-          margin: 28px 0 0 0;
-          display: inline-block;
-          height: 100%;
-          padding: 0;
-          background: none;
-          position: static; }
-          #container header ul li {
-            display: inline;
-            text-align: center; }
-            #container header ul li a {
-              color: #333a4a;
-              display: inline-block;
-              font-size: 1.3em;
-              transition: 0.1s ease-in-out; }
-            #container header ul li:not(:first-child) {
-              margin-left: 40px; }
-            #container header ul li:not(:last-child) a:hover {
-              border-bottom: 3px solid #333a4a; }
-            #container header ul li:last-child a {
-              color: #00B7FF;
-              opacity: 0.9;
-              background: #333a4a;
-              padding: 10px; }
-              #container header ul li:last-child a:hover {
-                background: #474e5c; } }
-      @media only screen and (min-width: 1170px) {
-        #container header ul {
-          margin: 22px 0 0 0; }
-          #container header ul li a {
-            font-size: 1.8em; } }
-    #container header.potluck-header {
-      height: 8vh;
-      position: static; }
-      #container header.potluck-header > img#logo {
-        height: 100%;
-        position: static;
-        margin: 0;
-        margin-left: 5%;
-        padding: 5px 0; }
-  #container main:not(.potluck) {
-    max-width: 3000px;
-    margin: 0 auto; }
-    #container main:not(.potluck).register-main, #container main:not(.potluck).index-main, #container main:not(.potluck).dashboard-main, #container main:not(.potluck).profile-main {
-      background: #dfdfdf; }
-    @media only screen and (min-width: 768px) {
-      #container main:not(.potluck) {
-        padding-top: 100px; } }
-  #container #main {
-    padding: 2% 15%;
-    margin: 0 auto; 
-    position:relative;}
-    #container #main * {
-    	position: relative;
-    }
-    #container #main p a {
-      color: #e06d55; }
-      #container #main p a:hover {
-        color: #e06d55;
-        text-decoration: underline; }
-      #container #main p a.noline:hover {
-        text-decoration: none; }
-    #container #main .user-form {
-      font-family: "Arvo", "Rockwell", "Courier Bold", "Courier", "Georgia", "Times", "Times New Roman", serif; }
+/*-----------------------------------WORKSPACE----------------------------------------------*/
 
-  #container footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 2vh;
-    background: #333a4a;
-    font-family: "Arvo", "Rockwell", "Courier Bold", "Courier", "Georgia", "Times", "Times New Roman", serif;
-    text-align: center; }
-    @media only screen and (min-width: 768px) {
-      #container footer {
-        height: 2.3vh; } }
-    #container footer ul {
-      list-style-type: none;
-      padding: 15px 15%;
-      margin: 0;
-      background: #333a4a;
-      display: inline-block; }
-      #container footer ul li {
-        margin-bottom: 0; }
-        #container footer ul li a {
-          color: #ffffff;
-          text-align: center;
-          font-size: 1.3em; }
-          #container footer ul li a:hover {
-            text-decoration: underline; }
-        @media only screen and (min-width: 768px) {
-          #container footer ul li {
-            display: inline; }
-            #container footer ul li:not(:first-child) {
-              margin-left: 100px; }
-            #container footer ul li a {
-              line-height: 50px; } }
-      @media only screen and (min-width: 768px) {
-        #container footer ul {
-          padding: 0; } }
+#work {
+  height: 87%;
+  width: 100%;
+}
+
+#choices {
+  height: 100%;
+  background-color: blue;
+  width: 20%;
+  display: inline-block;
+}
+
+#viewing {
+  height: 100%;
+  width: 80%;
+  /*float: right;*/
+    display: inline-block;
+}

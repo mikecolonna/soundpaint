@@ -53,7 +53,7 @@ public class ColorChannelMixerFilter implements Filter {
   @Override
   public String getFilterString() {
     return String.format("colorchannelmixer=" +
-            "%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f:%.4f%.4f:%.4f:%.4f:%.4f",
+            "%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f:%.2f",
         rr, rg, rb, ra,
         gr, gg, gb, ga,
         br, bg, bb, ba,
@@ -83,132 +83,164 @@ public class ColorChannelMixerFilter implements Filter {
     private double ab = 0.0;
     private double aa = 1.0;
 
-    public void rr(double value) {
+    public Builder rr(double value) {
       if (validValue(value)) {
         rr = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void rg(double value) {
+    public Builder rg(double value) {
       if (validValue(value)) {
         rg = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void rb(double value) {
+    public Builder rb(double value) {
       if (validValue(value)) {
         rb = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ra(double value) {
+    public Builder ra(double value) {
       if (validValue(value)) {
         ra = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void gr(double value) {
+    public Builder gr(double value) {
       if (validValue(value)) {
         gr = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void gg(double value) {
+    public Builder gg(double value) {
       if (validValue(value)) {
         gg = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void gb(double value) {
+    public Builder gb(double value) {
       if (validValue(value)) {
         gb = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ga(double value) {
+    public Builder ga(double value) {
       if (validValue(value)) {
         ga = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void br(double value) {
+    public Builder br(double value) {
       if (validValue(value)) {
         br = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void bg(double value) {
+    public Builder bg(double value) {
       if (validValue(value)) {
         bg = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void bb(double value) {
+    public Builder bb(double value) {
       if (validValue(value)) {
         bb = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ba(double value) {
+    public Builder ba(double value) {
       if (validValue(value)) {
         ba = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ar(double value) {
+    public Builder ar(double value) {
       if (validValue(value)) {
         ar = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ag(double value) {
+    public Builder ag(double value) {
       if (validValue(value)) {
         ag = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void ab(double value) {
+    public Builder ab(double value) {
       if (validValue(value)) {
         ab = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
-    public void aa(double value) {
+    public Builder aa(double value) {
       if (validValue(value)) {
         aa = value;
       } else {
         throw new IllegalArgumentException("Can only set a value in range [-2.0, 2.0] inclusive.");
       }
+
+      return this;
     }
 
     private boolean validValue(double value) {
