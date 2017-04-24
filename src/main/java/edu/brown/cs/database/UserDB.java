@@ -13,7 +13,7 @@ public interface UserDB {
   }
   
   static UserDB get(String id) {
-    return Database.getUserFromCache(id);
+    return Database.getUser(id);
   }
 
 }

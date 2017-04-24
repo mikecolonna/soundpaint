@@ -2,6 +2,8 @@ package edu.brown.cs.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,24 +56,91 @@ public final class Database {
    * @param id String ID of the User to get from the cache
    * @return UserDB with corresponding ID; null if UserDB is not in cache
    */
-  public static UserDB getUserFromCache(String id) {
-    return users.getOrDefault(id, null);
+  public static UserDB getUser(String id) {
+    // check cache first
+    UserDB user = users.get(id);
+    
+    // if user is not in cache
+    if (user == null) {
+      try (Connection conn = DriverManager.getConnection(urlToDb)) {
+        try (PreparedStatement prep = conn.prepareStatement(
+            "SELECT * FROM user WHERE user.id = ?")) {
+          prep.setString(1, id);
+          try (ResultSet rs = prep.executeQuery()) {
+            if (rs.next()) {
+              user = UserDB.createUser(rs.getString(1), rs.getString(2), rs.getString(3));
+              users.put(id, user);
+            }
+          }
+        } 
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    
+    return user;
   }
   
   public static void putVideoInCache(String id, VideoDB vid) {
     videos.putIfAbsent(id, vid);
   }
   
-  public static VideoDB getVideoFromCache(String id) {
-    return videos.getOrDefault(id, null);
+  public static VideoDB getVideo(String id) {
+    // check cache first 
+    VideoDB video = videos.get(id);
+    
+    // if video is not in cache
+    if (video == null) {
+      try (Connection conn = DriverManager.getConnection(urlToDb)) {
+        try (PreparedStatement prep = conn.prepareStatement(
+            "SELECT * FROM video WHERE video.id = ?")) {
+          prep.setString(1, id);
+          try (ResultSet rs = prep.executeQuery()) {
+            if (rs.next()) {
+              video = VideoDB.createVideo(rs.getString(1), rs.getString(2), rs.getString(3));
+              videos.put(id, video);
+            }
+          }
+        } 
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    
+    return video;
   }
   
   public static void putAudioInCache(String id, AudioDB aud) {
     audio.putIfAbsent(id, aud);
   }
   
-  public static AudioDB getAudioFromCache(String id) {
-    return audio.getOrDefault(id, null);
+  public static AudioDB getAudio(String id) {
+    // check cache first
+    AudioDB aud = audio.get(id);
+    
+    // if audio is not in cache
+    if (aud == null) {
+      try (Connection conn = DriverManager.getConnection(urlToDb)) {
+        try (PreparedStatement prep = conn.prepareStatement(
+            "SELECT * FROM audio WHERE audio.id = ?")) {
+          prep.setString(1, id);
+          try (ResultSet rs = prep.executeQuery()) {
+            if (rs.next()) {
+              aud = AudioDB.createAudio(rs.getString(1), rs.getString(2), rs.getString(3),
+                  rs.getString(4), rs.getString(5), rs.getString(6));
+              audio.put(id, aud);
+            }
+          }
+        } 
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    
+    return aud;
   }
 
 }

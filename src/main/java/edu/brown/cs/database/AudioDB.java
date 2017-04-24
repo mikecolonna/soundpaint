@@ -20,7 +20,7 @@ public interface AudioDB {
   }
   
   static AudioDB get(String id) {
-    return Database.getAudioFromCache(id);
+    return Database.getAudio(id);
   }
 
 }

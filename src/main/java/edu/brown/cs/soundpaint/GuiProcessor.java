@@ -35,7 +35,7 @@ public class GuiProcessor {
    * Sets routes from the passed in installer.
    * @param installer The installer from which to install routes.
    */
-  public void setRoutes() {
+  private void setRoutes() {
     Spark.get("/", new FrontHandler(), fme);
     Spark.get("/login", new FrontLoginHandler(), fme);
     Spark.get("/register", new FrontRegisterHandler(), fme);

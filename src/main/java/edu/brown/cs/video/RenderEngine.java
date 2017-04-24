@@ -37,14 +37,7 @@ public class RenderEngine {
       recorder.start();
 
       Frame curr = frameGrabber.grab();
-      //Java2DFrameConverter frameConverter = new Java2DFrameConverter();
       while (curr != null) {
-        /*BufferedImage img = frameConverter.convert(curr);
-        for (Filter f : filters) {
-          BufferedImage out = f.filter(img);
-          img = out;
-        }
-        recorder.record(frameConverter.convert(img));*/
 
         StringBuilder filterStringBuilder = new StringBuilder();
 

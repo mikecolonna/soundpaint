@@ -13,7 +13,7 @@ public interface VideoDB {
   }
   
   static VideoDB get(String id) {
-    return Database.getVideoFromCache(id);
+    return Database.getVideo(id);
   }
 
 }
