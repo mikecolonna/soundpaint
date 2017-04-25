@@ -1,34 +1,34 @@
-$(document).ready(() => {
-  var ctx = new AudioContext();
-  var audio = document.getElementById('myAudio');
-  var audioSrc = ctx.createMediaElementSource(audio);
-  var analyser = ctx.createAnalyser();
-  var dataArray = new Uint8Array(analyser.frequencyBinCount);
-  //analyser.getByteTimeDomainData(dataArray);
+const Visualizer = function() {
+  let camera, renderer, scene;
+  let vizHolder;
+  let fov, zoom, inc;
 
-  audioSrc.connect(analyser);
-  audioSrc.connect(ctx.destination);
-  var frequencyData = new Uint8Array(analyser.frequencyBinCount);
-  var scene, renderer, camera;
-  var fov, zoom, inc;
+  // data with which to manipulate visuals
+  let frequencyData;
 
   function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
     camera.position.set(0, 0, 100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
-    //camera.position.z = 2;
 
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
     scene = new THREE.Scene();
+
+    scene.fog = new THREE.Fog(0x000000, 2000, 3000);
+
+    vizHolder = new THREE.Object3D();
+    scene.add(vizHolder);
 
     addCubes();
 
     fov = camera.fov;
     zoom = 1.0;
     inc = -0.001;
+  }
+
+  function setFrequencyData(data) {
+    frequencyData = data;
   }
 
   function addCubes() {
@@ -42,7 +42,7 @@ $(document).ready(() => {
       var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       cube.castShadow = true;
       cube.receiveShadow = true;
-      cube.name = frequencyData.length;
+      //cube.name = frequencyData.length;
       cube.position.x = x;
 
       x += 10;
@@ -63,7 +63,7 @@ $(document).ready(() => {
   }
 
   function render() {
-    scene.traverse(function (e) {
+    /*scene.traverse(function (e) {
       if (e instanceof THREE.Mesh) {
         //e.rotation.x += frequencyData[e.id]/5000;
         e.rotation.y += frequencyData[e.id]/1000;
@@ -85,7 +85,7 @@ $(document).ready(() => {
     }
 
     analyser.getByteTimeDomainData(dataArray);
-    analyser.getByteFrequencyData(frequencyData);
+    analyser.getByteFrequencyData(frequencyData);*/
   }
 
   function animate() {
@@ -95,7 +95,4 @@ $(document).ready(() => {
     renderer.render(scene, camera);
   }
 
-  init();
-  animate();
-  audio.play();
-});
+};
