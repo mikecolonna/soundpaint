@@ -1,4 +1,4 @@
-package guihandlers;
+package edu.brown.cs.guihandlers;
 
 import edu.brown.cs.soundpaint.GuiProcessor;
 import spark.Request;

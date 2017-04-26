@@ -1,4 +1,4 @@
-package guihandlers;
+package edu.brown.cs.guihandlers;
 
 import java.util.Map;
 
@@ -20,9 +20,10 @@ public class FrontWorkspaceHandler implements TemplateViewRoute {
   
   @Override
   public ModelAndView handle(Request req, Response res) {
-    Map<String, Object> variables = ImmutableMap.of("title",
-        "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-            + " Mike, Tymani, and Tynan");
+    Map<String, Object> variables = ImmutableMap.of(
+        "title", "Soundpaint - CS32 Final Project",
+        "message","Created by Brendan, Mike, Tymani, and Tynan",
+        "error", "");
     return new ModelAndView(variables, "workspace.ftl");
   }
 }

@@ -1,4 +1,4 @@
-package guihandlers;
+package edu.brown.cs.guihandlers;
 
 import java.sql.SQLException;
 import java.util.Map;

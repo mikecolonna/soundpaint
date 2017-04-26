@@ -1,4 +1,4 @@
-package guihandlers;
+package edu.brown.cs.guihandlers;
 
 import java.util.Map;
 
@@ -29,9 +29,9 @@ public class FrontHandler implements TemplateViewRoute {
     System.out.println(a);
     
     guiProcessor.getSessionsToUsers();
-    Map<String, Object> variables = ImmutableMap.of("title",
-        "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-            + " Mike, Tymani, and Tynan");
+    Map<String, Object> variables = ImmutableMap.of(
+        "title", "Soundpaint - CS32 Final Project",
+        "message","Created by Brendan, Mike, Tymani, and Tynan");
     return new ModelAndView(variables, "home_news.ftl");
   }
 }

@@ -1,11 +1,12 @@
 package edu.brown.cs.soundpaint;
 
 import com.google.common.collect.ImmutableMap;
+
+import edu.brown.cs.guihandlers.FrontHandler;
+import edu.brown.cs.guihandlers.FrontLoginHandler;
+import edu.brown.cs.guihandlers.FrontRegisterHandler;
+import edu.brown.cs.guihandlers.FrontWorkspaceHandler;
 import freemarker.template.Configuration;
-import guihandlers.FrontHandler;
-import guihandlers.FrontLoginHandler;
-import guihandlers.FrontRegisterHandler;
-import guihandlers.FrontWorkspaceHandler;
 import spark.ExceptionHandler;
 import spark.ModelAndView;
 import spark.Request;
