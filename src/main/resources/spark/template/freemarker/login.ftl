@@ -22,12 +22,6 @@
         <li><a href="/workspace">Workspace</a></li>
         <li><a href="/projects">Projects</a></li>
       </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="/login">Login</a></li>
         <li><a href="/register">Register</a></li>
@@ -36,9 +30,11 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+${error}
+
 <div class="container" style="text-align: center">
   <img src="images/panda_before.jpg" style="width:30%">
-  <form>
+  <form action="/sendLogin" method="post">
     <ul class="flex-outer" style="text-align: left">
       <li>
         <input type="email" id="email" name="email" placeholder="Email*">
@@ -51,7 +47,7 @@
         <label for="password" class="my-error">required</label>
       </li>
       <li style="justify-content: center; margin-top: 3%">
-        <button class="my-button activated-red" type="button" id="login">Login</button>
+        <input class="my-button red-button" type="submit" value="Login">
       </li>
       <li style="justify-content: center; margin-top: 3%">
         <a href="/register">Register</button>
@@ -126,7 +122,7 @@ $('#login').click(function(e) {
     }
   }
   if(!($("#email").hasClass("required-field") && $("#password").hasClass("required-field"))) {
-    console.log("yay");
+    $(this).unbind('submit').submit();
   }
 });
 </script>

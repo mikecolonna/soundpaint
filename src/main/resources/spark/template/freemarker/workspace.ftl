@@ -22,12 +22,6 @@
         <li class="active"><a href="/workspace">Workspace</a></li>
         <li><a href="/projects">Projects</a></li>
       </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/login">Login</a></li>
         <li><a href="/register">Register</a></li>
@@ -36,34 +30,55 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+${error}
+
 <h1><span>WorkSpace</span></h1>
 
-<div id="work">
-	<span id="choices">
-		<ul>
-			<li>
-				filter 1
-			</li>
-			<li>
-				filter 2
-			</li>
-			<li>
-				filter 3
-			</li>
-		</ul>
-	</span>
-	<span id="viewing">
-		<script src="js/three.js"></script>
-		<script src="js/test.js"></script>
+<div id="work" onresize="resize_canvas()">
+  <form action="/sendRender" method="post">
+  	<ul id="filters">
+  		<li>
+  			<select>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="opel">Opel</option>
+          <option value="audi">Audi</option>
+        </select>
+  			<select>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="opel">Opel</option>
+          <option value="audi">Audi</option>
+        </select>
+      </li>
+  	</ul>
+    <a href="#" id="new-filter">Add Filter Pair</a>
+    <input class="my-button red-button" id="render" type="submit" value="Render">
+  </form>
 
-		<audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
-		<canvas id="canvas">
-		</canvas>
-		<video width="320" height="240" controls>
-  			<source src="movie.mp4" type="video/mp4">
-		</video>
-
-	</span>
 </div>
+<script src="js/three.js"></script>
+<script src="js/test.js"></script>
+
+<audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
+<canvas id="canvas">
+</canvas>
+<div>
+  <video id="preview" autoplay>
+      <source src="movie.mp4" type="video/mp4">
+  </video>
+
+<script type="text/javascript">
+  function resize_canvas() {
+    canvas = document.getElementById("canvas");
+    canvas.width = 87%;
+    canvas.height = 80%;
+  };
+  $("a").click(function(e) {
+    console.log("ok");
+    e.preventDefault();
+    console.log("YAY");
+  })
+</script>
 </#assign>
 <#include "main.ftl">

@@ -21,12 +21,6 @@
         <li><a href="/workspace">Workspace</a></li>
         <li><a href="/projects">Projects</a></li>
       </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/login">Login</a></li>
         <li class="active"><a href="/register">Register</a></li>
@@ -35,21 +29,18 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+${error}
+
 <div class="container">
-    <form>
+    <form action="/sendRegister" method="post">
         <ul class="flex-outer">
           <li>
             <p style="margin-bottom=2%;"> Please fill in the fields with your information</p>
           </li>
           <li>
-            <input type="text" id="first_name" name="first_name" placeholder="First Name*">
-            <label for="first_name" class="my-label">First Name*</label>
-            <label for="first_name" class="my-error">required</label>
-          </li>
-          <li>
-            <input type="text" id="last_name" name="last_name" placeholder="Last Name*">
-            <label for="last_name" class="my-label">Last Name*</label>
-            <label for="last_name" class="my-error">required</label>
+            <input type="text" id="username" name="username" placeholder="Username*">
+            <label for="username" class="my-label">Username*</label>
+            <label for="username" class="my-error">required</label>
           </li>
           <li>
             <input type="email" id="email" name="email" placeholder="Email*">
@@ -67,7 +58,7 @@
             <label for="password2" class="my-error">required</label>
           </li>
           <li style="justify-content: center; margin-top: 3%">
-            <button class="my-button activated-red" type="button" id="register">Sign Up</button>
+            <input class="my-button red-button" type="submit" value="Register">
           </li>
         </ul>
     </form>
@@ -105,26 +96,17 @@
     }
 });
 
-$('#register').click(function(e) {
+$('form').submit(function(e) {
   e.preventDefault();
   var email = $('#email').val();
   var password = $('#password').val();
-  if($("#first_name").val() === '') {
-    $("#first_name").addClass("required-field");
-    $("#first_name").parent().children().eq(2).animate({ opacity: 1 }); 
+  if($("#username").val() === '') {
+    $("#username").addClass("required-field");
+    $("#username").parent().children().eq(2).animate({ opacity: 1 }); 
   } else {
-    if($("#first_name").hasClass("required-field")) {
-      $("#first_name").removeClass("required-field");
-      $("#first_name").parent().children().eq(2).animate({ opacity: 0 }); 
-    }
-  }
-  if($("#last_name").val() === '') {
-    $("#last_name").addClass("required-field");
-    $("#last_name").parent().children().eq(2).animate({ opacity: 1 }); 
-  } else {
-    if($("#last_name").hasClass("required-field")) {
-      $("#last_name").removeClass("required-field");
-      $("#last_name").parent().children().eq(2).animate({ opacity: 0 });
+    if($("#username").hasClass("required-field")) {
+      $("#username").removeClass("required-field");
+      $("#username").parent().children().eq(2).animate({ opacity: 0 }); 
     }
   }
   if(email.indexOf('@') === -1) { //look for this character 
@@ -169,19 +151,9 @@ $('#register').click(function(e) {
       $("#password2").parent().children().eq(2).animate({ opacity: 0 }); 
     }
   }
-  if($("#first-name").hasClass("required-field") || $("#last-name").hasClass("required-field") || $("#email").hasClass("required-field") || $("#password").hasClass("required-field") || $("#password2").hasClass("required-field") || $("#student-mentor").hasClass("required-field")) {
-  } else {
-    $("#login").css("display", "none");
-    $("#login-button").removeClass("active-color").addClass("activated");
-    $("#profile-button").removeClass("not-activated").addClass("active-color");
-    if($('#student-mentor').val() === 'student') {
-      $("#mentee-profile").css("display", "block");
-    } else if($('#student-mentor').val() === 'mentor'){
-      $("#mentor-profile").css("display", "block");
-    }
-    $("#form-box").scrollTop(0);
-    $(window).scrollTop(0);
-  } 
+  if(!($("#username").hasClass("required-field") || $("#email").hasClass("required-field") || $("#password").hasClass("required-field") || $("#password2").hasClass("required-field") || $("#student-mentor").hasClass("required-field"))) {
+    $(this).unbind('submit').submit();
+  }
 });
 </script>
 </#assign>
