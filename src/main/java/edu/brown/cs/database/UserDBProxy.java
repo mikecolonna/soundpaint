@@ -7,11 +7,13 @@ import java.sql.SQLException;
 public class UserDBProxy implements UserDB {
   
   private String id;
+  private String username;
   private String email;
   private String password;
   
-  public UserDBProxy(String uId, String uEmail, String uPassword) {
+  public UserDBProxy(String uId, String uUsername, String uEmail, String uPassword) throws SQLException {
     id = uId;
+    username = uUsername;
     email = uEmail;
     password = uPassword;
     
@@ -19,15 +21,14 @@ public class UserDBProxy implements UserDB {
     // all info from <form> fields must be passed to UserDBProxy
     try (Connection conn = Database.getConnection()) {
       try (PreparedStatement prep = conn.prepareStatement(
-          "INSERT OR IGNORE INTO \"user\" VALUES (?, ?, ?);")) {
+          "INSERT OR ABORT INTO user VALUES (?, ?, ?, ?);")) {
         prep.setString(1, id);
-        prep.setString(2, email);
-        prep.setString(3, password);
+        prep.setString(2, username);
+        prep.setString(3, email);
+        prep.setString(4, password);
         prep.addBatch();
         prep.executeBatch();
       }
-    } catch (SQLException sqle) {
-      System.out.println("ERROR: Could not read from database.");
     }
     
     Database.putUserInCache(id, this);
@@ -36,6 +37,11 @@ public class UserDBProxy implements UserDB {
   @Override
   public String getId() {
     return id;
+  }
+  
+  @Override
+  public String getUsername() {
+    return username;
   }
 
   @Override

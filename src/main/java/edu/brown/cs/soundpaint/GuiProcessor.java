@@ -2,6 +2,10 @@ package edu.brown.cs.soundpaint;
 
 import com.google.common.collect.ImmutableMap;
 import freemarker.template.Configuration;
+import guihandlers.FrontHandler;
+import guihandlers.FrontLoginHandler;
+import guihandlers.FrontRegisterHandler;
+import guihandlers.FrontWorkspaceHandler;
 import spark.ExceptionHandler;
 import spark.ModelAndView;
 import spark.Request;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Installs GUI routes.
@@ -22,6 +27,7 @@ import java.util.Map;
 public class GuiProcessor {
 
   private FreeMarkerEngine fme = createEngine();
+  private Map<String, String> sessionsToUsers = new ConcurrentHashMap<>();
   
   public void runSparkServer(int port) {
     Spark.port(port);
@@ -36,10 +42,15 @@ public class GuiProcessor {
    * @param installer The installer from which to install routes.
    */
   private void setRoutes() {
-    Spark.get("/", new FrontHandler(), fme);
-    Spark.get("/login", new FrontLoginHandler(), fme);
-    Spark.get("/register", new FrontRegisterHandler(), fme);
-    Spark.get("/workspace", new FrontWorkSpaceHandler(), fme);
+    Spark.get("/", new FrontHandler(this), fme);
+    Spark.get("/login", new FrontLoginHandler(this), fme);
+    Spark.get("/register", new FrontRegisterHandler(this), fme);
+    Spark.get("/workspace", new FrontWorkspaceHandler(this), fme);
+    
+  }
+  
+  public Map<String, String> getSessionsToUsers() {
+    return sessionsToUsers;
   }
 
   /**
@@ -57,62 +68,6 @@ public class GuiProcessor {
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
-  }
-
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      System.out.println(req.session().id());
-      req.session().attribute("username", "Brendan");
-      String a = req.session().attribute("username");
-      System.out.println(a);
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "home_news.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontLoginHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "login.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontRegisterHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "register.ftl");
-    }
-  }
-  
-  /**
-   * Handle requests to the front page of the GUI.
-   */
-  private static class FrontWorkSpaceHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title",
-          "Soundpaint - CS32 Final Project","message","Created by Brendan,"
-              + " Mike, Tymani, and Tynan");
-      return new ModelAndView(variables, "workspace.ftl");
-    }
   }
   
   /**
