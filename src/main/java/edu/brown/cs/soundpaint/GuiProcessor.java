@@ -65,7 +65,10 @@ public class GuiProcessor {
   private static class FrontHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      System.out.println("Heere");
+      System.out.println(req.session().id());
+      req.session().attribute("username", "Brendan");
+      String a = req.session().attribute("username");
+      System.out.println(a);
       Map<String, Object> variables = ImmutableMap.of("title",
           "Soundpaint - CS32 Final Project","message","Created by Brendan,"
               + " Mike, Tymani, and Tynan");
