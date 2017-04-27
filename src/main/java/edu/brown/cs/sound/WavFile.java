@@ -1,4 +1,4 @@
-package edu.brown.cs.tratchfo;
+package edu.brown.cs.sound;
 // Wav file IO class
 // A.Greensted
 // http://www.labbookpages.co.uk

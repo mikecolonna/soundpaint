@@ -1,4 +1,4 @@
-package edu.brown.cs.tratchfo;
+package edu.brown.cs.sound;
 
 public class WavFileException extends Exception
 {

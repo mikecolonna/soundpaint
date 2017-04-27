@@ -45,6 +45,7 @@ public class GuiProcessor {
    * Sets routes from the passed in installer.
    * @param installer The installer from which to install routes.
    */
+
   private void setRoutes() {
     Spark.get("/", new FrontHandler(this), fme);
     Spark.get("/login", new FrontLoginHandler(this), fme);
@@ -59,6 +60,7 @@ public class GuiProcessor {
   
   public Map<String, String> getSessionsToUsers() {
     return sessionsToUsers;
+
   }
 
   /**

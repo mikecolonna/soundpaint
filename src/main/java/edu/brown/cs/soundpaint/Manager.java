@@ -1,13 +1,15 @@
 package edu.brown.cs.soundpaint;
 
 
-import edu.brown.cs.tratchfo.SoundParameter;
+
+import edu.brown.cs.sound.SoundParameter;
+
 import edu.brown.cs.video.*;
 
 
 import com.google.common.collect.ImmutableMap;
 
-import edu.brown.cs.tratchfo.SoundRead;
+import edu.brown.cs.sound.SoundRead;
 
 import org.bytedeco.javacv.*;
 
@@ -95,6 +97,7 @@ public class Manager {
 	   //read file
 		  SoundRead sr = new SoundRead();
 		  sr.read(tokens.get(1));
+		  
 
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");

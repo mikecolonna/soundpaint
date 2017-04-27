@@ -2,8 +2,8 @@ package edu.brown.cs.video;
 
 import edu.brown.cs.filter.ColorChannelMixerFilter;
 import edu.brown.cs.filter.Filter;
-import edu.brown.cs.tratchfo.SoundData;
-import edu.brown.cs.tratchfo.SoundParameter;
+import edu.brown.cs.sound.SoundData;
+import edu.brown.cs.sound.SoundParameter;
 import org.bytedeco.javacv.*;
 
 import java.util.List;
