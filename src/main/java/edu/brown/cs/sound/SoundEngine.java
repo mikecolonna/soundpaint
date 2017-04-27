@@ -25,6 +25,7 @@ public class SoundEngine {
 			toReturn = getFreqData();
 			break;
 		case TEMPO:
+			toReturn = getTempoData();
 			break;
 		}
 		return toReturn;
@@ -51,6 +52,15 @@ public class SoundEngine {
 			return null;
 		} else {
 			return sr.getScaledAmplitudeData();
+		}
+	}
+	
+	private List<Double> getTempoData() {
+		if(sr == null) {
+			System.out.println("ERROR: Set a sound reader for the framerate.");
+			return null;
+		} else {
+			return sr.getScaledTempoData();
 		}
 	}
 	/**

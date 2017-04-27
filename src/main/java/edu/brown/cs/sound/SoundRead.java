@@ -260,17 +260,20 @@ public class SoundRead {
 
 		double max = findMaxValue(toScale);
 		double min = findMinValue(toScale);
-
+		double sub = min;
+		if(min > 0) {
+			sub = -min;
+		}
 		double biggestMag = -1;
 		if(Math.abs(max) < Math.abs(min)) {
 			biggestMag = min;
 		} else {
 			biggestMag = max;
 		}
-		double scaleFactor = Math.abs(scaleMag)/biggestMag;
+		double scaleFactor = Math.abs(scaleMag)/(max - min);
 		List<Double> toReturn = new ArrayList<Double>();
 		for(double d: toScale){
-			toReturn.add(d*scaleFactor);
+			toReturn.add((d + min)*scaleFactor);
 		}
 		return toReturn;
 		
