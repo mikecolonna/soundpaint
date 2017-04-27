@@ -56,7 +56,7 @@ public final class Database {
    * @param id String ID of the User to get from the cache
    * @return UserDB with corresponding ID; null if UserDB is not in cache
    */
-  public static UserDB getUser(String id) {
+  public static UserDB getUserById(String id) {
     // check cache first
     UserDB user = users.get(id);
     
@@ -68,7 +68,7 @@ public final class Database {
           prep.setString(1, id);
           try (ResultSet rs = prep.executeQuery()) {
             if (rs.next()) {
-              user = UserDB.createUser(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+              user = UserDB.createDummy(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
               users.put(id, user);
             }
           }
@@ -80,6 +80,30 @@ public final class Database {
     }
     
     return user;
+  }
+  
+  /**
+   * Retrieves User from database with specified email and password.
+   * @param email String email given by the User
+   * @param password String password given by the User
+   * @return String ID of corresponding User; null if User is not in the database
+   */
+  public static String loginUser(String email, String password) throws SQLException {
+    String userId = null;
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep = conn.prepareStatement(
+          "SELECT id FROM user WHERE user.email = ? AND user.password = ?")) {
+        prep.setString(1, email);
+        prep.setString(2, password);
+        try (ResultSet rs = prep.executeQuery()) {
+          userId = rs.getString(1);
+        }
+      } 
+    }
+    
+    if (userId == null) System.out.println("USER NOT FOUND");
+    if (userId != null) System.out.println("USER FOUND");
+    return userId;
   }
   
   public static void putVideoInCache(String id, VideoDB vid) {

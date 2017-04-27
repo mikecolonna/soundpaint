@@ -17,8 +17,16 @@ public interface UserDB {
     return new UserDBProxy(id, username, email, password);
   }
   
-  static UserDB get(String id) {
-    return Database.getUser(id);
+  static UserDB createDummy(String id, String username, String email, String password) {
+    return new UserDBDummy(id, username, email, password);
+  }
+  
+  static UserDB getById(String id) {
+    return Database.getUserById(id);
+  }
+  
+  static String loginUser(String email, String password) throws SQLException {
+    return Database.loginUser(email, password);
   }
   
   static String generateId() {
