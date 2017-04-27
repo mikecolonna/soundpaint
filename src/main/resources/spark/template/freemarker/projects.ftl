@@ -36,9 +36,10 @@
 </nav>
 
 <h1><span>Personal Projects - USER</span></h1>
+<h1><span>Currently Under Construction, Please Come Back Soon!</span></h1>
 
-<ul id="projects">
+<!-- <ul id="projects">
 </ul>
-
+ -->
 </#assign>
 <#include "main.ftl">
