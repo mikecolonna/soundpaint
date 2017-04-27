@@ -23,7 +23,7 @@ public interface VideoDB {
   }
   
   static String generateId() {
-    String uid = "/v/" + UUID.randomUUID().toString().replace("-", "");
+    String uid = "v_" + UUID.randomUUID().toString().replace("-", "");
     return uid;
   }
 

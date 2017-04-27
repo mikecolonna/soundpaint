@@ -33,7 +33,7 @@ public interface AudioDB {
   }
   
   static String generateId() {
-    String uid = "/a/" + UUID.randomUUID().toString().replace("-", "");
+    String uid = "a_" + UUID.randomUUID().toString().replace("-", "");
     return uid;
   }
 
