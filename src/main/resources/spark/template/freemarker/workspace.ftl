@@ -138,6 +138,7 @@
       console.log("videoInput", videoInput);
       // so that you can get the file you wanted to upload 
       let audioFile = audioInput[0].files[0];
+      let videoFile = videoInput[0].files[0];
       
       // create the container for our file data
       var fd = new FormData();
