@@ -10,8 +10,10 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 
+
 import edu.brown.cs.database.Database;
 
+import freemarker.template.Configuration;
 
 /**
 * The Main class of our project. This is where execution begins.

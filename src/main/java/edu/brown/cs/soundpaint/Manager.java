@@ -1,7 +1,9 @@
 package edu.brown.cs.soundpaint;
 
+
 import edu.brown.cs.tratchfo.SoundParameter;
 import edu.brown.cs.video.*;
+
 
 import com.google.common.collect.ImmutableMap;
 
@@ -31,7 +33,6 @@ import java.util.regex.Pattern;
  * Created by tynan on 4/15/17.
  */
 public class Manager {
-
 
   //TODO: Find a way to move all these commands and handlers to separate modules
 
