@@ -28,7 +28,7 @@ public class RenderEngine {
       int imgHeight = frameGrabber.getImageHeight();
       double frameRate = frameGrabber.getFrameRate();
 
-      soundEngine.setSoundReader(frameRate);
+      soundEngine.setSoundReader(1/frameRate);
 
       int videoBitrate = frameGrabber.getVideoBitrate();
       int videoCodec = frameGrabber.getVideoCodec();
@@ -56,17 +56,16 @@ public class RenderEngine {
           SoundParameter soundParameter = mapping.getSoundParameter();
           VideoParameter videoParameter = mapping.getVideoParameter();
           double sensitivity = mapping.getSensitivity();
-
           switch (videoParameter) {
             case TINT:
-              currentImage = tintFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
+              currentImage = tintFilter(currentImage,  soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;
             case PUSH:
-              currentImage = pushFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
+              currentImage = pushFilter(currentImage,  soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;
             case BULGE:
               currentImage = bulgeFilter(currentImage, 100.0, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
-            break;
+              break;
             case EMBOSS:
               currentImage = embossFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;

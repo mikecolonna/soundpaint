@@ -170,7 +170,7 @@ public class SoundRead {
 	 * @return
 	 */
 	public List<Double> getScaledAmplitudeData() {
-		return scaleData(ampData);
+		return scaleData(freqData);
 	}
 	/**
 	 * Returns tempo data
@@ -184,6 +184,7 @@ public class SoundRead {
 	 * @return
 	 */
 	public List<Double> getScaledFrequencyData() {
+
 		//check if frequency Data is cached 
 		if(freqData.isEmpty()) {
 			
@@ -236,7 +237,6 @@ public class SoundRead {
 			
 			//loop through fft samples
 			for(int i = 0; i < fftData.size();i++) {
-				
 				//freq is in kilohertz
 				double toAdd = fftList.get(i).binToHz(findMaxIndex(fftData.get(i)), 
 						(float)origSampleRate);
@@ -244,10 +244,11 @@ public class SoundRead {
 				//tempo defined as beats per minute
 				//1 khz is equal to 60000 beats per minute
 				tempoData.add(toAdd*60000);
-				
+
 				freqData.add(toAdd);
 			}
 		}
+
 		return scaleData(freqData);
 	}
 	/**
@@ -264,16 +265,11 @@ public class SoundRead {
 		if(min > 0) {
 			sub = -min;
 		}
-		double biggestMag = -1;
-		if(Math.abs(max) < Math.abs(min)) {
-			biggestMag = min;
-		} else {
-			biggestMag = max;
-		}
+
 		double scaleFactor = Math.abs(scaleMag)/(max - min);
 		List<Double> toReturn = new ArrayList<Double>();
 		for(double d: toScale){
-			toReturn.add((d + min)*scaleFactor);
+			toReturn.add((d + sub)*scaleFactor);
 		}
 		return toReturn;
 		

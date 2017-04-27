@@ -144,7 +144,7 @@ public class Manager {
 
 ////    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
 
-    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
+//    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
     mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
         mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
