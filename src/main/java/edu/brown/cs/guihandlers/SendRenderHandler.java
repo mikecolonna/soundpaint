@@ -3,7 +3,10 @@ package edu.brown.cs.guihandlers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringWriter;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -15,10 +18,14 @@ import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.utils.IOUtils;
+
+import com.google.gson.*;
 
 public class SendRenderHandler implements Route {
   
   private GuiProcessor guiProcessor;
+  private Gson gson = new Gson();
   
   public SendRenderHandler(GuiProcessor gp) {
     guiProcessor = gp;
@@ -56,6 +63,28 @@ public class SendRenderHandler implements Route {
     // put audio in database
     AudioDB audio = AudioDB.createAudio(
         AudioDB.generateId(), video.getId(), audioFile.getAbsolutePath(), null, null, null);
+    
+    
+    try (InputStream is = req.raw().getPart("filters").getInputStream()) {
+      final int bufferSize = 1024;
+      final char[] buffer = new char[bufferSize];
+      final StringBuilder out = new StringBuilder();
+      Reader in = new InputStreamReader(is, "UTF-8");
+      while (true) {
+          int rsz = in.read(buffer, 0, buffer.length);
+          if (rsz < 0) {
+              break;
+          }
+          out.append(buffer, 0, rsz);
+      }
+      
+      // TODO: parse this array properly
+      
+      //filters = gson.fromJson(out.toString(), String.class);
+      System.out.println(out.toString());
+    }
+    
+   
     
     
     
