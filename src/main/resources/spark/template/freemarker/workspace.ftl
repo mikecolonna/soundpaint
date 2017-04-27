@@ -130,6 +130,11 @@
       console.log($($(".filter_pair").toArray()[0]).children().last().val());
       console.log($($(".filter_pair").toArray()[1]).children().first().val());
       console.log($($(".filter_pair").toArray()[1]).children().eq(1).val());
+      let filter_choices = [];
+      for(let i=0; i<x; i++) {
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().last().val());
+      }
       // get a reference to the fileInput
       let audioInput = $("#audio");
       console.log("audioInput", audioInput);
@@ -145,6 +150,7 @@
       // encode the file
       fd.append('audioName', audioFile);
       fd.append('videoName', videoFile);
+      fd.append('filters', filter_choices);
       
       sendFileWhenDone(fd);
     })
