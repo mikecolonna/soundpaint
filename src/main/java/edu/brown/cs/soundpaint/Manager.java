@@ -95,7 +95,7 @@ public class Manager {
   public void soundCommand(List<String> tokens, String cmd) {
 	  if (tokens.size() == 2) {	     
 	   //read file
-		  SoundRead sr = new SoundRead();
+		  SoundRead sr = new SoundRead((1.0/24.0));
 		  sr.read(tokens.get(1));
 		  
 

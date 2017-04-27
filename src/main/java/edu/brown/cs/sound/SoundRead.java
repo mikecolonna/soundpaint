@@ -13,7 +13,7 @@ public class SoundRead {
 	private double timeResolution = (1.0/24.0);
 	private int numFramesTime = 0;
 	private int totalNumFrames = 0;
-	private List<Double> ampData = new ArrayList<Double>();
+	private List<SoundData> ampData = new ArrayList<SoundData>();
 	private List<Double> freqData = new ArrayList<Double>();
 	
 	public SoundRead(double framRate) {
