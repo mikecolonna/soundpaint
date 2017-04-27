@@ -3,7 +3,9 @@ package edu.brown.cs.video;
 import edu.brown.cs.filter.ColorChannelMixerFilter;
 import edu.brown.cs.filter.Filter;
 import edu.brown.cs.sound.SoundData;
+import edu.brown.cs.sound.SoundEngine;
 import edu.brown.cs.sound.SoundParameter;
+import edu.brown.cs.soundpaint.VideoSoundParameterMapping;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
 
@@ -17,7 +19,7 @@ import java.util.Map;
  */
 public class RenderEngine {
 
-  public static void renderVideo(Map<String, VideoFilterSpecification> filterMap, FrameGrabber frameGrabber) {
+  public static void renderVideo(List<VideoSoundParameterMapping> mappings, FrameGrabber frameGrabber, SoundEngine soundEngine) {
     List<SoundData> frequencyData;
     try {
       frameGrabber.start();
@@ -47,23 +49,21 @@ public class RenderEngine {
 
         BufferedImage currentImage = converter.getBufferedImage(currentFrame);
 
-        for (Map.Entry<String, VideoFilterSpecification> mapping : filterMap.entrySet()) {
+        for (VideoSoundParameterMapping mapping : mappings) {
           System.out.println("entry");
-//          SoundParameter soundParameter = mapping.getKey();
-          VideoFilterSpecification videoFilterSpecification = mapping.getValue();
-          VideoParameter videoParameter = videoFilterSpecification.getVideoParameter();
+          SoundParameter soundParameter = mapping.getSoundParameter();
+          VideoParameter videoParameter = mapping.getVideoParameter();
+          double sensitivity = mapping.getSensitivity();
 
           switch (videoParameter) {
             case TINT:
-              tintFilter(currentImage);
+              currentImage = tintFilter(currentImage);
               break;
             case PUSH:
-              pushFilter(currentImage);
+              currentImage = pushFilter(currentImage);
               break;
             case BULGE:
-              BufferedImage outputImage = new BufferedImage(currentImage.getWidth(), currentImage.getHeight(), currentImage.getType());
-              bulgeFilter(currentImage, Math.random(), 100.0, outputImage);
-              currentImage = outputImage;
+              currentImage = bulgeFilter(currentImage, Math.random(), 100.0);
               break;
             case EMBOSS:
               currentImage = embossFilter(currentImage);
@@ -96,48 +96,48 @@ public class RenderEngine {
     }
   }
 
-  private static Filter colorFilterFromSound(double sensitivity) {
-    return new ColorChannelMixerFilter.Builder()
-        .rr(Math.random() * sensitivity)
-        .gg(Math.random() * sensitivity)
-        .bb(Math.random() * sensitivity)
-        .build();
-  }
+  private static BufferedImage tintFilter(BufferedImage input) {
 
-  private static void tintFilter(BufferedImage image) {
-    System.out.println("tinting");
+    BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+
     double redVal = Math.random();
     double greenVal = Math.random();
     double blueVal = Math.random();
-    for (int x = 0; x < image.getWidth(); x++) {
-      for (int y = 0; y < image.getHeight(); y++) {
+    for (int x = 0; x < input.getWidth(); x++) {
+      for (int y = 0; y < input.getHeight(); y++) {
 
-        Color color = new Color(image.getRGB(x, y));
+        Color color = new Color(input.getRGB(x, y));
 
         int r = (int) (color.getRed() * redVal);
         int g = (int) (color.getGreen() * greenVal);
         int b = (int) (color.getBlue() * blueVal);
 
-//        System.out.println("Original " + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + " new " + r + "," + g + "," + b);
-
-        image.setRGB(x, y, new Color(r, g, b).getRGB());
+        output.setRGB(x, y, new Color(r, g, b).getRGB());
       }
     }
+
+    return output;
   }
 
-  private static void pushFilter(BufferedImage image) {
+  private static BufferedImage pushFilter(BufferedImage input) {
+
+    BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+
     System.out.println("pushing");
     double randVal = Math.random();
-    for (int x = 0; x < image.getWidth(); x++) {
-      for (int y = 0; y < image.getHeight(); y++) {
-        image.setRGB(x, y, image.getRGB(x, y) + (int) (100 * randVal));
+    for (int x = 0; x < output.getWidth(); x++) {
+      for (int y = 0; y < output.getHeight(); y++) {
+        output.setRGB(x, y, output.getRGB(x, y) + (int) (100 * randVal));
       }
     }
+
+    return output;
   }
 
-  private static void bulgeFilter(BufferedImage input, double bulgeStrength, double bulgeRadius,
-    BufferedImage output) {
-    System.out.println("bulging");
+  private static BufferedImage bulgeFilter(BufferedImage input, double bulgeStrength, double bulgeRadius) {
+
+    BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+
     int w = input.getWidth();
     int h = input.getHeight();
     for(int x = 0; x < w; x++) {
@@ -164,14 +164,15 @@ public class RenderEngine {
         }
       }
     }
+
+    return output;
   }
 
-  public static BufferedImage embossFilter(BufferedImage src) {
-    int width = src.getWidth();
-    int height = src.getHeight();
+  public static BufferedImage embossFilter(BufferedImage input) {
+    int width = input.getWidth();
+    int height = input.getHeight();
 
-    BufferedImage dst;
-    dst = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
     for (int i = 0; i < height; i++)
       for (int j = 0; j < width; j++) {
@@ -179,10 +180,10 @@ public class RenderEngine {
         int lowerRight = 0;
 
         if (i > 0 && j > 0)
-          upperLeft = src.getRGB(j - 1, i - 1);
+          upperLeft = input.getRGB(j - 1, i - 1);
 
         if (i < height - 1 && j < width - 1)
-          lowerRight = src.getRGB(j + 1, i + 1);
+          lowerRight = input.getRGB(j + 1, i + 1);
 
         int redDiff = ((lowerRight >> 16) & 255) - ((upperLeft >> 16) & 255);
 
@@ -205,9 +206,9 @@ public class RenderEngine {
 
         int newColor = (grayColor << 16) + (grayColor << 8) + grayColor;
 
-        dst.setRGB(j, i, newColor);
+        output.setRGB(j, i, newColor);
       }
 
-    return dst;
+    return output;
   }
 }

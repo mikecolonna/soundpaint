@@ -3,11 +3,11 @@ package edu.brown.cs.sound;
 public class SoundData {
 	
 	private double time;
-	private SoundParameter param;
+	private double value;
 	
-	public SoundData(double time, SoundParameter param) {
+	public SoundData(double time, double value) {
 		this.time = time;
-		this.param = param;
+		this.value = value;
 	}
 	
 	public double getTime() {
@@ -15,7 +15,7 @@ public class SoundData {
 	}
 	
 	public double  getValue() {
-		return param.getValue();
+		return value;
 	}
 
 }

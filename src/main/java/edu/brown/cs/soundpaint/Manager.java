@@ -2,6 +2,7 @@ package edu.brown.cs.soundpaint;
 
 
 
+import edu.brown.cs.sound.SoundEngine;
 import edu.brown.cs.sound.SoundParameter;
 
 import edu.brown.cs.video.*;
@@ -139,24 +140,16 @@ public class Manager {
 
   public void renderCommand(List<String> tokens, String cmd) {
 
-    Map<String, VideoFilterSpecification> filterMap = new HashMap<>();
-    VideoFilterSpecification tintSpec = new VideoFilterSpecification(VideoParameter.TINT, 1.0);
-    VideoFilterSpecification pushSpec = new VideoFilterSpecification(VideoParameter.PUSH, 1.0);
-    VideoFilterSpecification bulgeSpec = new VideoFilterSpecification(VideoParameter.BULGE, 1.0);
-    VideoFilterSpecification embossSpec = new VideoFilterSpecification(VideoParameter.EMBOSS, 1.0);
+    List<VideoSoundParameterMapping> mappings = new ArrayList<>();
 
+////    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
 
-//    filterMap.put("b", pushSpec);
-    filterMap.put("c", bulgeSpec);
-    filterMap.put("d", embossSpec);
-    filterMap.put("a", tintSpec);
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
+        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
-    if (filterMap.size() != 2) {
-      System.out.println("ADFADSFADSFASFASDFADF");
-    }
-
-    if (tokens.size() == 2) {
-      RenderEngine.renderVideo(filterMap, new FFmpegFrameGrabber(tokens.get(1)));
+    if (tokens.size() == 3) {
+      RenderEngine.renderVideo(mappings, new FFmpegFrameGrabber(tokens.get(1)), new SoundEngine(tokens.get(2)));
     } else {
       System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
     }
