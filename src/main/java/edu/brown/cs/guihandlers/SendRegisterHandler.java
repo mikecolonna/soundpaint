@@ -72,7 +72,7 @@ public class SendRegisterHandler implements TemplateViewRoute {
     
     // put user in file system
     System.out.println("HERE");
-    new File("./src/main/resources/users/" + username).mkdir();
+    new File("./src/main/resources/static/users/" + username).mkdir();
     
     response.redirect("/");
     return null;

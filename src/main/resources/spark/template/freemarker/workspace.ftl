@@ -57,7 +57,6 @@
 	</ul>
   <button class="my-button" id="new_filter">Add Filter Pair</button>
   <button class="my-button red-button" id="render">Render</button>
-  <button class="my-button red-button" id="change">Change Song</button>
 </div>
 <script src="js/three.js"></script>
 <script src="js/test.js"></script>
@@ -67,7 +66,7 @@
 </canvas>
 <div id="frame">
   <video id="preview" autoplay>
-      <source src="movie.mp4" type="video/mp4">
+      <source src="/users/testguy2/v_42742c1f079047e38c7bfc210e2384a6/test_video.mp4" type="video/mp4">
   </video>
 </div>
 
@@ -113,10 +112,10 @@
         contentType: false,
         success: function(JSONsentFromServer) {
           // what do you do went it goes through
-          if (JSONsentFromServer.success) {
-            console.log("[Message]", JSONsentFromServer.message);
-            mountImage(JSONsentFromServer.message);
-          }
+          let parsed = JSON.parse(JSONsentFromServer);
+          $('#myAudio').attr('src', parsed.audiofp);
+          document.getElementById("myAudio").play();
+          $('#preview').attr('src', parsed.videofp);
         },
         error: function(errorSentFromServer) {
           // what to do if error
@@ -158,13 +157,12 @@
     })
   });
 
-  $("#change").click(function(e) {
-    e.preventDefault();
-    console.log("here");
-    $('#myAudio').attr('src', "tswift.mp3");
-    //$('#myAudio').play();
-    document.getElementById("myAudio").play();
-  });
+  // $("#change").click(function(e) {
+  //   e.preventDefault();
+  //   console.log("here");
+  //   $('#myAudio').attr('src', "tswift.mp3");
+  //   document.getElementById("myAudio").play();
+  // });
 </script>
 </#assign>
 <#include "main.ftl">

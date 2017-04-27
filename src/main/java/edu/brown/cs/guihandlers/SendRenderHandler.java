@@ -41,7 +41,7 @@ public class SendRenderHandler implements Route {
   @SuppressWarnings("unchecked")
   @Override
   public Object handle(Request req, Response response) throws Exception {
-
+    System.out.println("here");
     String username = req.session().attribute("username");
     
     File audioFile;
@@ -50,11 +50,12 @@ public class SendRenderHandler implements Route {
     String videoId = VideoDB.generateId();
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     
+    // extract video and store in file system
     try (InputStream is = req.raw().getPart("videoName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
       
-      String filepath = "./src/main/resources/users/" + username + "/" + videoId;
+      String filepath = "./src/main/resources/static/users/" + username + "/" + videoId;
       if (!new File(filepath).exists()) {
         new File(filepath).mkdir();
       }
@@ -69,11 +70,12 @@ public class SendRenderHandler implements Route {
     // put video in database
     VideoDB video = VideoDB.createVideo(videoId, userId, videoFile.getAbsolutePath());
     
+    // extract audio and store in file system
     try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
       
-      String filepath = "./src/main/resources/users/" + username + "/" + videoId + "/audio";
+      String filepath = "./src/main/resources/static/users/" + username + "/" + videoId + "/audio";
       if (!new File(filepath).exists()) {
         new File(filepath).mkdir();
       }
@@ -86,7 +88,8 @@ public class SendRenderHandler implements Route {
     // put audio in database
     AudioDB audio = AudioDB.createAudio(
         audioId, video.getId(), audioFile.getAbsolutePath(), null, null, null);
-    
+    System.out.println("here12312313");
+    // extract filters
     List<String> filters;
     try (InputStream is = req.raw().getPart("filters").getInputStream()) {
       final int bufferSize = 1024;
@@ -103,7 +106,9 @@ public class SendRenderHandler implements Route {
 
       filters = gson.fromJson(out.toString(), List.class);
     }
+    System.out.println("here123xxxxxx");
     
+    // map audio – video filters
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
     for (int i = 0; i < filters.size(); i += 2) {
       SoundParameter sp = null;
@@ -137,14 +142,19 @@ public class SendRenderHandler implements Route {
       
       mappings.add(new VideoSoundParameterMapping(vp, sp, 0.5));
     }
-    
+    System.out.println("here");
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
     SoundEngine soundEngine = new SoundEngine(audioFile.getAbsolutePath());
-    
+
+    System.out.println("here1");
     RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, videoFile.getAbsolutePath());
+    System.out.println("here3");
+    JsonObject filepaths = new JsonObject();
+    filepaths.addProperty("videofp", videoFile.getPath().substring(28));
+    filepaths.addProperty("audiofp", audioFile.getPath().substring(28));
+
     
-    
-    return null;
+    return filepaths;
   }
 
 }
