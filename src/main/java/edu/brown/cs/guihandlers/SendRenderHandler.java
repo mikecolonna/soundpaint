@@ -1,6 +1,8 @@
 package edu.brown.cs.guihandlers;
 
 import edu.brown.cs.soundpaint.GuiProcessor;
+import edu.brown.cs.tratchfo.SoundRead;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -15,7 +17,14 @@ public class SendRenderHandler implements Route {
   
   @Override
   public Object handle(Request req, Response response) throws Exception {
-    // TODO Auto-generated method stub
+    //String audio = req.raw().getParameter("fileName");
+    //System.out.println(audio);
+    //SoundRead soundReader = new SoundRead();
+    //soundReader.read(filename);
+    
+    System.out.println("HERE");
+    
+    System.out.println(req.queryParams("audioFile"));
     return null;
   }
 
