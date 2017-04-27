@@ -19,6 +19,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.database.Database;
 import freemarker.template.Configuration;
 
 /**
@@ -62,9 +63,13 @@ public final class Main {
    if (options.has("gui")) {
      guiProcessor.runSparkServer((int) options.valueOf("port"));
    }
+   
+   Database.setPath("jdbc:sqlite:test.db");
+   Database.resetCaches();
 
    commandProcessor.addCommands(manager::getPatternCommandMap);
    commandProcessor.repl();
  }
+
  
 }

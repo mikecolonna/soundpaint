@@ -8,7 +8,7 @@ import spark.TemplateViewRoute;
 public class SendLoginHandler implements TemplateViewRoute {
 
   @Override
-  public ModelAndView handle(Request arg0, Response arg1) throws Exception {
+  public ModelAndView handle(Request req, Response response) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
