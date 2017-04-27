@@ -18,7 +18,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/home">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li class="active"><a href="/workspace">Workspace</a></li>
         <li><a href="/projects">Projects</a></li>
       </ul>
@@ -30,7 +30,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-${error}
+<div class="error">
+  ${error}
+</div>
 
 <h1><span>WorkSpace</span></h1>
 
@@ -52,7 +54,7 @@ ${error}
         </select>
       </li>
   	</ul>
-    <a href="#" id="new-filter">Add Filter Pair</a>
+    <button class="my-button" id="new-filter">Add Filter Pair</button>
     <input class="my-button red-button" id="render" type="submit" value="Render">
   </form>
 
@@ -74,7 +76,7 @@ ${error}
     canvas.width = 87%;
     canvas.height = 80%;
   };
-  $("a").click(function(e) {
+  $("#new-filter").click(function(e) {
     console.log("ok");
     e.preventDefault();
     console.log("YAY");

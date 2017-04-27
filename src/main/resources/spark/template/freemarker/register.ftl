@@ -17,7 +17,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/home">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="/workspace">Workspace</a></li>
         <li><a href="/projects">Projects</a></li>
       </ul>
@@ -29,7 +29,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-${error}
+<div class="error">
+  ${error}
+</div>
 
 <div class="container">
     <form action="/sendRegister" method="post">
