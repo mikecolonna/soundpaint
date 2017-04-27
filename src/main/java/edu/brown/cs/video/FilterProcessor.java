@@ -4,7 +4,6 @@ package edu.brown.cs.video;
 
 import java.util.Queue;
 
-import edu.brown.cs.filter.Filter;
 import org.bytedeco.javacv.FFmpegFrameFilter;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -22,10 +21,6 @@ public class FilterProcessor {
   private FrameFilter filterer;
 
   //private Queue<Filter> filters;
-  
-  public FilterProcessor(Filter filter) {
-    filterer = new FFmpegFrameFilter(filter.getFilterString(), 0, 0);
-  }
 
   public FilterProcessor(String filter) {
     filterer = new FFmpegFrameFilter(filter, 0, 0);

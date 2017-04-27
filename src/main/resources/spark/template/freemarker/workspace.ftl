@@ -1,5 +1,5 @@
 <#assign content>
-
+<#assign log=logged/>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -23,8 +23,13 @@
         <li><a href="/projects">Projects</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
+        <#if log=="true">
+          <li><a>${name}</a></li>
+          <li><a href="/logout">Logout</a></li> 
+        <#else>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+        </#if>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -37,7 +42,7 @@
 <h1><span>WorkSpace</span></h1>
 
 <div id="work" onresize="resize_canvas()">
-  <input id="audio" type="file" name="audio" accept =".mp3, .wav"/>
+  <input id="audio" type="file" name="audio" accept =".mp3, .wav, .midi, .mid"/>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
 	<ul id="filters">
 		<li class="filter_pair">

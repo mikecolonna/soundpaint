@@ -23,15 +23,17 @@ public class FrontHandler implements TemplateViewRoute {
   
   @Override
   public ModelAndView handle(Request req, Response res) {
-    System.out.println(req.session().id());
-    req.session().attribute("username", "Brendan");
-    String a = req.session().attribute("username");
-    System.out.println(a);
-    
-    guiProcessor.getSessionsToUsers();
+    String logged = "false";
+    String seshId = req.session().id();
+    String username = "";
+    if(guiProcessor.getSessionsToUsers().containsKey(seshId)) {
+      logged = "true";
+      username = req.session().attribute("username");
+    }
     Map<String, Object> variables = ImmutableMap.of(
-        "title", "Soundpaint - CS32 Final Project",
-        "message","Created by Brendan, Mike, Tymani, and Tynan");
+            "title", "Soundpaint - CS32 Final Project",
+            "message","Created by Brendan, Mike, Tymani, and Tynan",
+            "error", "", "logged", logged, "name", username);
     return new ModelAndView(variables, "home_news.ftl");
   }
 }
