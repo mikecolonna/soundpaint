@@ -20,10 +20,16 @@ public class FrontWorkspaceHandler implements TemplateViewRoute {
   
   @Override
   public ModelAndView handle(Request req, Response res) {
+    String seshId = req.session().id();
+    if(!(guiProcessor.getSessionsToUsers().containsKey(seshId))) {
+      res.redirect("/login");
+      return null;
+    }
+	String username = req.session().attribute("username");
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
         "message","Created by Brendan, Mike, Tymani, and Tynan",
-        "error", "");
+        "error", "", "name", username);
     return new ModelAndView(variables, "workspace.ftl");
   }
 }

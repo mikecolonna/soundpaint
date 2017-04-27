@@ -20,6 +20,11 @@ public class FrontLoginHandler implements TemplateViewRoute {
   
   @Override
   public ModelAndView handle(Request req, Response res) {
+	String seshId = req.session().id();
+    if(guiProcessor.getSessionsToUsers().containsKey(seshId)) {
+      res.redirect("/");
+      return null;
+    }
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
         "message","Created by Brendan, Mike, Tymani, and Tynan",

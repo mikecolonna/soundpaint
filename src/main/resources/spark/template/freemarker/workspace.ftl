@@ -1,5 +1,4 @@
 <#assign content>
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -23,8 +22,8 @@
         <li><a href="/projects">Projects</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
+        <li><a>${name}</a></li>
+        <li><a href="/logout">Logout</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -37,7 +36,7 @@
 <h1><span>WorkSpace</span></h1>
 
 <div id="work" onresize="resize_canvas()">
-  <input id="audio" type="file" name="audio" accept =".mp3, .wav"/>
+  <input id="audio" type="file" name="audio" accept =".mp3, .wav, .midi, .mid"/>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
 	<ul id="filters">
 		<li class="filter_pair">
@@ -98,9 +97,9 @@
     // send file data using AJAX
     function sendFileWhenDone(fileData) {
       // you can access the file data from the file reader's event object as:
-      
+
       console.log("File data we sent: ", fileData);
-      
+
       // Send AJAX request with form data
       $.ajax({
         type: "POST",
@@ -126,27 +125,33 @@
 
     $("#render").click(function(e) {
       e.preventDefault();
-      console.log($(".filter_pair"));
-      console.log($($(".filter_pair").toArray()[0]).children().first().val());
-      console.log($($(".filter_pair").toArray()[0]).children().last().val());
-      console.log($($(".filter_pair").toArray()[1]).children().first().val());
-      console.log($($(".filter_pair").toArray()[1]).children().eq(1).val());
+      // console.log($(".filter_pair"));
+      // console.log($($(".filter_pair").toArray()[0]).children().first().val());
+      // console.log($($(".filter_pair").toArray()[0]).children().last().val());
+      // console.log($($(".filter_pair").toArray()[1]).children().first().val());
+      // console.log($($(".filter_pair").toArray()[1]).children().eq(1).val());
+      let filter_choices = [];
+      for(let i=0; i<x; i++) {
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
+      }
       // get a reference to the fileInput
       let audioInput = $("#audio");
       console.log("audioInput", audioInput);
       let videoInput = $("#video");
       console.log("videoInput", videoInput);
-      // so that you can get the file you wanted to upload 
+      // so that you can get the file you wanted to upload
       let audioFile = audioInput[0].files[0];
       let videoFile = videoInput[0].files[0];
-      
+
       // create the container for our file data
       var fd = new FormData();
-      
+
       // encode the file
       fd.append('audioName', audioFile);
       fd.append('videoName', videoFile);
-      
+      fd.append('filters', JSON.stringify(filter_choices));
+
       sendFileWhenDone(fd);
     })
   });
