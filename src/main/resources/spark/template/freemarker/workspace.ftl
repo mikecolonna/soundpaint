@@ -37,6 +37,8 @@
 <h1><span>WorkSpace</span></h1>
 
 <div id="work" onresize="resize_canvas()">
+  <input id="audio" type="file" name="audio" accept =".mp3, .wav"/>
+  <input id="video" type="file" name="video" accept =".mp4, .mov"/>
 	<ul id="filters">
 		<li class="filter_pair">
 			<select>
@@ -78,7 +80,6 @@
     let max_fields = 5; //maximum input boxes allowed
     let wrapper = $("#filters"); //Fields wrapper
     let x = 1;
-    console.log(x);
     $("#new_filter").on("click", function(e) {
       e.preventDefault();
       if(x < max_fields) { //max input box allowed
@@ -93,6 +94,54 @@
         alert("Maximum 5 filters");
       }
     });
+
+    // send file data using AJAX
+    function sendFileWhenDone(fileData) {
+      // you can access the file data from the file reader's event object as:
+      
+      console.log("File data we sent: ", fileData);
+      
+      // Send AJAX request with form data
+      $.ajax({
+        type: "POST",
+        // specify the url we want to upload our file to
+        url: '/render',
+        // this is how we pass in the actual file data from the form
+        data: fileData,
+        processData: false,
+        contentType: false,
+        success: function(JSONsentFromServer) {
+          // what do you do went it goes through
+          if (JSONsentFromServer.success) {
+            console.log("[Message]", JSONsentFromServer.message);
+            mountImage(JSONsentFromServer.message);
+          }
+        },
+        error: function(errorSentFromServer) {
+          // what to do if error
+          console.log("[Error]", errorSentFromServer);
+        }
+      })
+    }
+
+    $("#render").click(function(e) {
+      e.preventDefault();
+    
+      // get a reference to the fileInput
+      let audioInput = $("#audio");
+      console.log("audioInput", audioInput);
+      
+      // so that you can get the file you wanted to upload 
+      let audioFile = audioInput[0].files[0];
+      
+      // create the container for our file data
+      var fd = new FormData();
+      
+      // encode the file
+      fd.append('fileName', audioFile);
+      
+      sendFileWhenDone(fd);
+    })
   });
 </script>
 </#assign>
