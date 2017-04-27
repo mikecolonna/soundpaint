@@ -55,6 +55,7 @@
 	</ul>
   <button class="my-button" id="new_filter">Add Filter Pair</button>
   <button class="my-button red-button" id="render">Render</button>
+  <button class="my-button red-button" id="change">Change Song</button>
 </div>
 <script src="js/three.js"></script>
 <script src="js/test.js"></script>
@@ -153,6 +154,11 @@
 
       sendFileWhenDone(fd);
     })
+  });
+
+  $("#render").click(function(e) {
+    e.preventDefault();
+    $('#myAudio').attr('src', "tswift.mp3");
   });
 </script>
 </#assign>
