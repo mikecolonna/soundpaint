@@ -1,5 +1,4 @@
 <#assign content>
-<#assign log=logged/>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -23,13 +22,8 @@
         <li><a href="/projects">Projects</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <#if log=="true">
-          <li><a>${name}</a></li>
-          <li><a href="/logout">Logout</a></li> 
-        <#else>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
-        </#if>
+        <li><a>${name}</a></li>
+        <li><a href="/logout">Logout</a></li> 
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
