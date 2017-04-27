@@ -41,7 +41,7 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getFrequencyData();
+			return sr.getScaledFrequencyData();
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getAmplitudeData();
+			return sr.getScaledAmplitudeData();
 		}
 	}
 	/**

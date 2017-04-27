@@ -27,6 +27,9 @@ public class RenderEngine {
       int imgWidth = frameGrabber.getImageWidth();
       int imgHeight = frameGrabber.getImageHeight();
       double frameRate = frameGrabber.getFrameRate();
+
+      soundEngine.setSoundReader(frameRate);
+
       int videoBitrate = frameGrabber.getVideoBitrate();
       int videoCodec = frameGrabber.getVideoCodec();
 
@@ -45,6 +48,7 @@ public class RenderEngine {
 
       Frame currentFrame = frameGrabber.grab();
       int fn = 0;
+
       while (currentFrame != null) {
 
         BufferedImage currentImage = converter.getBufferedImage(currentFrame);
@@ -57,16 +61,16 @@ public class RenderEngine {
 
           switch (videoParameter) {
             case TINT:
-              currentImage = tintFilter(currentImage);
+              currentImage = tintFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;
             case PUSH:
-              currentImage = pushFilter(currentImage);
+              currentImage = pushFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;
             case BULGE:
-              currentImage = bulgeFilter(currentImage, Math.random(), 100.0);
-              break;
+              currentImage = bulgeFilter(currentImage, 100.0, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
+            break;
             case EMBOSS:
-              currentImage = embossFilter(currentImage);
+              currentImage = embossFilter(currentImage, soundEngine.getMetaData(mapping.getSoundParameter()).get(fn));
               break;
             default:
               break;
@@ -96,45 +100,41 @@ public class RenderEngine {
     }
   }
 
-  private static BufferedImage tintFilter(BufferedImage input) {
+  private static BufferedImage tintFilter(BufferedImage input, double value) {
 
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
-    double redVal = Math.random();
-    double greenVal = Math.random();
-    double blueVal = Math.random();
+    double greenVal = value;
+
     for (int x = 0; x < input.getWidth(); x++) {
       for (int y = 0; y < input.getHeight(); y++) {
 
         Color color = new Color(input.getRGB(x, y));
 
-        int r = (int) (color.getRed() * redVal);
         int g = (int) (color.getGreen() * greenVal);
-        int b = (int) (color.getBlue() * blueVal);
 
-        output.setRGB(x, y, new Color(r, g, b).getRGB());
+        output.setRGB(x, y, new Color(color.getRed(), g, color.getBlue()).getRGB());
       }
     }
 
     return output;
   }
 
-  private static BufferedImage pushFilter(BufferedImage input) {
+  private static BufferedImage pushFilter(BufferedImage input, double value) {
 
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
     System.out.println("pushing");
-    double randVal = Math.random();
     for (int x = 0; x < output.getWidth(); x++) {
       for (int y = 0; y < output.getHeight(); y++) {
-        output.setRGB(x, y, output.getRGB(x, y) + (int) (100 * randVal));
+        output.setRGB(x, y, output.getRGB(x, y) + (int) (100 * value));
       }
     }
 
     return output;
   }
 
-  private static BufferedImage bulgeFilter(BufferedImage input, double bulgeStrength, double bulgeRadius) {
+  private static BufferedImage bulgeFilter(BufferedImage input, double bulgeRadius, double bulgeStrength) {
 
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
@@ -168,7 +168,7 @@ public class RenderEngine {
     return output;
   }
 
-  public static BufferedImage embossFilter(BufferedImage input) {
+  public static BufferedImage embossFilter(BufferedImage input, double value) {
     int width = input.getWidth();
     int height = input.getHeight();
 
@@ -187,7 +187,7 @@ public class RenderEngine {
 
         int redDiff = ((lowerRight >> 16) & 255) - ((upperLeft >> 16) & 255);
 
-        int greenDiff = ((lowerRight >> 8) & 255) - ((upperLeft >> 8) & 255);
+        int greenDiff = (int) ((((lowerRight >> 8) & 255) - ((upperLeft >> 8) & 255)) * value);
 
         int blueDiff = (lowerRight & 255) - (upperLeft & 255);
 

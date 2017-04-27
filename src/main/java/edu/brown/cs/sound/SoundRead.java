@@ -136,8 +136,7 @@ public class SoundRead {
 	            	
 	            	//add amplitude data
 	            	ampData.add((buffer[s]));
-	            	
-	            	
+
 	               if (buffer[s] > max) {
 	            	   max = buffer[s];
 	            	
@@ -156,11 +155,8 @@ public class SoundRead {
 	         // Close the wavFile
 	         wavFile.close();
 	         
-	         //scale amplitude data
-	         ampData = scaleData(max,min,ampData);
-	         
-	         //get rest of meta data
-	         getFrequencyData();
+	         //get rest of meta data, this populates internal instance variables
+					getScaledFrequencyData();
 	      }
 	      catch (Exception e)
 	      {
@@ -173,21 +169,21 @@ public class SoundRead {
 	 * Returns amplitude data 
 	 * @return
 	 */
-	public List<Double> getAmplitudeData() {
-		return ampData;
+	public List<Double> getScaledAmplitudeData() {
+		return scaleData(ampData);
 	}
 	/**
 	 * Returns tempo data
 	 * @return
 	 */
-	public List<Double> getTempoData() {
-		return tempoData;
+	public List<Double> getScaledTempoData() {
+		return scaleData(tempoData);
 	}
 	/**
 	 * Collects and sets frequency and tempo data
 	 * @return
 	 */
-	public List<Double> getFrequencyData() {
+	public List<Double> getScaledFrequencyData() {
 		//check if frequency Data is cached 
 		if(freqData.isEmpty()) {
 			
@@ -238,16 +234,6 @@ public class SoundRead {
 				fftList.add(transform);
 			}
 			
-		
-			
-//			System.out.println("Number of bins (should be): " + numFramesTime/2);
-//			System.out.println("What it is: " + fftData.get(0).length);
-//			
-//			System.out.println("BIN VALUE FOR LAST BIN: " + fftList.get(0).binToHz(fftData.get(0).length -1, 44100));
-//			System.out.println("BIN VALUE FOR HALF BIN: " + fftList.get(0).binToHz(fftData.get(0).length/2, 44100));
-//			System.out.println("BIN VALUE FOR first  BIN: " + fftList.get(0).binToHz(1, 44100));
-			
-			
 			//loop through fft samples
 			for(int i = 0; i < fftData.size();i++) {
 				
@@ -261,28 +247,20 @@ public class SoundRead {
 				
 				freqData.add(toAdd);
 			}
-			
-			double maxValue = findMaxValue(freqData);
-			double minValue = findMinValue(freqData);
-			
-			//final tempoData scaled
-			tempoData = scaleData(maxValue*60000,minValue*60000,tempoData);
-			
-			//final frequency scaled
-			freqData = scaleData(maxValue,minValue,freqData);
-	
 		}
-		return freqData;
+		return scaleData(freqData);
 	}
 	/**
 	 * Scales sound data within pre-
 	 * determined scaleMag
-	 * @param max - max sound data value
-	 * @param min - min sound data value
 	 * @param toScale - list of data to be scaled
 	 * @return scaled data
 	 */
-	private List<Double> scaleData(double max, double min, List<Double> toScale) {
+	private List<Double> scaleData(List<Double> toScale) {
+
+		double max = findMaxValue(toScale);
+		double min = findMinValue(toScale);
+
 		double biggestMag = -1;
 		if(Math.abs(max) < Math.abs(min)) {
 			biggestMag = min;
@@ -293,7 +271,6 @@ public class SoundRead {
 		List<Double> toReturn = new ArrayList<Double>();
 		for(double d: toScale){
 			toReturn.add(d*scaleFactor);
-			System.out.println(d*scaleFactor);
 		}
 		return toReturn;
 		
