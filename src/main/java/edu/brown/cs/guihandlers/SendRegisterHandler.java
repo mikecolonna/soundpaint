@@ -67,7 +67,7 @@ public class SendRegisterHandler implements TemplateViewRoute {
     
     // log user in after completing registration
     guiProcessor.getSessionsToUsers().put(req.session().id(), user.getId());
-    
+    req.session().attribute("username", username);
     response.redirect("/");
     return null;
   }

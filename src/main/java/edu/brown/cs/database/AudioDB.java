@@ -14,18 +14,18 @@ public interface AudioDB {
   
   String getFreqMDFilepath();
   
-  String getPitchMDFilepath();
+  String getTempoMDFilepath();
   
   static AudioDB createAudio(String id, String videoId, String srcFilepath,
-      String ampFilepath, String freqFilepath, String pitchFilepath) {
+      String ampFilepath, String freqFilepath, String tempoFilepath) {
     return new AudioDBProxy(id, videoId, srcFilepath, 
-        ampFilepath, freqFilepath, pitchFilepath);
+        ampFilepath, freqFilepath, tempoFilepath);
   }
   
   static AudioDB createDummy(String id, String videoId, String srcFilepath,
-      String ampFilepath, String freqFilepath, String pitchFilepath) {
+      String ampFilepath, String freqFilepath, String tempoFilepath) {
     return new AudioDBDummy(id, videoId, srcFilepath, 
-        ampFilepath, freqFilepath, pitchFilepath);
+        ampFilepath, freqFilepath, tempoFilepath);
   }
   
   static AudioDB get(String id) {

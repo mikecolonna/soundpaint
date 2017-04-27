@@ -11,16 +11,16 @@ public class AudioDBProxy implements AudioDB {
   private String src;
   private String ampMd;
   private String freqMd;
-  private String pitchMd;
+  private String tempoMd;
   
   public AudioDBProxy(String aId, String aVidId, String aSrc, 
-      String aAmpMd, String aFreqMd, String aPitchMd) {
+      String aAmpMd, String aFreqMd, String aTempoMd) {
     id = aId;
     vidId = aVidId;
     src = aSrc;
     ampMd = aAmpMd;
     freqMd = aFreqMd;
-    pitchMd = aPitchMd;
+    tempoMd = aTempoMd;
     
     // put in database if not there
     // all info from <form> fields must be passed to AudioDBProxy
@@ -32,7 +32,7 @@ public class AudioDBProxy implements AudioDB {
         prep.setString(3, src);
         prep.setString(4, ampMd);
         prep.setString(5, freqMd);
-        prep.setString(6, pitchMd);
+        prep.setString(6, tempoMd);
         prep.addBatch();
         prep.executeBatch();
       }
@@ -69,8 +69,8 @@ public class AudioDBProxy implements AudioDB {
   }
   
   @Override
-  public String getPitchMDFilepath() {
-    return pitchMd;
+  public String getTempoMDFilepath() {
+    return tempoMd;
   }
 
 }
