@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class RenderEngine {
 
-  public static void renderVideo(List<VideoSoundParameterMapping> mappings, FrameGrabber frameGrabber, SoundEngine soundEngine) {
+  public static void renderVideo(List<VideoSoundParameterMapping> mappings, FrameGrabber frameGrabber, SoundEngine soundEngine, String outputPath) {
     List<SoundData> frequencyData;
     try {
       frameGrabber.start();
@@ -32,8 +32,6 @@ public class RenderEngine {
 
       int videoBitrate = frameGrabber.getVideoBitrate();
       int videoCodec = frameGrabber.getVideoCodec();
-
-      String outputPath = "./testRender.mp4";
 
       FFmpegFrameRecorder recorder
           = new FFmpegFrameRecorder(outputPath, imgWidth, imgHeight);

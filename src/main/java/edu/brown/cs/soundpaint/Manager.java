@@ -149,7 +149,7 @@ public class Manager {
         mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
     if (tokens.size() == 3) {
-      RenderEngine.renderVideo(mappings, new FFmpegFrameGrabber(tokens.get(1)), new SoundEngine(tokens.get(2)));
+      RenderEngine.renderVideo(mappings, new FFmpegFrameGrabber(tokens.get(1)), new SoundEngine(tokens.get(2)), "./testRender.mp4");
     } else {
       System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
     }
