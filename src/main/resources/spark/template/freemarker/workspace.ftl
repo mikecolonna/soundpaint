@@ -126,11 +126,16 @@
 
     $("#render").click(function(e) {
       e.preventDefault();
-    
+      console.log($(".filter_pair"));
+      console.log($($(".filter_pair").toArray()[0]).children().first().val());
+      console.log($($(".filter_pair").toArray()[0]).children().last().val());
+      console.log($($(".filter_pair").toArray()[1]).children().first().val());
+      console.log($($(".filter_pair").toArray()[1]).children().eq(1).val());
       // get a reference to the fileInput
       let audioInput = $("#audio");
       console.log("audioInput", audioInput);
-      
+      let videoInput = $("#video");
+      console.log("videoInput", videoInput);
       // so that you can get the file you wanted to upload 
       let audioFile = audioInput[0].files[0];
       
@@ -138,7 +143,8 @@
       var fd = new FormData();
       
       // encode the file
-      fd.append('fileName', audioFile);
+      fd.append('audioName', audioFile);
+      fd.append('videoName', videoFile);
       
       sendFileWhenDone(fd);
     })
