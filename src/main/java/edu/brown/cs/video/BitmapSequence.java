@@ -17,10 +17,9 @@ import java.util.List;
  */
 public class BitmapSequence {
 
-    public static List<BufferedImage> getBitmapSequenceFromPath(String path) {
+    public static List<BufferedImage> getBitmapSequenceFromFrameGrabber(FFmpegFrameGrabber frameGrabber) {
         List<BufferedImage> sequence = new ArrayList<>();
         try {
-            FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(path);
             frameGrabber.start();
             Frame frame;
             for(int i=0; i<frameGrabber.getLengthInFrames(); i++){

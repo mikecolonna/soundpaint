@@ -43,7 +43,7 @@ public class FilterProcessor {
       filterer.setImageHeight(imgHeight);
       
       FFmpegFrameRecorder recorder 
-        = new FFmpegFrameRecorder(outputPath, imgWidth, imgHeight);
+        = new FFmpegFrameRecorder(outputPath, 0);
       recorder.setFormat("mp4");
       recorder.setFrameRate(frameRate);
       recorder.setVideoBitrate(videoBitrate);
@@ -82,6 +82,7 @@ public class FilterProcessor {
       System.out.println("ERROR: Could not apply filter to frame.");
     } catch (FrameRecorder.Exception fre) {
       System.out.println("ERROR: Could not export frame to output.");
+      fre.printStackTrace();
     }
   }
   

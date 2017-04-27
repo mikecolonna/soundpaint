@@ -74,7 +74,7 @@ public class Manager {
         return;
       }
 
-      sequence = BitmapSequence.getBitmapSequenceFromPath(tokens.get(1));
+      sequence = BitmapSequence.getBitmapSequenceFromFrameGrabber(new FFmpegFrameGrabber(tokens.get(1)));
 
       new File(outputPath).mkdir();
       for (int i = 0; i < sequence.size(); i++) {
@@ -139,10 +139,21 @@ public class Manager {
 
   public void renderCommand(List<String> tokens, String cmd) {
 
-    Map<SoundParameter, VideoFilterSpecification> filterMap = new HashMap<>();
-    VideoFilterSpecification colorSpec = new VideoFilterSpecification(VideoParameter.COLOR, 1.0);
+    Map<String, VideoFilterSpecification> filterMap = new HashMap<>();
+    VideoFilterSpecification tintSpec = new VideoFilterSpecification(VideoParameter.TINT, 1.0);
+    VideoFilterSpecification pushSpec = new VideoFilterSpecification(VideoParameter.PUSH, 1.0);
+    VideoFilterSpecification bulgeSpec = new VideoFilterSpecification(VideoParameter.BULGE, 1.0);
+    VideoFilterSpecification embossSpec = new VideoFilterSpecification(VideoParameter.EMBOSS, 1.0);
 
-    filterMap.put(null, colorSpec);
+
+//    filterMap.put("b", pushSpec);
+    filterMap.put("c", bulgeSpec);
+    filterMap.put("d", embossSpec);
+    filterMap.put("a", tintSpec);
+
+    if (filterMap.size() != 2) {
+      System.out.println("ADFADSFADSFASFASDFADF");
+    }
 
     if (tokens.size() == 2) {
       RenderEngine.renderVideo(filterMap, new FFmpegFrameGrabber(tokens.get(1)));
@@ -150,7 +161,4 @@ public class Manager {
       System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
     }
   }
-  
-  
-
 }

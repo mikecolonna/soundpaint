@@ -5,5 +5,5 @@ package edu.brown.cs.video;
  */
 
 public enum VideoParameter {
-  COLOR
+  TINT, PUSH, BULGE, EMBOSS
 }
