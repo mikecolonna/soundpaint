@@ -1,5 +1,6 @@
 package edu.brown.cs.guihandlers;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -68,6 +69,11 @@ public class SendRegisterHandler implements TemplateViewRoute {
     // log user in after completing registration
     guiProcessor.getSessionsToUsers().put(req.session().id(), user.getId());
     req.session().attribute("username", username);
+    
+    // put user in file system
+    System.out.println("HERE");
+    new File("./src/main/resources/users/" + username).mkdir();
+    
     response.redirect("/");
     return null;
   }

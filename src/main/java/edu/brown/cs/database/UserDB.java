@@ -30,7 +30,7 @@ public interface UserDB {
   }
   
   static String generateId() {
-    String uid = "/u/" + UUID.randomUUID().toString().replace("-", "");
+    String uid = "u_" + UUID.randomUUID().toString().replace("-", "");
     return uid;
   }
 

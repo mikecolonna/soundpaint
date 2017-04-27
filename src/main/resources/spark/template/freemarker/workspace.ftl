@@ -37,7 +37,9 @@
 
 <div id="work" onresize="resize_canvas()">
   <input id="audio" type="file" name="audio" accept =".mp3, .wav, .midi, .mid"/>
+  <label for="audio" class="white">Audio</label>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
+  <label for="video" class="white">Video</label>
 	<ul id="filters">
 		<li class="filter_pair">
 			<select>
@@ -156,9 +158,12 @@
     })
   });
 
-  $("#render").click(function(e) {
+  $("#change").click(function(e) {
     e.preventDefault();
+    console.log("here");
     $('#myAudio').attr('src', "tswift.mp3");
+    //$('#myAudio').play();
+    document.getElementById("myAudio").play();
   });
 </script>
 </#assign>
