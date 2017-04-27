@@ -37,27 +37,24 @@
 <h1><span>WorkSpace</span></h1>
 
 <div id="work" onresize="resize_canvas()">
-  <form action="/sendRender" method="post">
-  	<ul id="filters">
-  		<li>
-  			<select>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="opel">Opel</option>
-          <option value="audi">Audi</option>
-        </select>
-  			<select>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="opel">Opel</option>
-          <option value="audi">Audi</option>
-        </select>
-      </li>
-  	</ul>
-    <button class="my-button" id="new-filter">Add Filter Pair</button>
-    <input class="my-button red-button" id="render" type="submit" value="Render">
-  </form>
-
+	<ul id="filters">
+		<li class="filter_pair">
+			<select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+      </select>
+			<select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+      </select>
+    </li>
+	</ul>
+  <button class="my-button" id="new_filter">Add Filter Pair</button>
+  <button class="my-button red-button" id="render">Render</button>
 </div>
 <script src="js/three.js"></script>
 <script src="js/test.js"></script>
@@ -65,22 +62,38 @@
 <audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
 <canvas id="canvas">
 </canvas>
-<div>
+<div id="frame">
   <video id="preview" autoplay>
       <source src="movie.mp4" type="video/mp4">
   </video>
+</div>
 
 <script type="text/javascript">
   function resize_canvas() {
     canvas = document.getElementById("canvas");
-    canvas.width = 87%;
-    canvas.height = 80%;
+    canvas.width = "87%";
+    canvas.height = "80%";
   };
-  $("#new-filter").click(function(e) {
-    console.log("ok");
-    e.preventDefault();
-    console.log("YAY");
-  })
+  $(document).ready(function() {
+    let max_fields = 5; //maximum input boxes allowed
+    let wrapper = $("#filters"); //Fields wrapper
+    let x = 1;
+    console.log(x);
+    $("#new_filter").on("click", function(e) {
+      e.preventDefault();
+      if(x < max_fields) { //max input box allowed
+        x++; //text box increment
+        $(wrapper).append('<li class="filter_pair"><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove">remove</a></li>'); //add new filter space
+        $(".remove").on("click", function(e) { //user click on remove text
+          e.preventDefault();
+          $(this).parent('li').remove();
+          x--;
+        })
+      } else {
+        alert("Maximum 5 filters");
+      }
+    });
+  });
 </script>
 </#assign>
 <#include "main.ftl">
