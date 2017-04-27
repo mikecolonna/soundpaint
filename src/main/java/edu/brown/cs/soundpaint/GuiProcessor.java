@@ -6,6 +6,7 @@ import edu.brown.cs.guihandlers.FrontHandler;
 import edu.brown.cs.guihandlers.FrontLoginHandler;
 import edu.brown.cs.guihandlers.FrontRegisterHandler;
 import edu.brown.cs.guihandlers.FrontWorkspaceHandler;
+import edu.brown.cs.guihandlers.LogoutHandler;
 import edu.brown.cs.guihandlers.SendLoginHandler;
 import edu.brown.cs.guihandlers.SendRegisterHandler;
 import edu.brown.cs.guihandlers.SendRenderHandler;
@@ -50,6 +51,7 @@ public class GuiProcessor {
     Spark.get("/login", new FrontLoginHandler(this), fme);
     Spark.get("/register", new FrontRegisterHandler(this), fme);
     Spark.get("/workspace", new FrontWorkspaceHandler(this), fme);
+    Spark.get("/logout", new LogoutHandler(this), fme);
     
     Spark.post("/register", new SendRegisterHandler(this), fme);
     Spark.post("/login", new SendLoginHandler(this), fme);
