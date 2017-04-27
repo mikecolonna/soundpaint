@@ -1,12 +1,7 @@
 package edu.brown.cs.soundpaint;
 
-<<<<<<< Updated upstream
 import edu.brown.cs.tratchfo.SoundParameter;
 import edu.brown.cs.video.*;
-=======
-import edu.brown.cs.video.FilterProcessor;
-import edu.brown.cs.video.GrayscaleFilter;
->>>>>>> Stashed changes
 
 import com.google.common.collect.ImmutableMap;
 
@@ -36,12 +31,7 @@ import java.util.regex.Pattern;
  * Created by tynan on 4/15/17.
  */
 public class Manager {
-<<<<<<< Updated upstream
-=======
-  
-  private FilterProcessor filterProcessor;
-  private List<BufferedImage> sequence;
->>>>>>> Stashed changes
+
 
   //TODO: Find a way to move all these commands and handlers to separate modules
 

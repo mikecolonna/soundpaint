@@ -1,12 +1,6 @@
 package edu.brown.cs.video;
 
-<<<<<<< Updated upstream
-=======
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
->>>>>>> Stashed changes
+
 import java.util.Queue;
 
 import edu.brown.cs.filter.Filter;
@@ -17,11 +11,7 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameFilter;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
-<<<<<<< Updated upstream
-=======
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.FrameGrabber.Exception;
->>>>>>> Stashed changes
+
 
 /**
  * @author mike 4/17/17
@@ -30,7 +20,6 @@ public class FilterProcessor {
 
   // internal filter graph
   private FrameFilter filterer;
-<<<<<<< Updated upstream
   //private Queue<Filter> filters;
   
   public FilterProcessor(Filter filter) {
@@ -39,17 +28,7 @@ public class FilterProcessor {
 
   public FilterProcessor(String filter) {
     filterer = new FFmpegFrameFilter(filter, 0, 0);
-=======
-  private Queue<Filter> filters;
-  
-  public FilterProcessor(String filterSpecs) {
-    filters = new LinkedList<>();
-    filterer = new FFmpegFrameFilter(filterSpecs, 0, 0);
-  }
-  
-  public void add(Filter filter) {
-    filters.add(filter);
->>>>>>> Stashed changes
+
   }
   
   public void process(String inputPath, String outputPath) {
