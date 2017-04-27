@@ -15,7 +15,7 @@ public class SoundEngine {
 		this.path = path;
 	}
 	
-	public List<Double> getMetaData(SoundParameter sp, double framerate) {
+	public List<Double> getMetaData(SoundParameter sp) {
 		List<Double> toReturn = new ArrayList<Double>();
 		switch(sp){
 		case AMPLITUDE:
