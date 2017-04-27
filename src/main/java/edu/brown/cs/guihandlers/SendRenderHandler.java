@@ -7,13 +7,21 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+
 import edu.brown.cs.database.AudioDB;
 import edu.brown.cs.database.VideoDB;
 import edu.brown.cs.soundpaint.GuiProcessor;
+import edu.brown.cs.soundpaint.VideoSoundParameterMapping;
+import edu.brown.cs.video.RenderEngine;
+import edu.brown.cs.video.VideoParameter;
+import edu.brown.cs.sound.SoundEngine;
+import edu.brown.cs.sound.SoundParameter;
 import edu.brown.cs.sound.SoundRead;
 import spark.Request;
 import spark.Response;
@@ -96,13 +104,44 @@ public class SendRenderHandler implements Route {
       filters = gson.fromJson(out.toString(), List.class);
     }
     
+    List<VideoSoundParameterMapping> mappings = new ArrayList<>();
     for (int i = 0; i < filters.size(); i += 2) {
+      SoundParameter sp = null;
+      switch (filters.get(i)) {
+        case "Amplitude":
+          sp = SoundParameter.AMPLITUDE;
+          break;
+        case "Frequency":
+          sp = SoundParameter.FREQUENCY;
+          break;
+        case "Tempo":
+          sp = SoundParameter.TEMPO;
+          break;
+      }
       
+      VideoParameter vp = null;
+      switch (filters.get(i + 1)) {
+        case "Tint":
+          vp = VideoParameter.TINT;
+          break;
+        case "Push":
+          vp = VideoParameter.PUSH;
+          break;
+        case "Bulge":
+          vp = VideoParameter.BULGE;
+          break;
+        case "Emboss":
+          vp = VideoParameter.EMBOSS;
+          break;
+      }
       
+      mappings.add(new VideoSoundParameterMapping(vp, sp, 0.5));
     }
     
+    FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
+    SoundEngine soundEngine = new SoundEngine(audioFile.getAbsolutePath());
     
-    
+    RenderEngine.renderVideo(mappings, frameGrabber, soundEngine);
     
     
     return null;
