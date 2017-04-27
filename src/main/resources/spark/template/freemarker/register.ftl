@@ -34,7 +34,7 @@
 </div>
 
 <div class="container">
-    <form action="/sendRegister" method="post">
+    <form action="/register" method="post">
         <ul class="flex-outer">
           <li>
             <p style="margin-bottom=2%;"> Please fill in the fields with your information</p>
@@ -67,7 +67,7 @@
 </div>
 <script type="text/javascript">
   $('.container').find('input, select, option').on('keyup blur focus click', function (e) {
-  
+
   var $this = $(this)
     if (e.type === 'keyup') {
       if ($this.val() === '') {
@@ -77,23 +77,23 @@
       }
     } else if (e.type === 'blur') {
       if($this.val() === '' || $this.val() == null) {
-        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
+        $(this).parent().children().eq(1).animate({ opacity: 0 });
       } else {
-        $(this).parent().children().eq(1).animate({ opacity: .9 });   
-      }   
+        $(this).parent().children().eq(1).animate({ opacity: .9 });
+      }
     } else if (e.type === 'focus') {
       if($this.val() === '' || $this.val() == null) {
-        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
-      } 
+        $(this).parent().children().eq(1).animate({ opacity: 0 });
+      }
       else if($this.val() !== '') {
-        $(this).parent().children().eq(1).animate({ opacity: .9 }); 
+        $(this).parent().children().eq(1).animate({ opacity: .9 });
       }
     } else if (e.type === 'click') {
       if($this.val() === '' || $this.val() == null) {
-        $(this).parent().children().eq(1).animate({ opacity: 0 }); 
-      } 
+        $(this).parent().children().eq(1).animate({ opacity: 0 });
+      }
       else if($this.val() !== '') {
-        $(this).parent().children().eq(1).animate({ opacity: .9 }); 
+        $(this).parent().children().eq(1).animate({ opacity: .9 });
       }
     }
 });
@@ -104,21 +104,21 @@ $('form').submit(function(e) {
   var password = $('#password').val();
   if($("#username").val() === '') {
     $("#username").addClass("required-field");
-    $("#username").parent().children().eq(2).animate({ opacity: 1 }); 
+    $("#username").parent().children().eq(2).animate({ opacity: 1 });
   } else {
     if($("#username").hasClass("required-field")) {
       $("#username").removeClass("required-field");
-      $("#username").parent().children().eq(2).animate({ opacity: 0 }); 
+      $("#username").parent().children().eq(2).animate({ opacity: 0 });
     }
   }
-  if(email.indexOf('@') === -1) { //look for this character 
+  if(email.indexOf('@') === -1) { //look for this character
     $("#email").addClass("required-field");
     if(email === '') {
       $("#email").parent().children().eq(2).text("Email required");
     } else {
       $("#email").parent().children().eq(2).text("Please enter a proper email");
     }
-    $("#email").parent().children().eq(2).animate({ opacity: 1 }); 
+    $("#email").parent().children().eq(2).animate({ opacity: 1 });
   } else {
     if($("#email").hasClass("required-field")) {
       $("#email").removeClass("required-field");
@@ -132,7 +132,7 @@ $('form').submit(function(e) {
     } else {
       $("#password").parent().children().eq(2).text("Password must be at least 6 characters long");
     }
-    $("#password").parent().children().eq(2).animate({ opacity: 1 }); 
+    $("#password").parent().children().eq(2).animate({ opacity: 1 });
   } else {
     if($("#password").hasClass("required-field")) {
       $("#password").removeClass("required-field");
@@ -142,15 +142,15 @@ $('form').submit(function(e) {
   if($("#password2").val() === ''){
     $("#password2").parent().children().eq(2).text("This is required");
     $("#password2").addClass("required-field");
-    $("#password2").parent().children().eq(2).animate({ opacity: 1 }); 
+    $("#password2").parent().children().eq(2).animate({ opacity: 1 });
   } else if($("#password2").val() !== password && $("#password2").val() !== ''){
     $("#password2").parent().children().eq(2).text("Passwords don't match");
     $("#password2").addClass("required-field");
-    $("#password2").parent().children().eq(2).animate({ opacity: 1 }); 
+    $("#password2").parent().children().eq(2).animate({ opacity: 1 });
   } else {
     if($("#password2").hasClass("required-field")) {
       $("#password2").removeClass("required-field");
-      $("#password2").parent().children().eq(2).animate({ opacity: 0 }); 
+      $("#password2").parent().children().eq(2).animate({ opacity: 0 });
     }
   }
   if(!($("#username").hasClass("required-field") || $("#email").hasClass("required-field") || $("#password").hasClass("required-field") || $("#password2").hasClass("required-field") || $("#student-mentor").hasClass("required-field"))) {

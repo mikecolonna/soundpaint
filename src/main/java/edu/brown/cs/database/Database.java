@@ -100,9 +100,7 @@ public final class Database {
         }
       } 
     }
-    
-    if (userId == null) System.out.println("USER NOT FOUND");
-    if (userId != null) System.out.println("USER FOUND");
+   
     return userId;
   }
   

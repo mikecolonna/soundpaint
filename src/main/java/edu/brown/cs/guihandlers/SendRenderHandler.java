@@ -13,9 +13,8 @@ public class SendRenderHandler implements Route {
     guiProcessor = gp;
   }
   
-
   @Override
-  public Object handle(Request arg0, Response arg1) throws Exception {
+  public Object handle(Request req, Response response) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }

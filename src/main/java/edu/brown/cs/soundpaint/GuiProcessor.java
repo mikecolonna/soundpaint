@@ -8,6 +8,7 @@ import edu.brown.cs.guihandlers.FrontRegisterHandler;
 import edu.brown.cs.guihandlers.FrontWorkspaceHandler;
 import edu.brown.cs.guihandlers.SendLoginHandler;
 import edu.brown.cs.guihandlers.SendRegisterHandler;
+import edu.brown.cs.guihandlers.SendRenderHandler;
 import freemarker.template.Configuration;
 import spark.ExceptionHandler;
 import spark.ModelAndView;
@@ -50,8 +51,9 @@ public class GuiProcessor {
     Spark.get("/register", new FrontRegisterHandler(this), fme);
     Spark.get("/workspace", new FrontWorkspaceHandler(this), fme);
     
-    Spark.post("/sendRegister", new SendRegisterHandler(this), fme);
-    Spark.post("/sendLogin", new SendLoginHandler(this), fme);
+    Spark.post("/register", new SendRegisterHandler(this), fme);
+    Spark.post("/login", new SendLoginHandler(this), fme);
+    Spark.post("/render", new SendRenderHandler(this));
     
   }
   

@@ -23,19 +23,22 @@ public class SendLoginHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response response) throws Exception {
+    // if user is already logged in -- take them to home
+    String seshId = req.session().id();
+    if (guiProcessor.getSessionsToUsers().containsKey(seshId)) {
+      response.redirect("/");
+      return null;
+    }
+    
     QueryParamsMap qm = req.queryMap();
     String email = qm.value("email");
     String password = qm.value("password");
-    //System.out.println("email : " + email);
-    //System.out.println("password : " + password);
     
     String userId;
     try {
       userId = UserDB.loginUser(email, password);
       guiProcessor.getSessionsToUsers().put(req.session().id(), userId);
     } catch (SQLException sqle) {
-      //System.out.println(sqle);
-      
       Map<String, Object> variables = ImmutableMap.of(
           "title", "Soundpaint - CS32 Final Project",
           "message","Created by Brendan, Mike, Tymani, and Tynan",
@@ -43,11 +46,8 @@ public class SendLoginHandler implements TemplateViewRoute {
       return new ModelAndView(variables, "login.ftl");
     }
     
-    Map<String, Object> variables = ImmutableMap.of(
-        "title", "Soundpaint - CS32 Final Project",
-        "message","Created by Brendan, Mike, Tymani, and Tynan",
-        "error", "");
-    return new ModelAndView(variables, "home_news.ftl");
+    response.redirect("/");
+    return null;
   }
 
 }

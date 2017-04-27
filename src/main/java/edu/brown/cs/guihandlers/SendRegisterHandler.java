@@ -23,6 +23,13 @@ public class SendRegisterHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response response) throws Exception {
+    // if user is already logged in -- take them to home
+    String seshId = req.session().id();
+    if (guiProcessor.getSessionsToUsers().containsKey(seshId)) {
+      response.redirect("/");
+      return null;
+    }
+    
     QueryParamsMap qm = req.queryMap();
     String username = qm.value("username");
     String email = qm.value("email");
@@ -61,11 +68,8 @@ public class SendRegisterHandler implements TemplateViewRoute {
     // log user in after completing registration
     guiProcessor.getSessionsToUsers().put(req.session().id(), user.getId());
     
-    Map<String, Object> variables = ImmutableMap.of(
-        "title", "Soundpaint - CS32 Final Project",
-        "message","Created by Brendan, Mike, Tymani, and Tynan",
-        "error", "");
-    return new ModelAndView(variables, "home_news.ftl");
+    response.redirect("/");
+    return null;
   }
 
 }
