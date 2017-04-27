@@ -41,16 +41,15 @@
 	<ul id="filters">
 		<li class="filter_pair">
 			<select>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
+        <option value="Amplitude">Amplitude</option>
+        <option value="Tempo">Tempo</option>
+        <option value="Frequency">Frequency</option>
       </select>
 			<select>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
+        <option value="Tint">Tint</option>
+        <option value="Push">Push</option>
+        <option value="Bulge">Bulge</option>
+        <option value="Emboss">Emboss</option>
       </select>
     </li>
 	</ul>
@@ -83,7 +82,7 @@
       e.preventDefault();
       if(x < max_fields) { //max input box allowed
         x++; //text box increment
-        $(wrapper).append('<li class="filter_pair"><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove">remove</a></li>'); //add new filter space
+        $(wrapper).append('<li class="filter_pair"><select><option value="Amplitude">Amplitude</option><option value="Tempo">Tempo</option><option value="Frequency">Frequency</option></select><select><option value="Tint">Tint</option><option value="Push">Push</option><option value="Bulge">Bulge</option><option value="Emboss">Emboss</option></select><a href="#" class="remove">remove</a></li>'); //add new filter space
         $(".remove").on("click", function(e) { //user click on remove text
           e.preventDefault();
           $(this).parent('li').remove();
