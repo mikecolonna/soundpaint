@@ -14,9 +14,9 @@ $(document).ready(() => {
   var fov, zoom, inc;
 
   let lineHolder;
-  const LINE_COUNT = 24;
+  const LINE_COUNT = 30;
   let horiDistance;
-  const fillFactor = 0.8;
+  const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
   const RECT_SIDE = 50;
@@ -57,20 +57,20 @@ $(document).ready(() => {
 
     let rotation = 0;
     for (let i = 0; i < LINE_COUNT; i++) {
-      rotation = i * ((2 * Math.PI) / LINE_COUNT);
+      rotation = i * ((Math.PI) / LINE_COUNT);
 
-      let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33});
+      let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33 });
       planeMaterial.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
       console.log("line hue value : " + i / LINE_COUNT);
 
       const geometry = new THREE.PlaneGeometry(planeWidth, 2, segments, segments);
-      //onst geometry = new THREE.Geometry
 
       const mesh = new THREE.Mesh(geometry, planeMaterial);
-      mesh.position.x = horiDistance * i - (horiDistance * LINE_COUNT) / 2;
+      //mesh.position.x = horiDistance * i - (horiDistance * LINE_COUNT) / 2;
+
 
       //console.log("z :" + mesh.position.z);
-      //mesh.rotateZ(Math.PI/4);
+      mesh.rotateZ(rotation);
       //mesh.setRotationFromAxisAngle(centerAxis, rotation);
       console.log(rotation);
       mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
