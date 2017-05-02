@@ -1,7 +1,6 @@
 package edu.brown.cs.soundpaint;
 
-
-
+import edu.brown.cs.database.Database;
 import edu.brown.cs.sound.SoundEngine;
 import edu.brown.cs.sound.SoundParameter;
 
@@ -26,6 +25,9 @@ import javax.imageio.ImageIO;
 
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import java.nio.Buffer;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +59,7 @@ public class Manager {
         .put(Pattern.compile("process\\s+(.+)"), this::processCommand)
         .put(Pattern.compile("sound\\s+(.+)"), this::soundCommand)
         .put(Pattern.compile("render\\s+(.+)"), this::renderCommand)
+        .put(Pattern.compile("db\\s+(.+)"), this::dbCommand)
         .build();
   }
 
@@ -153,5 +156,39 @@ public class Manager {
     } else {
       System.out.println("ERROR: Please input 2 arguments to the 'process' command.");
     }
+  }
+  
+  public void dbCommand(List<String> tokens, String cmd) {
+    String dbName;
+    try {
+      dbName = tokens.get(1);
+    } catch (ArrayIndexOutOfBoundsException aioobe) {
+      System.out.println("ERROR: No database specified.");
+      return;
+    }
+
+    try {
+      Class.forName("org.sqlite.JDBC");
+    } catch (ClassNotFoundException cnfe) {
+      System.out.println("ERROR: Class not found.");
+      return;
+    }
+    String urlToDb = "jdbc:sqlite:" + dbName;
+
+    //set path to database
+    Database.setPath(urlToDb);
+    try (Connection conn = Database.getConnection()) {
+      Statement stat = null;
+      stat = conn.createStatement();
+      stat.executeUpdate("PRAGMA foreign_keys = ON;");
+    } catch (SQLException sqle) {
+      System.out.println("ERROR: Could not connect to database.");
+      return;
+    }
+    
+    Database.createTables();
+    Database.resetCaches();
+    
+    System.out.println("db set to " + dbName);
   }
 }

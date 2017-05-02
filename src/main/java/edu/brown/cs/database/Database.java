@@ -36,6 +36,42 @@ public final class Database {
     return DriverManager.getConnection(urlToDb);
   }
   
+  public static void createTables() {
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep1 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS user("
+          + "id TEXT PRIMARY KEY,"
+          + "username TEXT UNIQUE,"
+          + "email TEXT UNIQUE,"
+          + "password TEXT NOT NULL);")) {
+        prep1.executeUpdate();
+      }
+      
+      try (PreparedStatement prep2 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS video("
+          + "id TEXT PRIMARY KEY,"
+          + "user_id TEXT,"
+          + "filepath TEXT NOT NULL UNIQUE,"
+          + "FOREIGN KEY (user_id) REFERENCES user (id));")) {
+        prep2.executeUpdate();
+      }
+      
+      try (PreparedStatement prep3 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS audio("
+          + "id TEXT PRIMARY KEY,"
+          + "video_id TEXT,"
+          + "src TEXT,"
+          + "amp TEXT,"
+          + "freq TEXT,"
+          + "tempo TEXT,"
+          + "FOREIGN KEY (video_id) REFERENCES video (id));")) {
+        prep3.executeUpdate();
+      }
+    } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
+  }
+  
   public static void resetCaches() {
     users = new HashMap<>();
     videos = new HashMap<>();
@@ -74,7 +110,6 @@ public final class Database {
           }
         } 
       } catch (SQLException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }

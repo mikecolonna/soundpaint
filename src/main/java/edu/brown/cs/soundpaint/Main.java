@@ -56,9 +56,6 @@ public final class Main {
    if (options.has("gui")) {
      guiProcessor.runSparkServer((int) options.valueOf("port"));
    }
-   
-   Database.setPath("jdbc:sqlite:test.db");
-   Database.resetCaches();
 
    commandProcessor.addCommands(manager::getPatternCommandMap);
    commandProcessor.repl();

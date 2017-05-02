@@ -21,8 +21,6 @@ $(document).ready(() => {
   const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
-  let composer;
-  //const centerAxis = new THREE.Vector3();
 
   function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
@@ -168,6 +166,7 @@ $(document).ready(() => {
 
     //analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
+    console.log(frequencyData);
   }
 
   //const clock = new THREE.Clock();
