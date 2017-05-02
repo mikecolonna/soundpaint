@@ -73,7 +73,7 @@ local.properties
 
 .DS_Store
 soundpaint.iml
-src/main/resources/static/user/
+src/main/resources/static/users/
 
 
 ########
