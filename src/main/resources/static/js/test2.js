@@ -3,27 +3,33 @@ $(document).ready(() => {
   var audio = document.getElementById('myAudio');
   var audioSrc = ctx.createMediaElementSource(audio);
   var analyser = ctx.createAnalyser();
-  var dataArray = new Uint8Array(analyser.frequencyBinCount);
   //analyser.getByteTimeDomainData(dataArray);
+  const binCount = analyser.frequencyBinCount;
 
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
-  var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+  var dataArray = new Uint8Array(binCount);
+  var frequencyData = new Uint8Array(binCount);
   var scene, renderer, camera;
   var fov, zoom, inc;
 
   let lineHolder;
-  const LINE_COUNT = 4;
-  let vertDistance;
+  const LINE_COUNT = 24;
+  let horiDistance;
   const fillFactor = 0.8;
   const planeWidth = 20;
   const segments = 10;
+  const RECT_SIDE = 50;
+  const RECT_DEPTH = 1000;
+  const LINES_PER_SIDE = LINE_COUNT / 4;
+  const LINE_WIDTH = RECT_SIDE / LINES_PER_SIDE; //??
+  //const centerAxis = new THREE.Vector3();
 
   function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
     camera.position.set(0, 0, 100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
-    camera.position.z = 200;
+    //camera.position.z = 2;
 
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -31,7 +37,10 @@ $(document).ready(() => {
 
     scene = new THREE.Scene();
 
-    //addCubes();
+    /*const light = new THREE.PointLight(0xffffff, 1.0, 100);
+    light.position(0, 0, 0);
+    scene.add(light);*/
+
     addLines();
 
     fov = camera.fov;
@@ -39,53 +48,33 @@ $(document).ready(() => {
     inc = -0.001;
   }
 
-  function addCubes() {
-    var x = -100;
-    var y = 0;
-    var z = 0;
-
-    for (var i = 0; i < 1000; i++) {
-      var cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
-      var cubeMaterial = new THREE.MeshNormalMaterial({color:frequencyData[i]*0xff3300, wireframe : true});
-      var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.castShadow = true;
-      cube.receiveShadow = true;
-      cube.name = frequencyData.length;
-      cube.position.x = x;
-
-      x += 10;
-
-      if (x == 100) {
-        z += 10;
-        x = -100;
-      } else if (z == 100) {
-        x = 0;
-        y += 10;
-        z = 0;
-      }
-
-      cube.position.y = y;
-      cube.position.z = z;
-      scene.add(cube);
-    }
-  }
-
   function addLines() {
     lineHolder = new THREE.Object3D();
     scene.add(lineHolder);
     lineHolder.position.z = -300;
-    vertDistance = canvas.width / LINE_COUNT;
+    horiDistance = canvas.width / LINE_COUNT;
+    //lineHolder.rotation.z = Math.PI/4;
 
+    let rotation = 0;
     for (let i = 0; i < LINE_COUNT; i++) {
+      rotation = i * ((2 * Math.PI) / LINE_COUNT);
+
       let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33});
-      planeMaterial.color.setHSL(i / LINE_COUNT * 360, 1.0, 0.5);
-      console.log("line hue value : " + i / LINE_COUNT * 360);
+      planeMaterial.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
+      console.log("line hue value : " + i / LINE_COUNT);
 
       const geometry = new THREE.PlaneGeometry(planeWidth, 2, segments, segments);
+      //onst geometry = new THREE.Geometry
 
       const mesh = new THREE.Mesh(geometry, planeMaterial);
-      mesh.position.y = vertDistance * i - (vertDistance * LINE_COUNT) / 2;
-      mesh.scale.y = (i + 1) / LINE_COUNT * fillFactor;
+      mesh.position.x = horiDistance * i - (horiDistance * LINE_COUNT) / 2;
+
+      //console.log("z :" + mesh.position.z);
+      //mesh.rotateZ(Math.PI/4);
+      //mesh.setRotationFromAxisAngle(centerAxis, rotation);
+      console.log(rotation);
+      mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
+      mesh.scale.y = 1000;
       lineHolder.add(mesh);
     }
   }
@@ -107,8 +96,7 @@ $(document).ready(() => {
 
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
-      lineHolder.children[i].scale.y =
-        frequencyData[i] * frequencyData[i] + 0.00001;
+      lineHolder.children[i].scale.x = frequencyData[i] * 0.01;
     }
 
     /*camera.fov = fov * zoom;
@@ -118,7 +106,7 @@ $(document).ready(() => {
       inc = -inc;
     }*/
 
-    analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
+    //analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
   }
 
