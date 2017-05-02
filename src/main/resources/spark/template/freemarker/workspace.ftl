@@ -59,6 +59,14 @@
   <button class="my-button red-button" id="render">Render</button>
 </div>
 <script src="js/three.js"></script>
+<script src="js/EffectComposer.js"></script>
+<script src="js/RenderPass.js"></script>
+<script src="js/ShaderPass.js"></script>
+<script src="js/CopyShader.js"></script>
+<script src="js/DigitalGlitch.js"></script>
+<script src="js/GlitchPass.js"></script>
+<script src="js/BloomPass.js"></script>
+<script src="js/ConvolutionShader.js"></script>
 <script src="js/test2.js"></script>
 <!-- <script src="js/AudioVisualizer.js"></script>
 <script src="js/Lines.js"></script> -->

@@ -21,6 +21,7 @@ $(document).ready(() => {
   const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
+  let composer;
   //const centerAxis = new THREE.Vector3();
 
   function init() {
@@ -31,6 +32,7 @@ $(document).ready(() => {
 
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
@@ -41,6 +43,23 @@ $(document).ready(() => {
 
     addLines();
     addCubes();
+
+    // COMPOSERS
+    composer = new THREE.EffectComposer(renderer);
+
+    // PASSES
+    const renderPass = new THREE.RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    //renderPass.renderToScreen = true;
+
+    const bloomPass = new THREE.BloomPass(1, 25, 5, 256);
+    //bloomPass.renderToScreen = true;
+    composer.addPass(bloomPass);
+
+    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    effectCopy.renderToScreen = true;
+    composer.addPass(effectCopy);
+
   }
 
   function addLines() {
@@ -86,7 +105,6 @@ $(document).ready(() => {
       cube.receiveShadow = true;
       cube.name = i;
       cube.position.z = i * -20;
-
       cubeHolder.add(cube);
     }
   }
@@ -108,7 +126,7 @@ $(document).ready(() => {
 
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
-      lineHolder.children[i].scale.x = frequencyData[i] * 0.005;
+      lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
@@ -137,7 +155,6 @@ $(document).ready(() => {
           cube.position.y -= .1;
         }
       }
-
       cube.rotation.x += frequencyData[cube.id]/1000;
       cube.rotation.z += frequencyData[cube.id]/10000;
     }
@@ -153,11 +170,15 @@ $(document).ready(() => {
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
   }
 
+  //const clock = new THREE.Clock();
   function animate() {
     requestAnimationFrame(animate);
     render();
+    //renderer.render(scene, camera);
+    //renderer.clear();
 
-    renderer.render(scene, camera);
+    //const delta = clock.getDelta();
+    composer.render();
   }
 
   init();
