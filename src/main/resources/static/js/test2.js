@@ -14,15 +14,14 @@ $(document).ready(() => {
   var fov, zoom, inc;
 
   let lineHolder;
-  const LINE_COUNT = 24;
+  let cubeHolder;
+  const LINE_COUNT = 30;
+  const CUBE_COUNT = 6;
   let horiDistance;
-  const fillFactor = 0.8;
+  const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
-  const RECT_SIDE = 50;
-  const RECT_DEPTH = 1000;
-  const LINES_PER_SIDE = LINE_COUNT / 4;
-  const LINE_WIDTH = RECT_SIDE / LINES_PER_SIDE; //??
+  let composer;
   //const centerAxis = new THREE.Vector3();
 
   function init() {
@@ -33,19 +32,34 @@ $(document).ready(() => {
 
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
 
-    /*const light = new THREE.PointLight(0xffffff, 1.0, 100);
-    light.position(0, 0, 0);
-    scene.add(light);*/
+    const light = new THREE.PointLight(0xffffff, 2.0, 120);
+    light.position.set(0, 0, 100);
+    scene.add(light);
 
     addLines();
+    addCubes();
 
-    fov = camera.fov;
-    zoom = 1.0;
-    inc = -0.001;
+    // COMPOSERS
+    composer = new THREE.EffectComposer(renderer);
+
+    // PASSES
+    const renderPass = new THREE.RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    //renderPass.renderToScreen = true;
+
+    const bloomPass = new THREE.BloomPass(1, 25, 5, 256);
+    //bloomPass.renderToScreen = true;
+    composer.addPass(bloomPass);
+
+    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    effectCopy.renderToScreen = true;
+    composer.addPass(effectCopy);
+
   }
 
   function addLines() {
@@ -57,25 +71,41 @@ $(document).ready(() => {
 
     let rotation = 0;
     for (let i = 0; i < LINE_COUNT; i++) {
-      rotation = i * ((2 * Math.PI) / LINE_COUNT);
+      rotation = i * ((Math.PI) / LINE_COUNT);
 
-      let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33});
+      let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33 });
       planeMaterial.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
       console.log("line hue value : " + i / LINE_COUNT);
 
       const geometry = new THREE.PlaneGeometry(planeWidth, 2, segments, segments);
-      //onst geometry = new THREE.Geometry
 
       const mesh = new THREE.Mesh(geometry, planeMaterial);
-      mesh.position.x = horiDistance * i - (horiDistance * LINE_COUNT) / 2;
+      //mesh.position.x = horiDistance * i - (horiDistance * LINE_COUNT) / 2;
 
       //console.log("z :" + mesh.position.z);
-      //mesh.rotateZ(Math.PI/4);
+      mesh.rotateZ(rotation);
       //mesh.setRotationFromAxisAngle(centerAxis, rotation);
       console.log(rotation);
       mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
       mesh.scale.y = 1000;
       lineHolder.add(mesh);
+    }
+  }
+
+  function addCubes() {
+    cubeHolder = new THREE.Object3D();
+    scene.add(cubeHolder);
+
+    for (let i = 0; i < CUBE_COUNT; i++) {
+      var cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
+      var cubeMaterial = new THREE.MeshLambertMaterial({color:0xff0000, wireframe : false});
+      //cubeMaterial.color.setHSL((i / CUBE_COUNT), 1.0, 0.5);
+      var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.castShadow = true;
+      cube.receiveShadow = true;
+      cube.name = i;
+      cube.position.z = i * -20;
+      cubeHolder.add(cube);
     }
   }
 
@@ -96,7 +126,37 @@ $(document).ready(() => {
 
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
-      lineHolder.children[i].scale.x = frequencyData[i] * 0.01;
+      lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+    }
+
+    for (let j = 0; j < CUBE_COUNT; j++) {
+      const cube = cubeHolder.children[j];
+      if (cube.position.z > 90) {
+        cube.position.z = j * -20;
+        cube.position.x = 0;
+        cube.position.y = 0;
+      } else {
+        cube.position.z += 1;
+        if (cube.name === 0) {
+          cube.position.x += .1;
+        } else if (cube.name === 1) {
+          cube.position.x -= .1;
+        } else if (cube.name === 2) {
+          cube.position.x += .1;
+          cube.position.y -= .1;
+        } else if (cube.name === 3) {
+          cube.position.x -= .1;
+          cube.position.y += .1;
+        } else if (cube.name === 4) {
+          cube.position.x += .1;
+          cube.position.y += .1;
+        } else if (cube.name === 5) {
+          cube.position.x -= .1;
+          cube.position.y -= .1;
+        }
+      }
+      cube.rotation.x += frequencyData[cube.id]/1000;
+      cube.rotation.z += frequencyData[cube.id]/10000;
     }
 
     /*camera.fov = fov * zoom;
@@ -110,11 +170,15 @@ $(document).ready(() => {
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
   }
 
+  //const clock = new THREE.Clock();
   function animate() {
     requestAnimationFrame(animate);
     render();
+    //renderer.render(scene, camera);
+    //renderer.clear();
 
-    renderer.render(scene, camera);
+    //const delta = clock.getDelta();
+    composer.render();
   }
 
   init();
