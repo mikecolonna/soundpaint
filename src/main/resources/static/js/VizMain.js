@@ -1,3 +1,5 @@
+//const events = new Events();
+
 const VizMain = function() {
 
   let canvas;
@@ -5,16 +7,24 @@ const VizMain = function() {
   function init() {
     canvas = document.getElementById('canvas');
 
-    canvas.addEventListener('drop', onDocumentDrop, false);
+    //canvas.addEventListener('drop', onDocumentDrop, false);
     //canvas.addEventListener('dragover', onDocumentDragOver, false);
 
     AudioHandler.init();
-
+    VizHandler.init();
   }
 
-  function onDocumentDrop(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    AudioHandler.onAudioDrop(evt);
-  }
-};
+  function update() {
+		requestAnimationFrame(update);
+		VizMain.emit("update");
+	}
+
+  return {
+    init : init
+  };
+
+}();
+
+$(document).ready(function() {
+	VizMain.init();
+});

@@ -59,7 +59,9 @@
   <button class="my-button red-button" id="render">Render</button>
 </div>
 <script src="js/three.js"></script>
-<script src="js/test.js"></script>
+<script src="js/test2.js"></script>
+<!-- <script src="js/AudioVisualizer.js"></script>
+<script src="js/Lines.js"></script> -->
 
 <audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
 <canvas id="canvas">

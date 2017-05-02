@@ -7,31 +7,38 @@ const Visualizer = function() {
   let frequencyData;
 
   function init() {
+    Visualizer.on("update", update);
+
+    // CAMERA
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
     camera.position.set(0, 0, 100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+    // RENDERER
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
-    scene = new THREE.Scene();
 
+    // SCENE
+    scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x000000, 2000, 3000);
 
+    // INIT VISUALS
     vizHolder = new THREE.Object3D();
     scene.add(vizHolder);
+    Lines.init();
 
-    addCubes();
+    /*addCubes();
 
     fov = camera.fov;
     zoom = 1.0;
-    inc = -0.001;
+    inc = -0.001;*/
   }
 
   function setFrequencyData(data) {
     frequencyData = data;
   }
 
-  function addCubes() {
+  /*function addCubes() {
     var x = -100;
     var y = 0;
     var z = 0;
@@ -60,7 +67,7 @@ const Visualizer = function() {
       cube.position.z = z;
       scene.add(cube);
     }
-  }
+  }*/
 
   function render() {
     /*scene.traverse(function (e) {
@@ -94,5 +101,11 @@ const Visualizer = function() {
 
     renderer.render(scene, camera);
   }
+
+  return {
+    init: init,
+    update: update,
+    getVizHolder: function() { return vizHolder;},
+  };
 
 };
