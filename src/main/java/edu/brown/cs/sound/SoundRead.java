@@ -1,4 +1,4 @@
-package edu.brown.cs.sound;
+package main.java.edu.brown.cs.sound;
 
 import java.io.File;
 import java.util.ArrayList;
