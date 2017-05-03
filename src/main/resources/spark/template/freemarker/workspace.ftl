@@ -40,24 +40,31 @@
   <label for="audio" class="white">Audio</label>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
   <label for="video" class="white">Video</label>
-	<ul id="filters">
-		<li class="filter_pair">
-			<select>
-        <option value="Amplitude">Amplitude</option>
-        <option value="Tempo">Tempo</option>
-        <option value="Frequency">Frequency</option>
-      </select>
-			<select>
-        <option value="Tint">Tint</option>
-        <option value="Push">Push</option>
-        <option value="Bulge">Bulge</option>
-        <option value="Emboss">Emboss</option>
-      </select>
-    </li>
-	</ul>
-  <button class="my-button" id="new_filter">Add Filter Pair</button>
+  <div id="vf" style="background-color: blue; width: 100%; color: white">Video Filters</div>
+  <div id="moveable_vf">
+  	<ul id="filters">
+  		<li class="filter_pair">
+  			<select>
+          <option value="Amplitude">Amplitude</option>
+          <option value="Tempo">Tempo</option>
+          <option value="Frequency">Frequency</option>
+        </select>
+  			<select>
+          <option value="Tint">Tint</option>
+          <option value="Push">Push</option>
+          <option value="Bulge">Bulge</option>
+          <option value="Emboss">Emboss</option>
+        </select>
+      </li>
+  	</ul>
+    <button class="my-button" id="new_filter">Add Filter Pair</button>
+  </div>
   <button class="my-button red-button" id="render">Render</button>
+  <button class="my-button red-button" onclick="location.href='http://google.com';" id="save">Save</button>
+  <input type="range" id="transparency" min="0" max="100" />
+  <label for="transparency" class="white">Transparency</label>
 </div>
+
 <script src="js/three/three.js"></script>
 <script src="js/three/EffectComposer.js"></script>
 <script src="js/three/RenderPass.js"></script>
@@ -68,15 +75,13 @@
 <script src="js/three/BloomPass.js"></script>
 <script src="js/three/ConvolutionShader.js"></script>
 <script src="js/test2.js"></script>
-<!-- <script src="js/AudioVisualizer.js"></script>
-<script src="js/Lines.js"></script> -->
 
 <audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
 <canvas id="canvas">
 </canvas>
 <div id="frame">
   <video id="preview" autoplay>
-      <source src="/users/testguy2/v_42742c1f079047e38c7bfc210e2384a6/test_video.mp4" type="video/mp4">
+      <source src="giphy.mp4" type="video/mp4">
   </video>
 </div>
 
@@ -94,7 +99,7 @@
       e.preventDefault();
       if(x < max_fields) { //max input box allowed
         x++; //text box increment
-        $(wrapper).append('<li class="filter_pair"><select><option value="Amplitude">Amplitude</option><option value="Tempo">Tempo</option><option value="Frequency">Frequency</option></select><select><option value="Tint">Tint</option><option value="Push">Push</option><option value="Bulge">Bulge</option><option value="Emboss">Emboss</option></select><a href="#" class="remove">remove</a></li>'); //add new filter space
+        $(wrapper).append('<li class="filter_pair"><select><option value="Amplitude">Amplitude</option><option value="Tempo">Tempo</option><option value="Frequency">Frequency</option></select><select><option value="Tint">Tint</option><option value="Push">Push</option><option value="Bulge">Bulge</option><option value="Emboss">Emboss</option></select><br><a href="#" class="remove">remove</a></li>'); //add new filter space
         $(".remove").on("click", function(e) { //user click on remove text
           e.preventDefault();
           $(this).parent('li').remove();
@@ -136,11 +141,10 @@
 
     $("#render").click(function(e) {
       e.preventDefault();
-      // console.log($(".filter_pair"));
-      // console.log($($(".filter_pair").toArray()[0]).children().first().val());
-      // console.log($($(".filter_pair").toArray()[0]).children().last().val());
-      // console.log($($(".filter_pair").toArray()[1]).children().first().val());
-      // console.log($($(".filter_pair").toArray()[1]).children().eq(1).val());
+      //check if files have been uploaded or not!!!-------------------------------------------------------------------------------------------
+      // if(document.getElementById("uploadBox").value != "") {
+      //   // you have a file
+      // }
       let filter_choices = [];
       for(let i=0; i<x; i++) {
         filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
@@ -148,9 +152,7 @@
       }
       // get a reference to the fileInput
       let audioInput = $("#audio");
-      console.log("audioInput", audioInput);
       let videoInput = $("#video");
-      console.log("videoInput", videoInput);
       // so that you can get the file you wanted to upload
       let audioFile = audioInput[0].files[0];
       let videoFile = videoInput[0].files[0];
@@ -165,14 +167,26 @@
 
       sendFileWhenDone(fd);
     })
+    $('#frame').resizable({
+      aspectRatio: true,
+      resize: function(event, ui) {
+        if($(this).width() < ($("body").width()*.79) && $(this).height() < ($("body").height()*.86)) {
+          $(this).css({
+            'top': parseInt(ui.position.top, 10) + ((ui.originalSize.height - ui.size.height)) / 2,
+            'left': parseInt(ui.position.left, 10) + ((ui.originalSize.width - ui.size.width)) / 2
+          });
+        }
+      }
+    });
   });
 
-  // $("#change").click(function(e) {
-  //   e.preventDefault();
-  //   console.log("here");
-  //   $('#myAudio').attr('src', "tswift.mp3");
-  //   document.getElementById("myAudio").play();
-  // });
+  $("#vf").click(function(e) {
+    e.preventDefault();
+    $("#moveable_vf").slideToggle("slow", function() {
+    // Animation complete.
+    console.log("hi");
+    });
+  })
 </script>
 </#assign>
 <#include "main.ftl">

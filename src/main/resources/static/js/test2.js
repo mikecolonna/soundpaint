@@ -73,7 +73,7 @@ $(document).ready(() => {
 
       let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33 });
       planeMaterial.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
-      console.log("line hue value : " + i / LINE_COUNT);
+      // console.log("line hue value : " + i / LINE_COUNT);
 
       const geometry = new THREE.PlaneGeometry(planeWidth, 2, segments, segments);
 
@@ -83,7 +83,7 @@ $(document).ready(() => {
       //console.log("z :" + mesh.position.z);
       mesh.rotateZ(rotation);
       //mesh.setRotationFromAxisAngle(centerAxis, rotation);
-      console.log(rotation);
+      // console.log(rotation);
       mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
       mesh.scale.y = 1000;
       lineHolder.add(mesh);
@@ -166,7 +166,7 @@ $(document).ready(() => {
 
     //analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
-    console.log(frequencyData);
+    // console.log(frequencyData);
   }
 
   //const clock = new THREE.Clock();
