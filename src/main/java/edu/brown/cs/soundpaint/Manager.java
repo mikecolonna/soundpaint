@@ -97,9 +97,12 @@ public class Manager {
   public void soundCommand(List<String> tokens, String cmd) {
 	  if (tokens.size() == 2) {	     
 	   //read file
-		  SoundRead sr = new SoundRead((1.0/24.0));
-		  sr.read(tokens.get(1));
+		//  SoundRead sr = new SoundRead((1.0/24.0));
+		  //sr.read(tokens.get(1));
 		  
+		  SoundEngine se = new SoundEngine(tokens.get(1));
+		  se.setSoundReader((1.0/24.0));
+		 
 
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");
@@ -143,7 +146,7 @@ public class Manager {
 
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
 
-////    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
+///    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
 
 //    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
     mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
