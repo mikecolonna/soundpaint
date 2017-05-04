@@ -6,7 +6,6 @@ import edu.brown.cs.sound.SoundParameter;
 
 import edu.brown.cs.video.*;
 
-
 import com.google.common.collect.ImmutableMap;
 
 import edu.brown.cs.sound.SoundRead;
@@ -21,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
 
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import java.nio.Buffer;
@@ -188,6 +186,7 @@ public class Manager {
     
     Database.createTables();
     Database.resetCaches();
+    Database.connected(true);
     
     System.out.println("db set to " + dbName);
   }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.database.Database;
 import edu.brown.cs.database.UserDB;
 import edu.brown.cs.soundpaint.GuiProcessor;
 import spark.ModelAndView;
@@ -28,6 +29,12 @@ public class SendRegisterHandler implements TemplateViewRoute {
     String seshId = req.session().id();
     if (guiProcessor.getSessionsToUsers().containsKey(seshId)) {
       response.redirect("/");
+      return null;
+    }
+    
+    // if database is not connected -- send to error page
+    if (!Database.isConnected()) {
+      response.redirect("/error");
       return null;
     }
     

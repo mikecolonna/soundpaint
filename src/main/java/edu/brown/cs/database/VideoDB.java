@@ -10,12 +10,14 @@ public interface VideoDB {
   
   String getFilePath();
   
-  static VideoDB createVideo(String id, String userId, String filepath) {
-    return new VideoDBProxy(id, userId, filepath);
+  String isPublic();
+  
+  static VideoDB createVideo(String id, String userId, String filepath, String pub) {
+    return new VideoDBProxy(id, userId, filepath, pub);
   }
   
-  static VideoDB createDummy(String id, String userId, String filepath) {
-    return new VideoDBDummy(id, userId, filepath);
+  static VideoDB createDummy(String id, String userId, String filepath, String pub) {
+    return new VideoDBDummy(id, userId, filepath, pub);
   }
   
   static VideoDB get(String id) {

@@ -15,9 +15,9 @@ $(document).ready(() => {
 
   let lineHolder;
   let cubeHolder;
-  const LINE_COUNT = 30;
+  const LINE_COUNT = 25;
   const CUBE_COUNT = 6;
-  let horiDistance;
+  //let horiDistance;
   const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
@@ -54,7 +54,10 @@ $(document).ready(() => {
     //bloomPass.renderToScreen = true;
     composer.addPass(bloomPass);
 
-    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    /*const glitchPass = new THREE.GlitchPass(0);
+    composer.addPass(glitchPass);*/
+
+    const effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     effectCopy.renderToScreen = true;
     composer.addPass(effectCopy);
 
@@ -125,6 +128,7 @@ $(document).ready(() => {
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
       lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+      lineHolder.children[i].material.color.setRGB()
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
@@ -156,13 +160,6 @@ $(document).ready(() => {
       cube.rotation.x += frequencyData[cube.id]/1000;
       cube.rotation.z += frequencyData[cube.id]/10000;
     }
-
-    /*camera.fov = fov * zoom;
-    camera.updateProjectionMatrix();
-    zoom += inc;
-    if ( zoom <= 0.1*(frequencyData[20]/100) || zoom >= 1*(frequencyData[20]/100) ){
-      inc = -inc;
-    }*/
 
     //analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain

@@ -68,7 +68,7 @@ public class SendRenderHandler implements Route {
     String userId = guiProcessor.getSessionsToUsers().get(req.session().id());
     
     // put video in database
-    VideoDB video = VideoDB.createVideo(videoId, userId, videoFile.getAbsolutePath());
+    VideoDB video = VideoDB.createVideo(videoId, userId, videoFile.getAbsolutePath(), "true");
     
     // extract audio and store in file system
     try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
@@ -88,7 +88,7 @@ public class SendRenderHandler implements Route {
     // put audio in database
     AudioDB audio = AudioDB.createAudio(
         audioId, video.getId(), audioFile.getAbsolutePath(), null, null, null);
-    System.out.println("here12312313");
+
     // extract filters
     List<String> filters;
     try (InputStream is = req.raw().getPart("filters").getInputStream()) {
@@ -106,7 +106,6 @@ public class SendRenderHandler implements Route {
 
       filters = gson.fromJson(out.toString(), List.class);
     }
-    System.out.println("here123xxxxxx");
     
     // map audio – video filters
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
@@ -142,13 +141,12 @@ public class SendRenderHandler implements Route {
       
       mappings.add(new VideoSoundParameterMapping(vp, sp, 0.5));
     }
-    System.out.println("here");
+
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
     SoundEngine soundEngine = new SoundEngine(audioFile.getAbsolutePath());
 
-    System.out.println("here1");
     RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, videoFile.getAbsolutePath());
-    System.out.println("here3");
+
     JsonObject filepaths = new JsonObject();
     filepaths.addProperty("videofp", videoFile.getPath().substring(28));
     filepaths.addProperty("audiofp", audioFile.getPath().substring(28));

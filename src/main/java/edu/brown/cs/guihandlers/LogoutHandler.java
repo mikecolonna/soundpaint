@@ -17,9 +17,7 @@ public class LogoutHandler implements TemplateViewRoute {
   @Override
   public ModelAndView handle(Request req, Response response) throws Exception {
     String seshId = req.session().id();
-    
     guiProcessor.getSessionsToUsers().remove(seshId);
-    
     response.redirect("/");
     return null;
   }

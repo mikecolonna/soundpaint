@@ -2,8 +2,10 @@ package edu.brown.cs.soundpaint;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.guihandlers.ErrorHandler;
 import edu.brown.cs.guihandlers.FrontHandler;
 import edu.brown.cs.guihandlers.FrontLoginHandler;
+import edu.brown.cs.guihandlers.FrontPresentationHandler;
 import edu.brown.cs.guihandlers.FrontProjectsHandler;
 import edu.brown.cs.guihandlers.FrontRegisterHandler;
 import edu.brown.cs.guihandlers.FrontWorkspaceHandler;
@@ -54,8 +56,10 @@ public class GuiProcessor {
     Spark.get("/register", new FrontRegisterHandler(this), fme);
     Spark.get("/workspace", new FrontWorkspaceHandler(this), fme);
     Spark.get("/logout", new LogoutHandler(this), fme);
+    Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/projects", new FrontProjectsHandler(this), fme);
-    Spark.get("/video/:id", new FrontProjectsHandler(this), fme);
+    Spark.get("/presentation", new FrontPresentationHandler(this), fme);
+    //Spark.get("/video/:id", new FrontProjectsHandler(this), fme);
     
     Spark.post("/register", new SendRegisterHandler(this), fme);
     Spark.post("/login", new SendLoginHandler(this), fme);
