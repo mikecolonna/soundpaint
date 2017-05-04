@@ -128,7 +128,6 @@ $(document).ready(() => {
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
       lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
-      lineHolder.children[i].material.color.setRGB()
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
