@@ -25,7 +25,7 @@ public class FrontWorkspaceHandler implements TemplateViewRoute {
       res.redirect("/login");
       return null;
     }
-	String username = req.session().attribute("username");
+    String username = req.session().attribute("username");
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
         "message","Created by Brendan, Mike, Tymani, and Tynan",

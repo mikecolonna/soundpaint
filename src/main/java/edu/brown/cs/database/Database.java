@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class Database {
@@ -13,6 +15,7 @@ public final class Database {
   private Database() { }
   
   private static String urlToDb;
+  private static boolean isConnected = false;
   
   // caches
   private static Map<String, UserDB> users;
@@ -34,6 +37,51 @@ public final class Database {
    */
   public static Connection getConnection() throws SQLException {
     return DriverManager.getConnection(urlToDb);
+  }
+  
+  public static void connected(boolean bool) {
+    isConnected = bool;
+  }
+  
+  public static boolean isConnected() {
+    return isConnected;
+  }
+  
+  public static void createTables() {
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep1 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS user("
+          + "id TEXT PRIMARY KEY,"
+          + "username TEXT UNIQUE,"
+          + "email TEXT UNIQUE,"
+          + "password TEXT NOT NULL);")) {
+        prep1.executeUpdate();
+      }
+      
+      try (PreparedStatement prep2 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS video("
+          + "id TEXT PRIMARY KEY,"
+          + "user_id TEXT,"
+          + "filepath TEXT NOT NULL UNIQUE,"
+          + "public TEXT,"
+          + "FOREIGN KEY (user_id) REFERENCES user (id));")) {
+        prep2.executeUpdate();
+      }
+      
+      try (PreparedStatement prep3 = conn.prepareStatement(
+          "CREATE TABLE IF NOT EXISTS audio("
+          + "id TEXT PRIMARY KEY,"
+          + "video_id TEXT,"
+          + "src TEXT,"
+          + "amp TEXT,"
+          + "freq TEXT,"
+          + "tempo TEXT,"
+          + "FOREIGN KEY (video_id) REFERENCES video (id));")) {
+        prep3.executeUpdate();
+      }
+    } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
   }
   
   public static void resetCaches() {
@@ -74,7 +122,6 @@ public final class Database {
           }
         } 
       } catch (SQLException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -120,13 +167,12 @@ public final class Database {
           prep.setString(1, id);
           try (ResultSet rs = prep.executeQuery()) {
             if (rs.next()) {
-              video = VideoDB.createVideo(rs.getString(1), rs.getString(2), rs.getString(3));
+              video = VideoDB.createVideo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
               videos.put(id, video);
             }
           }
         } 
       } catch (SQLException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -157,12 +203,67 @@ public final class Database {
           }
         } 
       } catch (SQLException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
     
     return aud;
+  }
+  
+  public static Map<String, String> getPublicThumbnailFilepaths() {
+    Map<String, String> thumbnailsToUsernames = new HashMap<>();
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep = conn.prepareStatement(
+          "SELECT video.filepath, user.name "
+          + "FROM video "
+          + "INNER JOIN user "
+          + "ON video.user_id = user.id "
+          + "WHERE video.public = 'true'")) {
+        try (ResultSet rs = prep.executeQuery()) {
+          while (rs.next()) {
+            System.out.println("filepath to video : " + rs.getString(1));
+            System.out.println("username : " + rs.getString(2));
+            
+            String rawfp = rs.getString(1);
+            String thumbfp = rawfp.substring(0, rawfp.lastIndexOf('/')) + "/thumbnail.png";
+            String username = rs.getString(2);
+            thumbnailsToUsernames.put(thumbfp, username);
+          }
+        }
+      }
+    } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
+    return thumbnailsToUsernames;
+  }
+  
+  public static String[] getUserThumbnailFilepaths(String userId) {
+    List<String> rawfilepaths = new ArrayList<>();
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep = conn.prepareStatement(
+          "SELECT video.filepath "
+          + "FROM video "
+          + "WHERE video.user_id = ?")) {
+        prep.setString(1, userId);
+        try (ResultSet rs = prep.executeQuery()) {
+          while (rs.next()) {
+            rawfilepaths.add(rs.getString(1));
+          }
+        }
+      }
+    } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
+    
+    String[] filepaths = new String[rawfilepaths.size()];
+    
+    for (int i = 0; i < filepaths.length; i++) {
+      String curr = rawfilepaths.get(i);
+      int endIndex = curr.lastIndexOf('/');
+      filepaths[i] = curr.substring(0, endIndex) + "/thumbnail.png";
+    }
+    
+    return filepaths;
   }
 
 }

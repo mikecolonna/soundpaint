@@ -15,14 +15,12 @@ $(document).ready(() => {
 
   let lineHolder;
   let cubeHolder;
-  const LINE_COUNT = 30;
+  const LINE_COUNT = 25;
   const CUBE_COUNT = 6;
-  let horiDistance;
+  //let horiDistance;
   const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
-  let composer;
-  //const centerAxis = new THREE.Vector3();
 
   function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
@@ -56,7 +54,10 @@ $(document).ready(() => {
     //bloomPass.renderToScreen = true;
     composer.addPass(bloomPass);
 
-    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    /*const glitchPass = new THREE.GlitchPass(0);
+    composer.addPass(glitchPass);*/
+
+    const effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     effectCopy.renderToScreen = true;
     composer.addPass(effectCopy);
 
@@ -75,7 +76,7 @@ $(document).ready(() => {
 
       let planeMaterial = new THREE.MeshBasicMaterial ({ color : 0xEBFF33 });
       planeMaterial.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
-      console.log("line hue value : " + i / LINE_COUNT);
+      // console.log("line hue value : " + i / LINE_COUNT);
 
       const geometry = new THREE.PlaneGeometry(planeWidth, 2, segments, segments);
 
@@ -85,7 +86,7 @@ $(document).ready(() => {
       //console.log("z :" + mesh.position.z);
       mesh.rotateZ(rotation);
       //mesh.setRotationFromAxisAngle(centerAxis, rotation);
-      console.log(rotation);
+      // console.log(rotation);
       mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
       mesh.scale.y = 1000;
       lineHolder.add(mesh);
@@ -159,15 +160,9 @@ $(document).ready(() => {
       cube.rotation.z += frequencyData[cube.id]/10000;
     }
 
-    /*camera.fov = fov * zoom;
-    camera.updateProjectionMatrix();
-    zoom += inc;
-    if ( zoom <= 0.1*(frequencyData[20]/100) || zoom >= 1*(frequencyData[20]/100) ){
-      inc = -inc;
-    }*/
-
     //analyser.getByteTimeDomainData(dataArray);  // amplitude in time domain
     analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
+    // console.log(frequencyData);
   }
 
   //const clock = new THREE.Clock();
