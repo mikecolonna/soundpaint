@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  */
 public class BulgeBufferedImageFilter implements BufferedImageFilter{
 
-  private int BULGE_RADIUS = 100;
+  private final int BULGE_RADIUS = 100;
 
   public BulgeBufferedImageFilter() {
 

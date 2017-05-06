@@ -106,7 +106,7 @@ public class RenderEngine {
 
   public static void saveThumbnail(String inputPath, String outputPath) {
 
-    int THUMBNAIL_WIDTH = 200;
+    final int THUMBNAIL_WIDTH = 200;
 
     FrameGrabber fg = new FFmpegFrameGrabber(inputPath);
 
