@@ -59,6 +59,7 @@ public class Manager {
         .put(Pattern.compile("render\\s+(.+)"), this::renderCommand)
         .put(Pattern.compile("db\\s+(.+)"), this::dbCommand)
         .put(Pattern.compile("wav\\s+(.+)"), this::extractWavCommand)
+        .put(Pattern.compile("thumb\\s+(.+)"), this::saveThumbnailCommand)
         .build();
   }
 
@@ -146,10 +147,6 @@ public class Manager {
   public void renderCommand(List<String> tokens, String cmd) {
 
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
-
-///    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
-
-//    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
     mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
         mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
@@ -197,5 +194,9 @@ public class Manager {
 
   public void extractWavCommand(List<String> tokens, String cmd) {
     ExtractWav.extractWav(tokens.get(1), tokens.get(2));
+  }
+
+  public void saveThumbnailCommand(List<String> tokens, String cmd) {
+    RenderEngine.saveThumbnail(tokens.get(1), tokens.get(2));
   }
 }

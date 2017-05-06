@@ -8,8 +8,11 @@ import edu.brown.cs.soundpaint.VideoSoundParameterMapping;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.Buffer;
 import java.util.List;
 
@@ -101,5 +104,33 @@ public class RenderEngine {
     }
   }
 
+  public static void saveThumbnail(String inputPath, String outputPath) {
 
+    int THUMBNAIL_WIDTH = 200;
+
+    FrameGrabber fg = new FFmpegFrameGrabber(inputPath);
+
+    try {
+      fg.start();
+      Frame f = fg.grabFrame();
+      if (f == null) {
+        System.out.println("ERROR: Cannot obtain a thumbnail from this video, it is empty.");
+      } else {
+        BufferedImage src = new Java2DFrameConverter().getBufferedImage(f);
+        Image thumbnail = src.getScaledInstance(THUMBNAIL_WIDTH, -1, Image.SCALE_SMOOTH);
+        BufferedImage bufferedThumbnail = new BufferedImage(thumbnail.getWidth(null),
+            thumbnail.getHeight(null),
+            BufferedImage.TYPE_INT_RGB);
+        bufferedThumbnail.getGraphics().drawImage(thumbnail, 0, 0, null);
+        try {
+          ImageIO.write(bufferedThumbnail, "jpeg", new File(outputPath));
+        } catch (IOException e) {
+          System.out.println("ERROR: Could not save thumbnail to the given filepath.");
+        }
+      }
+      fg.close();
+    } catch (FFmpegFrameGrabber.Exception e) {
+      System.out.println("ERROR: Could not access the provided video stream.");
+    }
+  }
 }

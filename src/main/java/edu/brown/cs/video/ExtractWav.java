@@ -28,9 +28,9 @@ public class ExtractWav {
       fr.stop();
       System.out.println("Recorded wav.");
     } catch (FrameGrabber.Exception e) {
-      e.printStackTrace();
+      System.out.println("ERROR: Could not access the provided video stream.");
     } catch (FrameRecorder.Exception e) {
-      e.printStackTrace();
+      System.out.println("ERROR: Could not record to the provided filepath.");
     }
   }
 }
