@@ -22,6 +22,7 @@ public class TintBufferedImageFilter implements BufferedImageFilter {
 
   @Override
   public BufferedImage filter(BufferedImage input, double parameterValue, double sensitivityValue) {
+    BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
     for (int x = 0; x < input.getWidth(); x++) {

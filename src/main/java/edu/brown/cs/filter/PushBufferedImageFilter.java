@@ -17,6 +17,7 @@ public class PushBufferedImageFilter implements BufferedImageFilter {
 
   @Override
   public BufferedImage filter(BufferedImage input, double parameterValue, double sensitivityValue) {
+    BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
     System.out.println("pushing");

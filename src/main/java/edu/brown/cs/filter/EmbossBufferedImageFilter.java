@@ -13,6 +13,7 @@ public class EmbossBufferedImageFilter implements BufferedImageFilter {
 
   @Override
   public BufferedImage filter(BufferedImage input, double parameterValue, double sensitivityValue) {
+    BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     int width = input.getWidth();
     int height = input.getHeight();
 
