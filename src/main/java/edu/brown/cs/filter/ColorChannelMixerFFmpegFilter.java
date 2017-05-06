@@ -3,7 +3,7 @@ package edu.brown.cs.filter;
 /**
  * This class wraps ffmpeg's colorchannelmixer filter. Use the nested Builder class to obtain an instance of this object.
  */
-public class ColorChannelMixerFilter implements Filter {
+public class ColorChannelMixerFFmpegFilter implements FFmpegFilter {
 
   private double rr;
   private double rg;
@@ -25,10 +25,10 @@ public class ColorChannelMixerFilter implements Filter {
   private double ab;
   private double aa;
 
-  private ColorChannelMixerFilter(double rr, double rg, double rb, double ra,
-                                  double gr, double gg, double gb, double ga,
-                                  double br, double bg, double bb, double ba,
-                                  double ar, double ag, double ab, double aa) {
+  private ColorChannelMixerFFmpegFilter(double rr, double rg, double rb, double ra,
+                                        double gr, double gg, double gb, double ga,
+                                        double br, double bg, double bb, double ba,
+                                        double ar, double ag, double ab, double aa) {
     this.rr = rr;
     this.rg = rg;
     this.rb = rb;
@@ -247,8 +247,8 @@ public class ColorChannelMixerFilter implements Filter {
       return !(-2.0 > value || 2.0 < value);
     }
 
-    public ColorChannelMixerFilter build() {
-      return new ColorChannelMixerFilter(rr, rg, rb, ra, gr, gg, gb, ga, br, bg, bb, ba, ar, ag, ab, aa);
+    public ColorChannelMixerFFmpegFilter build() {
+      return new ColorChannelMixerFFmpegFilter(rr, rg, rb, ra, gr, gg, gb, ga, br, bg, bb, ba, ar, ag, ab, aa);
     }
 
   }

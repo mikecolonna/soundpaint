@@ -119,7 +119,7 @@ public class Manager {
       
       filterProcessor = new FilterProcessor(filters);
       //filterProcessor.add(new GrayscaleFilter());
-      System.out.printf("Filter set to %s.\n", filters);
+      System.out.printf("FFmpegFilter set to %s.\n", filters);
     } else {
       System.out.println(
           "ERROR: Please input at least 1 argument to the 'filter' command.");
