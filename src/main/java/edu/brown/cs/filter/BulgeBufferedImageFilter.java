@@ -19,6 +19,8 @@ public class BulgeBufferedImageFilter implements BufferedImageFilter{
     BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
+    int adjustedBulgeRadius = (int) (BULGE_RADIUS * sensitivityValue);
+
     int w = input.getWidth();
     int h = input.getHeight();
     for(int x = 0; x < w; x++) {
@@ -28,11 +30,11 @@ public class BulgeBufferedImageFilter implements BufferedImageFilter{
         double distanceSquared = Math.pow(dx, 2) + Math.pow(dy, 2);
         int sx = x;
         int sy = y;
-        if (distanceSquared < Math.pow(BULGE_RADIUS, 2)) {
+        if (distanceSquared < Math.pow(adjustedBulgeRadius, 2)) {
           double distance = Math.sqrt(distanceSquared);
           double dirX = dx / distance;
           double dirY = dy / distance;
-          double alpha = distance / BULGE_RADIUS;
+          double alpha = distance / (adjustedBulgeRadius);
           double distortionFactor =
               distance * Math.pow(1-alpha, 1.0 / parameterValue);
           sx -= distortionFactor * dirX;

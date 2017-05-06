@@ -60,7 +60,7 @@ public class RenderEngine {
 
           double sensitivity = mapping.getSensitivity();
           double parameter = soundEngine.getMetaData(soundParameter).get(fn);
-
+          
           switch (videoParameter) {
             case TINT:
               BufferedImageFilter tintFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);

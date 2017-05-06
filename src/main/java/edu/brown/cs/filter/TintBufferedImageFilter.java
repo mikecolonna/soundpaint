@@ -36,15 +36,15 @@ public class TintBufferedImageFilter implements BufferedImageFilter {
 
         switch (filterColor) {
           case RED:
-            r = (int) (r * parameterValue);
+            r = (int) (r * parameterValue * sensitivityValue);
             break;
 
           case GREEN:
-            g = (int) (g * parameterValue);
+            g = (int) (g * parameterValue * sensitivityValue);
             break;
 
           case BLUE:
-            b = (int) (b * parameterValue);
+            b = (int) (b * parameterValue * sensitivityValue);
             break;
 
           default:

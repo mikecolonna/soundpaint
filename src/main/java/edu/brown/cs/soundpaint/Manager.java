@@ -147,8 +147,8 @@ public class Manager {
   public void renderCommand(List<String> tokens, String cmd) {
 
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
-    mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
-        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
+//        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
     if (tokens.size() == 3) {
       RenderEngine.renderVideo(mappings, new FFmpegFrameGrabber(tokens.get(1)), new SoundEngine(tokens.get(2)), "./testRender.mp4");

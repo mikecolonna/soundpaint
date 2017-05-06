@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  */
 public class PushBufferedImageFilter implements BufferedImageFilter {
 
-  int PUSH_CONSTANT = 100;
+  int PUSH_VALUE = 100;
 
   public PushBufferedImageFilter() {
 
@@ -20,10 +20,12 @@ public class PushBufferedImageFilter implements BufferedImageFilter {
     BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
+    int adjustedPushValue = (int) (PUSH_VALUE * sensitivityValue);
+
     System.out.println("pushing");
     for (int x = 0; x < output.getWidth(); x++) {
       for (int y = 0; y < output.getHeight(); y++) {
-        output.setRGB(x, y, output.getRGB(x, y) + (int) (PUSH_CONSTANT * parameterValue));
+        output.setRGB(x, y, output.getRGB(x, y) + (int) (adjustedPushValue * parameterValue));
       }
     }
 
