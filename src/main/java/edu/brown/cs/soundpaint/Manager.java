@@ -58,6 +58,7 @@ public class Manager {
         .put(Pattern.compile("sound\\s+(.+)"), this::soundCommand)
         .put(Pattern.compile("render\\s+(.+)"), this::renderCommand)
         .put(Pattern.compile("db\\s+(.+)"), this::dbCommand)
+        .put(Pattern.compile("wav\\s+(.+)"), this::extractWavCommand)
         .build();
   }
 
@@ -192,5 +193,9 @@ public class Manager {
     Database.connected(true);
     
     System.out.println("db set to " + dbName);
+  }
+
+  public void extractWavCommand(List<String> tokens, String cmd) {
+    ExtractWav.extractWav(tokens.get(1), tokens.get(2));
   }
 }
