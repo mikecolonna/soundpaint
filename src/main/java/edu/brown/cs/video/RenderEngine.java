@@ -79,6 +79,18 @@ public class RenderEngine {
               BufferedImageFilter embossFilter = new EmbossBufferedImageFilter();
               currentImage = embossFilter.filter(currentImage, parameter, sensitivity);
               break;
+            case REDTINT:
+              BufferedImageFilter redFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.RED);
+              currentImage = redFilter.filter(currentImage, parameter, sensitivity);
+              break;
+            case GREENTINT:
+              BufferedImageFilter greenFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
+              currentImage = greenFilter.filter(currentImage, parameter, sensitivity);
+              break;
+            case BLUETINT:
+              BufferedImageFilter blueFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.BLUE);
+              currentImage = blueFilter.filter(currentImage, parameter, sensitivity);
+              break;
             default:
               break;
           }
