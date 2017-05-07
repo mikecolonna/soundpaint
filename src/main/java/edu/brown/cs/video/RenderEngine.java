@@ -59,8 +59,8 @@ public class RenderEngine {
           VideoParameter videoParameter = mapping.getVideoParameter();
 
           double sensitivity = mapping.getSensitivity();
-//          double parameter = soundEngine.getMetaData(soundParameter).get(fn);
-          double parameter = Math.random();
+          double parameter = soundEngine.getMetaData(soundParameter).get(fn);
+          System.out.println("PARAMETER VALUE: " + parameter);
           
           switch (videoParameter) {
             case TINT:
@@ -79,15 +79,15 @@ public class RenderEngine {
               BufferedImageFilter embossFilter = new EmbossBufferedImageFilter();
               currentImage = embossFilter.filter(currentImage, parameter, sensitivity);
               break;
-            case REDTINT:
+            case RED_TINT:
               BufferedImageFilter redFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.RED);
               currentImage = redFilter.filter(currentImage, parameter, sensitivity);
               break;
-            case GREENTINT:
+            case GREEN_TINT:
               BufferedImageFilter greenFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
               currentImage = greenFilter.filter(currentImage, parameter, sensitivity);
               break;
-            case BLUETINT:
+            case BLUE_TINT:
               BufferedImageFilter blueFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.BLUE);
               currentImage = blueFilter.filter(currentImage, parameter, sensitivity);
               break;

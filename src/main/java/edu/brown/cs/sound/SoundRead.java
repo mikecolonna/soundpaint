@@ -30,7 +30,9 @@ public class SoundRead {
 	//the highest number for scaled values
 	private double scaleHigh = 1;
 	//List of amplitudes from audio file in db (scaled)
-	private List<Double> videoFrameAmp = new ArrayList<Double>();
+	private List<Double> specificAmp = new ArrayList<Double>();
+
+	private List<Double> generalAmp = new ArrayList<Double>();
 		
 	//List of amplitudes from audio file in db (scaled)
 	private List<Double> ampData = new ArrayList<Double>();
@@ -181,8 +183,12 @@ public class SoundRead {
 	 * Returns amplitude data 
 	 * @return
 	 */
-	public List<Double> getScaledAmplitudeData() {
-		return scaleData(videoFrameAmp);
+	public List<Double> getScaledSpecificAmplitudeData() {
+		return scaleData(specificAmp);
+	}
+
+	public List<Double> getScaledGeneralAmplitudeData() {
+		return scaleData(generalAmp);
 	}
 	/**
 	 * Returns tempo data
@@ -217,8 +223,12 @@ public class SoundRead {
 					float [] toAdd = new float [numFramesTime];
 					
 					//add sound data into video frame rate chunk
+
+					generalAmp.add((double) ampData.get(lastAdd).floatValue());
+
 					for(int i = 0; i < numFramesTime;i++) {
 						toAdd[i] = ampData.get(lastAdd + i).floatValue();
+
 					}
 					
 					//add video chunk to fft samples list
@@ -252,7 +262,9 @@ public class SoundRead {
 				double toAdd = transform.binToHz(maxIndex, 
 						(float)origSampleRate);
 				//System.out.println("f size: " + f.length + " maxIndex: " + maxIndex);
-				videoFrameAmp.add((double) f[maxIndex]);
+
+				System.out.println("MAX INDEX IS " + maxIndex + " HERTZ IS " + toAdd);
+				specificAmp.add((double) f[maxIndex]);
 				
 
 				//tempo defined as beats per minute

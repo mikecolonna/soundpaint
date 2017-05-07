@@ -26,18 +26,22 @@ public class SoundEngine {
 	public List<Double> getMetaData(SoundParameter sp) {
 		List<Double> toReturn = new ArrayList<Double>();
 		switch(sp){
-		case AMPLITUDE:
-			toReturn = getAmpData();
-			ampData = toReturn;
-			break;
-		case FREQUENCY:
-			toReturn = getFreqData();
-			freqData = toReturn;
-			break;
-		case TEMPO:
-			toReturn = getTempoData();
-			tempoData = toReturn;
-			break;
+			case GENERAL_AMPLITUDE:
+				toReturn = getGeneralAmpData();
+				ampData = toReturn;
+				break;
+			case SPECIFIC_AMPLITUDE:
+				toReturn = getSpecificAmpData();
+				ampData = toReturn;
+				break;
+			case FREQUENCY:
+				toReturn = getFreqData();
+				freqData = toReturn;
+				break;
+			case TEMPO:
+				toReturn = getTempoData();
+				tempoData = toReturn;
+				break;
 		}
 		return toReturn;
 		
@@ -58,12 +62,21 @@ public class SoundEngine {
 		}
 	}
 	
-	private List<Double> getAmpData() {
+	private List<Double> getGeneralAmpData() {
 		if (sr == null) {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getScaledAmplitudeData();
+			return sr.getScaledGeneralAmplitudeData();
+		}
+	}
+
+	private List<Double> getSpecificAmpData() {
+		if (sr == null) {
+			System.out.println("ERROR: Set a sound reader for the framerate.");
+			return null;
+		} else {
+			return sr.getScaledSpecificAmplitudeData();
 		}
 	}
 	

@@ -1,5 +1,5 @@
 package edu.brown.cs.sound;
 
 public enum SoundParameter {
-	AMPLITUDE, FREQUENCY, TEMPO
+	SPECIFIC_AMPLITUDE, GENERAL_AMPLITUDE, FREQUENCY, TEMPO
 }

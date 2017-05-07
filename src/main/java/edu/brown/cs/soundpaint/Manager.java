@@ -146,7 +146,7 @@ public class Manager {
   public void renderCommand(List<String> tokens, String cmd) {
 
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
-    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.FREQUENCY,1.0));
 //        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
     if (tokens.size() == 3) {

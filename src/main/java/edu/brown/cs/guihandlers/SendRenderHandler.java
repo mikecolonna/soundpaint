@@ -112,7 +112,7 @@ public class SendRenderHandler implements Route {
       SoundParameter sp = null;
       switch (filters.get(i)) {
         case "Amplitude":
-          sp = SoundParameter.AMPLITUDE;
+          sp = SoundParameter.GENERAL_AMPLITUDE;
           break;
         case "Frequency":
           sp = SoundParameter.FREQUENCY;
