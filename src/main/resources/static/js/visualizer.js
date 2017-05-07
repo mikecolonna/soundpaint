@@ -1,23 +1,22 @@
 $(document).ready(() => {
-  var ctx = new AudioContext();
-  var audio = document.getElementById('myAudio');
-  var audioSrc = ctx.createMediaElementSource(audio);
-  var analyser = ctx.createAnalyser();
-  //analyser.getByteTimeDomainData(dataArray);
+  const ctx = new AudioContext();
+  const audio = document.getElementById('myAudio');
+  const audioSrc = ctx.createMediaElementSource(audio);
+  const analyser = ctx.createAnalyser();
   const binCount = analyser.frequencyBinCount;
 
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
-  var dataArray = new Uint8Array(binCount);
-  var frequencyData = new Uint8Array(binCount);
-  var scene, renderer, camera;
-  var fov, zoom, inc;
+  let dataArray = new Uint8Array(binCount);
+  let frequencyData = new Uint8Array(binCount);
+  let scene;
+  let renderer;
+  let camera;
 
   let lineHolder;
   let cubeHolder;
   const LINE_COUNT = 25;
   const CUBE_COUNT = 6;
-  //let horiDistance;
   const fillFactor = 2;
   const planeWidth = 20;
   const segments = 10;
@@ -26,7 +25,6 @@ $(document).ready(() => {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
     camera.position.set(0, 0, 100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
-    //camera.position.z = 2;
 
     renderer = new THREE.WebGLRenderer( { canvas : document.getElementById('canvas') } );
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -128,6 +126,11 @@ $(document).ready(() => {
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
       lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+
+      const r = $("#red").val();
+      const g = $("#green").val();
+      const b = $("#blue").val();
+      lineHolder.children[i].material.color.setRGB(r, g, b);
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
@@ -165,14 +168,9 @@ $(document).ready(() => {
     // console.log(frequencyData);
   }
 
-  //const clock = new THREE.Clock();
   function animate() {
     requestAnimationFrame(animate);
     render();
-    //renderer.render(scene, camera);
-    //renderer.clear();
-
-    //const delta = clock.getDelta();
     composer.render();
   }
 

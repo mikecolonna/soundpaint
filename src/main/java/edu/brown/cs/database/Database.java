@@ -214,11 +214,10 @@ public final class Database {
     Map<String, String> thumbnailsToUsernames = new HashMap<>();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       try (PreparedStatement prep = conn.prepareStatement(
-          "SELECT video.filepath, user.name "
-          + "FROM video "
-          + "INNER JOIN user "
-          + "ON video.user_id = user.id "
-          + "WHERE video.public = 'true'")) {
+          "SELECT video.filepath, user.username "
+          + "FROM video, user "
+          + "WHERE video.user_id = user.id "
+          + "AND video.public = 'true'")) {
         try (ResultSet rs = prep.executeQuery()) {
           while (rs.next()) {
             System.out.println("filepath to video : " + rs.getString(1));

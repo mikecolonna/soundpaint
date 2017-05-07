@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import edu.brown.cs.video.RenderEngine;
 import edu.brown.cs.video.VideoParameter;
 import edu.brown.cs.sound.SoundEngine;
 import edu.brown.cs.sound.SoundParameter;
-import edu.brown.cs.sound.SoundRead;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -41,7 +39,6 @@ public class SendRenderHandler implements Route {
   @SuppressWarnings("unchecked")
   @Override
   public Object handle(Request req, Response response) throws Exception {
-    System.out.println("here");
     String username = req.session().attribute("username");
     
     File audioFile;
@@ -51,6 +48,7 @@ public class SendRenderHandler implements Route {
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     
     // extract video and store in file system
+    String outputVideoFilepath;
     try (InputStream is = req.raw().getPart("videoName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
@@ -60,7 +58,8 @@ public class SendRenderHandler implements Route {
         new File(filepath).mkdir();
       }
       
-      videoFile = new File(filepath + "/test_video.mp4");
+      outputVideoFilepath = filepath + "/output.mp4";
+      videoFile = new File(filepath + "/src_video.mp4");
       OutputStream outStream = new FileOutputStream(videoFile);
       outStream.write(buffer);
     }
@@ -80,7 +79,7 @@ public class SendRenderHandler implements Route {
         new File(filepath).mkdir();
       }
    
-      audioFile = new File(filepath + "/test_audio.wav");
+      audioFile = new File(filepath + "/src_audio.wav");
       OutputStream outStream = new FileOutputStream(audioFile);
       outStream.write(buffer);
     }
@@ -144,15 +143,15 @@ public class SendRenderHandler implements Route {
 
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
     SoundEngine soundEngine = new SoundEngine(audioFile.getAbsolutePath());
+    RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, outputVideoFilepath);
 
-    RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, videoFile.getAbsolutePath());
-
-    JsonObject filepaths = new JsonObject();
-    filepaths.addProperty("videofp", videoFile.getPath().substring(28));
-    filepaths.addProperty("audiofp", audioFile.getPath().substring(28));
-
+    JsonObject videoAudioInfo = new JsonObject();
+    videoAudioInfo.addProperty("videoid", videoId);
+    videoAudioInfo.addProperty("videofp", videoFile.getPath().substring(28));
+    videoAudioInfo.addProperty("audioid", audioId);
+    videoAudioInfo.addProperty("audiofp", audioFile.getPath().substring(28));
     
-    return filepaths;
+    return videoAudioInfo;
   }
 
 }
