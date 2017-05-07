@@ -45,8 +45,8 @@ public class SendLoginHandler implements TemplateViewRoute {
     try {
       userId = UserDB.loginUser(email, password);
       guiProcessor.getSessionsToUsers().put(req.session().id(), userId);
-	  UserDB user = UserDB.getById(userId);
-	  String username = user.getUsername();
+      UserDB user = UserDB.getById(userId);
+      String username = user.getUsername();
       req.session().attribute("username", username);
     } catch (SQLException sqle) {
       Map<String, Object> variables = ImmutableMap.of(

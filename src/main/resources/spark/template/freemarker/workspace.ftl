@@ -61,7 +61,7 @@
       <button class="my-button" id="new_filter">Add Filter Pair</button>
     </div>
   </div>
-  <div id="visf" class="tab">Visualizer Filters</div>
+  <div id="visf" class="tab">Visualizer Options</div>
   <input type="checkbox" id="public" name="public" value="true">Public<br>
   <button class="my-button red-button" id="render">Render</button>
   <input type="range" id="transparency" min="0" max="100" />
