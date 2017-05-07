@@ -20,7 +20,7 @@ public class FilterProcessor {
   // internal filter graph
   private FrameFilter filterer;
 
-  //private Queue<Filter> filters;
+  //private Queue<FFmpegFilter> filters;
 
   public FilterProcessor(String filter) {
     filterer = new FFmpegFrameFilter(filter, 0, 0);
@@ -56,7 +56,7 @@ public class FilterProcessor {
       //Java2DFrameConverter frameConverter = new Java2DFrameConverter();
       while (curr != null) {
         /*BufferedImage img = frameConverter.convert(curr);
-        for (Filter f : filters) {
+        for (FFmpegFilter f : filters) {
           BufferedImage out = f.filter(img);
           img = out;
         }

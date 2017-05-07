@@ -81,3 +81,5 @@ src/main/resources/static/users/
 ########
 
 lib/*
+
+/bin/

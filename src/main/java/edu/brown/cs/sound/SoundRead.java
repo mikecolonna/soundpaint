@@ -151,12 +151,14 @@ public class SoundRead {
 	         
 	         //set total amount of frame sin audio file
 	         totalNumFrames = count;
-	        
+	        System.out.println();
 	         // Close the wavFile
 	         wavFile.close();
+	      // Output the minimum and maximum value
+	         System.out.printf("Min: %f, Max: %f\n", min, max);
 	         
 	         //get rest of meta data, this populates internal instance variables
-					getScaledFrequencyData();
+			getScaledFrequencyData();
 	      }
 	      catch (Exception e)
 	      {
@@ -170,7 +172,7 @@ public class SoundRead {
 	 * @return
 	 */
 	public List<Double> getScaledAmplitudeData() {
-		return scaleData(freqData);
+		return scaleData(ampData);
 	}
 	/**
 	 * Returns tempo data
@@ -246,7 +248,9 @@ public class SoundRead {
 				tempoData.add(toAdd*60000);
 
 				freqData.add(toAdd);
+				
 			}
+			
 		}
 
 		return scaleData(freqData);
@@ -261,15 +265,13 @@ public class SoundRead {
 
 		double max = findMaxValue(toScale);
 		double min = findMinValue(toScale);
-		double sub = min;
-		if(min > 0) {
-			sub = -min;
-		}
+//TODO: fix so can change range
 
 		double scaleFactor = Math.abs(scaleMag)/(max - min);
 		List<Double> toReturn = new ArrayList<Double>();
 		for(double d: toScale){
-			toReturn.add((d + sub)*scaleFactor);
+			toReturn.add((d - min)*scaleFactor);
+			//System.out.println("Negative scale?: " + ((d - sub)*scaleFactor < 0));
 		}
 		return toReturn;
 		

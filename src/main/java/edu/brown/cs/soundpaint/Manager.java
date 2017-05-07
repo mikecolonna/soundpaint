@@ -58,6 +58,8 @@ public class Manager {
         .put(Pattern.compile("sound\\s+(.+)"), this::soundCommand)
         .put(Pattern.compile("render\\s+(.+)"), this::renderCommand)
         .put(Pattern.compile("db\\s+(.+)"), this::dbCommand)
+        .put(Pattern.compile("wav\\s+(.+)"), this::extractWavCommand)
+        .put(Pattern.compile("thumb\\s+(.+)"), this::saveThumbnailCommand)
         .build();
   }
 
@@ -97,9 +99,12 @@ public class Manager {
   public void soundCommand(List<String> tokens, String cmd) {
 	  if (tokens.size() == 2) {	     
 	   //read file
-		  SoundRead sr = new SoundRead((1.0/24.0));
-		  sr.read(tokens.get(1));
+		//  SoundRead sr = new SoundRead((1.0/24.0));
+		  //sr.read(tokens.get(1));
 		  
+		  SoundEngine se = new SoundEngine(tokens.get(1));
+		  se.setSoundReader((1.0/24.0));
+		 
 
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");
@@ -116,7 +121,7 @@ public class Manager {
       
       filterProcessor = new FilterProcessor(filters);
       //filterProcessor.add(new GrayscaleFilter());
-      System.out.printf("Filter set to %s.\n", filters);
+      System.out.printf("FFmpegFilter set to %s.\n", filters);
     } else {
       System.out.println(
           "ERROR: Please input at least 1 argument to the 'filter' command.");
@@ -142,12 +147,8 @@ public class Manager {
   public void renderCommand(List<String> tokens, String cmd) {
 
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
-
-////    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.AMPLITUDE,1.0));
-
-//    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
-    mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.AMPLITUDE,1.0));
-        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.AMPLITUDE,1.0));
+//        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
     if (tokens.size() == 3) {
       RenderEngine.renderVideo(mappings, new FFmpegFrameGrabber(tokens.get(1)), new SoundEngine(tokens.get(2)), "./testRender.mp4");
@@ -189,5 +190,13 @@ public class Manager {
     Database.connected(true);
     
     System.out.println("db set to " + dbName);
+  }
+
+  public void extractWavCommand(List<String> tokens, String cmd) {
+    ExtractWav.extractWav(tokens.get(1), tokens.get(2));
+  }
+
+  public void saveThumbnailCommand(List<String> tokens, String cmd) {
+    RenderEngine.saveThumbnail(tokens.get(1), tokens.get(2));
   }
 }
