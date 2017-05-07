@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
  */
 public class BulgeBufferedImageFilter implements BufferedImageFilter{
 
-  private final int BULGE_RADIUS = 100;
-
   public BulgeBufferedImageFilter() {
 
   }
@@ -16,10 +14,12 @@ public class BulgeBufferedImageFilter implements BufferedImageFilter{
   @Override
   public BufferedImage filter(BufferedImage input, double parameterValue, double sensitivityValue) {
 
+    int bulgeRadius = input.getWidth() / 2;
+
     BufferedImageFilter.validateParameters(parameterValue, sensitivityValue);
     BufferedImage output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
-    int adjustedBulgeRadius = (int) (BULGE_RADIUS * sensitivityValue);
+    int adjustedBulgeRadius = (int) (bulgeRadius * sensitivityValue);
 
     int w = input.getWidth();
     int h = input.getHeight();
