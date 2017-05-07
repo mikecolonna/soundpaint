@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.cs.database.Database;
 import edu.brown.cs.soundpaint.GuiProcessor;
 import spark.ModelAndView;
 import spark.Request;
@@ -20,17 +21,18 @@ public class FrontPresentationHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
+    String logged = "false";
     String seshId = req.session().id();
-    if (!(guiProcessor.getSessionsToUsers().containsKey(seshId))) {
-      res.redirect("/login");
-      return null;
+    String username = "";
+    if (guiProcessor.getSessionsToUsers().containsKey(seshId)) {
+      logged = "true";
+      username = req.session().attribute("username");
     }
-    
-    String username = req.session().attribute("username");
+   
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
         "message","Created by Brendan, Mike, Tymani, and Tynan",
-        "error", "", "name", username);
+        "error", "", "name", username, "logged", logged);
     return new ModelAndView(variables, "presentation.ftl");
   }
 

@@ -70,7 +70,7 @@ a:-webkit-any-link {
   box-shadow: 0px 5px 0px 2px #af4646;
 }
 
-#render, #save {
+#render, #done {
   float:none;
   width:100%;
   font-size: 20px;
@@ -80,7 +80,7 @@ a:-webkit-any-link {
 select {
   cursor: pointer;
 }
-input[type=text], input[type=email], input[type=password], input[type=number] {
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=range] {
   font-size: 1.3em;
   width: 100%;
   border: 2px solid #989797 !important;
@@ -224,7 +224,7 @@ select:invalid { color: gray; }
   padding: 5px;
 }
 
-#canvas {
+#canvas, #empty_black {
   max-height: 87%;
   max-width: 80%;
   display: inline-block;
@@ -233,6 +233,15 @@ select:invalid { color: gray; }
   -webkit-box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
   -moz-box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
   box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
+}
+#canvas, #transparency, #done, #t_id {
+  /*display: none;*/
+}
+#empty_black {
+  height: 87%;
+  width: 80%;
+  background-color: black;
+  display: inline-block;
 }
 
 #frame {
@@ -245,12 +254,15 @@ select:invalid { color: gray; }
   border-radius: 25px;
   max-height: 87%;
   max-width: 80%;
+  min-height: 23%;
+  min-width: 20%;
   opacity: 0.5;
     /*background-color: #E9E581;*/
 }
 #preview {
   min-width: 100%;
   height: auto;
+  /*display: none;*/
 }
 
 #filters {
@@ -263,9 +275,10 @@ select:invalid { color: gray; }
   margin-top: 10px;
   background-color: #F6F6F6;
   padding: 5px;
+  border-radius: 5px;
 }
 #new_filter {
-  float: right;
+  /*float: right;*/
   margin-right: 10px;
   margin-top: 10px;
 }
@@ -287,7 +300,29 @@ input[type=file], .white {
   display: none;
 }
 
+.tab{
+  border: 1px solid red;
+  background-color: blue;
+  width: 100%;
+  color: white;
+  padding: 3px;
+  padding-left: 10px;
+  border-radius: 5px;
+  font-weight: bolder;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
 .error {
   color: red;
   margin-left: 5%;
+}
+
+
+/*----------------------------------------presentation--------------------------------------------------------------*/
+
+#bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }

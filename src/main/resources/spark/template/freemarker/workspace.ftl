@@ -40,7 +40,7 @@
   <label for="audio" class="white">Audio</label>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
   <label for="video" class="white">Video</label>
-  <div id="vf" style="background-color: blue; width: 100%; color: white">Video Filters</div>
+  <div id="vf" class="tab">Video Filters</div>
   <div id="moveable_vf">
   	<ul id="filters">
   		<li class="filter_pair">
@@ -57,12 +57,15 @@
         </select>
       </li>
   	</ul>
-    <button class="my-button" id="new_filter">Add Filter Pair</button>
+    <div style="text-align: right">
+      <button class="my-button" id="new_filter">Add Filter Pair</button>
+    </div>
   </div>
+  <div id="visf" class="tab">Visualizer Filters</div>
   <button class="my-button red-button" id="render">Render</button>
-  <button class="my-button red-button" onclick="location.href='http://google.com';" id="save">Save</button>
   <input type="range" id="transparency" min="0" max="100" />
-  <label for="transparency" class="white">Transparency</label>
+  <label for="transparency" class="white" id="t_id">Transparency</label>
+  <button class="my-button red-button" onclick="location.href='http://google.com';" id="done">Done</button>
 </div>
 
 <script src="js/three/three.js"></script>
@@ -79,8 +82,10 @@
 <audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
 <canvas id="canvas">
 </canvas>
+<!-- <div id="empty_black">
+</div -->
 <div id="frame">
-  <video id="preview" autoplay>
+  <video id="preview">
       <source src="giphy.mp4" type="video/mp4">
   </video>
 </div>
@@ -131,6 +136,10 @@
           $('#myAudio').attr('src', parsed.audiofp);
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
+          $("#transparency").show();
+          $("#show").t_id();
+          $("#done").show();
+          $("#render").prop("disabled",false);
         },
         error: function(errorSentFromServer) {
           // what to do if error
@@ -145,32 +154,41 @@
       // if(document.getElementById("uploadBox").value != "") {
       //   // you have a file
       // }
-      let filter_choices = [];
-      for(let i=0; i<x; i++) {
-        filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
-        filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
-      }
-      // get a reference to the fileInput
-      let audioInput = $("#audio");
-      let videoInput = $("#video");
-      // so that you can get the file you wanted to upload
-      let audioFile = audioInput[0].files[0];
-      let videoFile = videoInput[0].files[0];
+      $("#render").prop("disabled",true);
+      // let filter_choices = [];
+      // for(let i=0; i<x; i++) {
+      //   filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
+      //   filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
+      // }
+      // // get a reference to the fileInput
+      // let audioInput = $("#audio");
+      // let videoInput = $("#video");
+      // // so that you can get the file you wanted to upload
+      // let audioFile = audioInput[0].files[0];
+      // let videoFile = videoInput[0].files[0];
 
-      // create the container for our file data
-      var fd = new FormData();
+      // // create the container for our file data
+      // var fd = new FormData();
 
-      // encode the file
-      fd.append('audioName', audioFile);
-      fd.append('videoName', videoFile);
-      fd.append('filters', JSON.stringify(filter_choices));
+      // // encode the file
+      // fd.append('audioName', audioFile);
+      // fd.append('videoName', videoFile);
+      // fd.append('filters', JSON.stringify(filter_choices));
 
-      sendFileWhenDone(fd);
+      // sendFileWhenDone(fd);
+      $("#transparency").slideToggle();
+      $("#t_id").slideToggle();
+      $("#done").slideToggle();
     })
     $('#frame').resizable({
       aspectRatio: true,
       resize: function(event, ui) {
-        if($(this).width() < ($("body").width()*.79) && $(this).height() < ($("body").height()*.86)) {
+        if(($(this).width() < ($("body").width()*.79) && $(this).height() < ($("body").height()*.86)) && ($(this).width() > ($("body").width()*.19) && $(this).height() > ($("body").height()*.22))) {
+
+          console.log($(this).height());
+          console.log("bodymin " + $("body").height()*.22);
+          console.log($("body").height());
+          console.log("bodymax " + $("body").height()*.86);
           $(this).css({
             'top': parseInt(ui.position.top, 10) + ((ui.originalSize.height - ui.size.height)) / 2,
             'left': parseInt(ui.position.left, 10) + ((ui.originalSize.width - ui.size.width)) / 2
@@ -186,6 +204,10 @@
     // Animation complete.
     console.log("hi");
     });
+  })
+
+  $("#transparency").change(function() {
+    $("#frame").css("opacity", $(this).val() / 100);
   })
 </script>
 </#assign>
