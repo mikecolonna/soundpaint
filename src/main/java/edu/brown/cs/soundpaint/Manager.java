@@ -103,11 +103,6 @@ public class Manager {
 		  SoundEngine se = new SoundEngine(tokens.get(1));
 		  se.setSoundReader((1.0/24.0));
 		  
-		  List<Double> freq = se.getMetaData(SoundParameter.AMPLITUDE);
-		  
-		  for(Double d: freq){
-			  System.out.println("Freq" + d);
-		  }
 		  
 
 	  }else {
