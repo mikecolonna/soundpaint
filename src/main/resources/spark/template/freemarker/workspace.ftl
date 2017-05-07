@@ -169,9 +169,9 @@
       let videoFile = videoInput[0].files[0];
       let public;
       if($('#checkArray:checkbox:checked').length > 0) {
-        public = true;
+        public = "true";
       } else {
-        public = false;
+        public = "false";
       }
       // create the container for our file data
       let fd = new FormData();
@@ -180,7 +180,7 @@
       fd.append('audioName', audioFile);
       fd.append('videoName', videoFile);
       fd.append('filters', JSON.stringify(filter_choices));
-      fd.append('public', JSON.stringify(public));
+      fd.append('public', public;
 
       sendFileWhenDone(fd);
     })
