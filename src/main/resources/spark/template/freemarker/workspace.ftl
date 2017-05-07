@@ -61,12 +61,14 @@
       <button class="my-button" id="new_filter">Add Filter Pair</button>
     </div>
   </div>
-  <div id="visf" class="tab">Visualizer Filters</div>
-  <div id="rgb">
-    <label>R<input type="range" id="red" min="0" max="1" step="0.1"/></label>
-    <label>G<input type="range" id="green" min="0" max="1" step="0.1"/></label>
-    <label>B<input type="range" id="blue" min="0" max="1" step="0.1"/></label>
-  </div>
+  <div id="visf" class="tab">Display Options</div>
+    <div id="opts">
+      <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked>Rainbow
+      <input type="radio" id="setRgb" name="viscolor" class="viscolor" value="rgb">RGB<br>
+        <label>R<input type="range" id="red" min="0" max="1" step="0.1"/></label>
+        <label>G<input type="range" id="green" min="0" max="1" step="0.1"/></label>
+        <label>B<input type="range" id="blue" min="0" max="1" step="0.1"/></label>
+    </div>
   <div style="text-align: right" id="public_wrap">
     <input type="checkbox" id="public" name="public" value="true">Public<br>
   </div>
@@ -85,7 +87,7 @@
 <script src="js/three/GlitchPass.js"></script>
 <script src="js/three/BloomPass.js"></script>
 <script src="js/three/ConvolutionShader.js"></script>
-<script src="js/test2.js"></script>
+<script src="js/visualizer.js"></script>
 
 <audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
 <canvas id="canvas">
@@ -217,7 +219,7 @@
   })
   $("#visf").click(function(e) {
     e.preventDefault();
-    $("#rgb").slideToggle("slow", function() {
+    $("#opts").slideToggle("slow", function() {
     // Animation complete.
     });
   })

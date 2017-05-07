@@ -127,10 +127,14 @@ $(document).ready(() => {
     for (let i = 0; i < LINE_COUNT; i++) {
       lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
 
-      const r = $("#red").val();
-      const g = $("#green").val();
-      const b = $("#blue").val();
-      lineHolder.children[i].material.color.setRGB(r, g, b);
+      if ($("#setRgb").is(':checked')) {
+        const r = $("#red").val();
+        const g = $("#green").val();
+        const b = $("#blue").val();
+        lineHolder.children[i].material.color.setRGB(r, g, b);
+      } else if ($("#setRainbow").is(':checked')) {
+        lineHolder.children[i].material.color.setHSL((i / LINE_COUNT), 1.0, 0.5);
+      }
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
