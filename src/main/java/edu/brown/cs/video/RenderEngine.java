@@ -52,53 +52,60 @@ public class RenderEngine {
       while (currentFrame != null) {
 
         BufferedImage currentImage = converter.getBufferedImage(currentFrame);
+        if (currentImage != null) {
+          for (VideoSoundParameterMapping mapping : mappings) {
 
-        for (VideoSoundParameterMapping mapping : mappings) {
+            SoundParameter soundParameter = mapping.getSoundParameter();
+            VideoParameter videoParameter = mapping.getVideoParameter();
 
-          SoundParameter soundParameter = mapping.getSoundParameter();
-          VideoParameter videoParameter = mapping.getVideoParameter();
+            double sensitivity = mapping.getSensitivity();
+            double parameter = 0;
+            List<Double> metadata = soundEngine.getMetaData(soundParameter);
+            int metadataSize = metadata.size();
 
-          double sensitivity = mapping.getSensitivity();
-          double parameter = soundEngine.getMetaData(soundParameter).get(fn);
-          System.out.println("PARAMETER VALUE: " + parameter);
-          
-          switch (videoParameter) {
-            case TINT:
-              BufferedImageFilter tintFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
-              currentImage = tintFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case PUSH:
-              BufferedImageFilter pushFilter = new PushBufferedImageFilter();
-              currentImage = pushFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case BULGE:
-              BufferedImageFilter bulgeFilter = new BulgeBufferedImageFilter();
-              currentImage = bulgeFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case EMBOSS:
-              BufferedImageFilter embossFilter = new EmbossBufferedImageFilter();
-              currentImage = embossFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case RED_TINT:
-              BufferedImageFilter redFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.RED);
-              currentImage = redFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case GREEN_TINT:
-              BufferedImageFilter greenFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
-              currentImage = greenFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            case BLUE_TINT:
-              BufferedImageFilter blueFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.BLUE);
-              currentImage = blueFilter.filter(currentImage, parameter, sensitivity);
-              break;
-            default:
-              break;
+            if (fn < metadataSize) {
+              parameter = metadata.get(fn);
+            }
+
+            switch (videoParameter) {
+              case TINT:
+                BufferedImageFilter tintFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
+                currentImage = tintFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case PUSH:
+                BufferedImageFilter pushFilter = new PushBufferedImageFilter();
+                currentImage = pushFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case BULGE:
+                BufferedImageFilter bulgeFilter = new BulgeBufferedImageFilter();
+                currentImage = bulgeFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case EMBOSS:
+                BufferedImageFilter embossFilter = new EmbossBufferedImageFilter();
+                currentImage = embossFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case RED_TINT:
+                BufferedImageFilter redFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.RED);
+                currentImage = redFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case GREEN_TINT:
+                BufferedImageFilter greenFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
+                currentImage = greenFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case BLUE_TINT:
+                BufferedImageFilter blueFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.BLUE);
+                currentImage = blueFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              default:
+                break;
+            }
           }
-        }
 
-        recorder.record(converter.getFrame(currentImage));
-        System.out.println("Recorded frame number " + fn);
-        fn++;
+          recorder.record(converter.getFrame(currentImage));
+          System.out.println("Recorded frame number " + fn);
+          fn++;
+
+        }
         currentFrame = frameGrabber.grab();
       }
       System.out.println("All frames have been processed!");

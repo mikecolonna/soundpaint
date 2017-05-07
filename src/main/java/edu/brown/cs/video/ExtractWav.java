@@ -9,7 +9,7 @@ public class ExtractWav {
 
   public static void extractWav(String inputPath, String outputPath) {
     FFmpegFrameGrabber fg = new FFmpegFrameGrabber(inputPath);
-    FFmpegFrameRecorder fr = new FFmpegFrameRecorder(outputPath, 2);
+    FFmpegFrameRecorder fr = new FFmpegFrameRecorder(outputPath, 1);
     try {
       fg.start();
       Frame cf = fg.grabSamples();

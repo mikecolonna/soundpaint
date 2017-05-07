@@ -219,25 +219,24 @@ public class SoundRead {
 			//loops through every chunk of video frame data from sound data
 			while(lastAdd+(numFramesTime-1) < totalNumFrames){
 				//	System.out.println(lastAdd + " / " + totalNumFrames);
-					//define video frame rate chunk 
+					//define video frame rate chunk
 					float [] toAdd = new float [numFramesTime];
-					
-					//add sound data into video frame rate chunk
 
-					generalAmp.add((double) ampData.get(lastAdd).floatValue());
-
+					double averageLoudness = 0;
 					for(int i = 0; i < numFramesTime;i++) {
 						toAdd[i] = ampData.get(lastAdd + i).floatValue();
-
+						double amplitudeSampleValue = Math.abs(toAdd[i]);
+						averageLoudness += Math.pow(amplitudeSampleValue, 2);
 					}
-					
+
+					averageLoudness = Math.sqrt(averageLoudness);
+					generalAmp.add(Math.sqrt(Math.sqrt(averageLoudness)));
+
 					//add video chunk to fft samples list
 					fftData.add(toAdd);
-					
+
 					//find next start of video frame chunk
-					lastAdd = (int) Math.ceil(lastAdd+(numFramesTime-1)*overlap) - 1;
-				
-				
+					lastAdd = (int) Math.ceil(lastAdd+(numFramesTime-1));
 			}
 			
 			//List of FFT Objects indexed according to fftData
@@ -263,7 +262,7 @@ public class SoundRead {
 						(float)origSampleRate);
 				//System.out.println("f size: " + f.length + " maxIndex: " + maxIndex);
 
-				System.out.println("MAX INDEX IS " + maxIndex + " HERTZ IS " + toAdd);
+
 				specificAmp.add((double) f[maxIndex]);
 				
 
