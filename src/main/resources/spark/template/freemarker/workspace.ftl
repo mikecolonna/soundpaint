@@ -67,7 +67,7 @@
     <label>G<input type="range" id="green" min="0" max="1" step="0.1"/></label>
     <label>B<input type="range" id="blue" min="0" max="1" step="0.1"/></label>
   </div>
-  <div style="text-align: right">
+  <div style="text-align: right" id="public_wrap">
     <input type="checkbox" id="public" name="public" value="true">Public<br>
   </div>
   <button class="my-button red-button" id="render">Render</button>
@@ -220,10 +220,6 @@
     $("#rgb").slideToggle("slow", function() {
     // Animation complete.
     });
-  })
-
-  $("#red").change(function() {
-    console.log($(this).val());
   })
 
   $("#transparency").change(function() {

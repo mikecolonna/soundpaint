@@ -126,6 +126,11 @@ $(document).ready(() => {
     // scale lines on levels
     for (let i = 0; i < LINE_COUNT; i++) {
       lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+
+      const r = $("#red").val();
+      const g = $("#green").val();
+      const b = $("#blue").val();
+      lineHolder.children[i].material.color.setRGB(r, g, b);
     }
 
     for (let j = 0; j < CUBE_COUNT; j++) {
