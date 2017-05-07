@@ -62,7 +62,14 @@
     </div>
   </div>
   <div id="visf" class="tab">Visualizer Filters</div>
-  <input type="checkbox" id="public" name="public" value="true">Public<br>
+  <div id="rgb">
+    <label>R<input type="range" id="red" min="0" max="1" step="0.1"/></label>
+    <label>G<input type="range" id="green" min="0" max="1" step="0.1"/></label>
+    <label>B<input type="range" id="blue" min="0" max="1" step="0.1"/></label>
+  </div>
+  <div style="text-align: right">
+    <input type="checkbox" id="public" name="public" value="true">Public<br>
+  </div>
   <button class="my-button red-button" id="render">Render</button>
   <input type="range" id="transparency" min="0" max="100" />
   <label for="transparency" class="white" id="t_id">Transparency</label>
@@ -180,7 +187,7 @@
       fd.append('audioName', audioFile);
       fd.append('videoName', videoFile);
       fd.append('filters', JSON.stringify(filter_choices));
-      fd.append('public', public;
+      fd.append('public', public);
 
       sendFileWhenDone(fd);
     })
@@ -206,8 +213,17 @@
     e.preventDefault();
     $("#moveable_vf").slideToggle("slow", function() {
     // Animation complete.
-    console.log("hi");
     });
+  })
+  $("#visf").click(function(e) {
+    e.preventDefault();
+    $("#rgb").slideToggle("slow", function() {
+    // Animation complete.
+    });
+  })
+
+  $("#red").change(function() {
+    console.log($(this).val());
   })
 
   $("#transparency").change(function() {

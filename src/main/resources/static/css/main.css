@@ -289,14 +289,14 @@ select:invalid { color: gray; }
   box-shadow: 0px 6px 16px 1px rgba(0,0,0,0.75);
 }
 
-input[type=file], .white {
+input[type=file], .white, #public {
   color: #F6F6F6;
 }
 .white {
   padding-left: 5px;
 }
 
-#moveable_vf {
+#moveable_vf, #rgb {
   display: none;
 }
 
