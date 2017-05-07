@@ -62,6 +62,7 @@
     </div>
   </div>
   <div id="visf" class="tab">Visualizer Filters</div>
+  <input type="checkbox" id="public" name="public" value="true">Public<br>
   <button class="my-button red-button" id="render">Render</button>
   <input type="range" id="transparency" min="0" max="100" />
   <label for="transparency" class="white" id="t_id">Transparency</label>
@@ -155,30 +156,33 @@
       //   // you have a file
       // }
       $("#render").prop("disabled",true);
-      // let filter_choices = [];
-      // for(let i=0; i<x; i++) {
-      //   filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
-      //   filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
-      // }
-      // // get a reference to the fileInput
-      // let audioInput = $("#audio");
-      // let videoInput = $("#video");
-      // // so that you can get the file you wanted to upload
-      // let audioFile = audioInput[0].files[0];
-      // let videoFile = videoInput[0].files[0];
+      let filter_choices = [];
+      for(let i=0; i<x; i++) {
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
+        filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
+      }
+      // get a reference to the fileInput
+      let audioInput = $("#audio");
+      let videoInput = $("#video");
+      // so that you can get the file you wanted to upload
+      let audioFile = audioInput[0].files[0];
+      let videoFile = videoInput[0].files[0];
+      let public;
+      if($('#checkArray:checkbox:checked').length > 0) {
+        public = true;
+      } else {
+        public = false;
+      }
+      // create the container for our file data
+      let fd = new FormData();
 
-      // // create the container for our file data
-      // var fd = new FormData();
+      // encode the file
+      fd.append('audioName', audioFile);
+      fd.append('videoName', videoFile);
+      fd.append('filters', JSON.stringify(filter_choices));
+      fd.append('public', JSON.stringify(public));
 
-      // // encode the file
-      // fd.append('audioName', audioFile);
-      // fd.append('videoName', videoFile);
-      // fd.append('filters', JSON.stringify(filter_choices));
-
-      // sendFileWhenDone(fd);
-      $("#transparency").slideToggle();
-      $("#t_id").slideToggle();
-      $("#done").slideToggle();
+      sendFileWhenDone(fd);
     })
     $('#frame').resizable({
       aspectRatio: true,
