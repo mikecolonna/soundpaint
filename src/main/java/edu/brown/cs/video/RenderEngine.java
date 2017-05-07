@@ -59,7 +59,8 @@ public class RenderEngine {
           VideoParameter videoParameter = mapping.getVideoParameter();
 
           double sensitivity = mapping.getSensitivity();
-          double parameter = soundEngine.getMetaData(soundParameter).get(fn);
+//          double parameter = soundEngine.getMetaData(soundParameter).get(fn);
+          double parameter = Math.random();
           
           switch (videoParameter) {
             case TINT:

@@ -55,17 +55,19 @@ public class EmbossBufferedImageFilter implements BufferedImageFilter {
         output.setRGB(j, i, newColor);
       }
 
-//    BufferedImage combinedOutput = new BufferedImage(input.getWidth(), input.getHeight(), BufferedImage.TYPE_INT_ARGB);
-//
-//    // paint both images, preserving the alpha channels
-//    Graphics2D g = combinedOutput.createGraphics();
-//    g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-//    g.drawImage(input, 0, 0, null);
-////    float opacity = (float) (parameterValue * sensitivityValue);
-////    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-////
-////    g.drawImage(output, 0, 0, null);
 
-    return output;
+    System.out.println(input.getType());
+    BufferedImage combinedOutput = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+
+    // paint both images, preserving the alpha channels
+    Graphics2D g = combinedOutput.createGraphics();
+
+    g.drawImage(input, 0, 0, null);
+
+    float opacity = (float) (parameterValue * sensitivityValue);
+    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+    g.drawImage(output, 0, 0, null);
+
+    return combinedOutput;
   }
 }
