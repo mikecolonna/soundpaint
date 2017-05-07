@@ -24,10 +24,14 @@ public class SoundRead {
 	//the total number of frames in the uploaded audio file
 	private int totalNumFrames = 0;
 	
-	//the tightest/smallest bound for the scaled 
-	//audio values to fit into
-	private double scaleMag = 1;
+	//the lowest number for scaled values
+	private double scaleLow = 0;
 	
+	//the highest number for scaled values
+	private double scaleHigh = 1;
+	//List of amplitudes from audio file in db (scaled)
+	private List<Double> videoFrameAmp = new ArrayList<Double>();
+		
 	//List of amplitudes from audio file in db (scaled)
 	private List<Double> ampData = new ArrayList<Double>();
 	
@@ -36,6 +40,12 @@ public class SoundRead {
 	
 	//List of tempoData from audio file in beats per minute (scaled)
 	private List<Double> tempoData = new ArrayList<Double>();
+	
+	//highest amplitude to be considered a beat
+	private double highBeatAmp = 1;
+	
+	//lowest amplitude to be considered a beat
+	private double lowBeatAmp = 0;
 	
 	
 	/**
@@ -77,7 +87,7 @@ public class SoundRead {
 	 * @param filename - audio file path
 	 */
 	private void readMp(String filename) {
-		
+		//MP3File.openMP3File(new File(filename));
 	}
 	/**
 	 * Reads audio file and call functions to 
@@ -155,7 +165,7 @@ public class SoundRead {
 	         // Close the wavFile
 	         wavFile.close();
 	      // Output the minimum and maximum value
-	         System.out.printf("Min: %f, Max: %f\n", min, max);
+	         System.out.println(min + " : " + max);
 	         
 	         //get rest of meta data, this populates internal instance variables
 			getScaledFrequencyData();
@@ -172,7 +182,7 @@ public class SoundRead {
 	 * @return
 	 */
 	public List<Double> getScaledAmplitudeData() {
-		return scaleData(ampData);
+		return scaleData(videoFrameAmp);
 	}
 	/**
 	 * Returns tempo data
@@ -202,7 +212,7 @@ public class SoundRead {
 			
 			//loops through every chunk of video frame data from sound data
 			while(lastAdd+(numFramesTime-1) < totalNumFrames){
-					
+				//	System.out.println(lastAdd + " / " + totalNumFrames);
 					//define video frame rate chunk 
 					float [] toAdd = new float [numFramesTime];
 					
@@ -225,31 +235,40 @@ public class SoundRead {
 		
 			//loop through each video chunk to transform via fft the 
 			//sound data in each chunk
+			
+			int count = 0;
+			int len = fftData.size();
 			for(float [] f: fftData) {
 				
 				//Define FFT object
 				FFT transform = new FFT(f.length,new HammingWindow());
-				
+				//System.out.println(count + " / " + len + " " + ((double) count/(double)len)*100 + "%");
 				//FFT forward transform on f in fftData
 				transform.forwardTransform(f);
+				count++;
+				//find which index/freq has highest amp value
+				int maxIndex = findMaxIndex(f);
 				
-				//add FFT object to list
-				fftList.add(transform);
+				double toAdd = transform.binToHz(maxIndex, 
+						(float)origSampleRate);
+				//System.out.println("f size: " + f.length + " maxIndex: " + maxIndex);
+				videoFrameAmp.add((double) f[maxIndex]);
+				
+
+				//tempo defined as beats per minute
+				//find tempo in certain amplitude range
+				if(f[maxIndex] >= lowBeatAmp 
+						&& f[maxIndex] <= highBeatAmp) {
+					//1 khz is equal to 60000 beats per minute
+					tempoData.add(toAdd*60000);
+				}else{
+					tempoData.add(0.0);
+				}
+				
+				freqData.add(toAdd);
 			}
 			
-			//loop through fft samples
-			for(int i = 0; i < fftData.size();i++) {
-				//freq is in kilohertz
-				double toAdd = fftList.get(i).binToHz(findMaxIndex(fftData.get(i)), 
-						(float)origSampleRate);
-				
-				//tempo defined as beats per minute
-				//1 khz is equal to 60000 beats per minute
-				tempoData.add(toAdd*60000);
 
-				freqData.add(toAdd);
-				
-			}
 			
 		}
 
@@ -265,28 +284,28 @@ public class SoundRead {
 
 		double max = findMaxValue(toScale);
 		double min = findMinValue(toScale);
-//TODO: fix so can change range
 
-		double scaleFactor = Math.abs(scaleMag)/(max - min);
+		double scaleFactor = scaleHigh/(max - min);
 		List<Double> toReturn = new ArrayList<Double>();
 		for(double d: toScale){
-			toReturn.add((d - min)*scaleFactor);
-			//System.out.println("Negative scale?: " + ((d - sub)*scaleFactor < 0));
+			toReturn.add(((d - min) + scaleLow)*scaleFactor);
 		}
 		return toReturn;
 		
 	}
 	
 	private int findMaxIndex(float[] data){
-		float max = Float.MIN_VALUE;
+		float max = -1;
 		int toReturn = -1;
 		//only look through half of data because of nyquist
-		for(int i = 0; i < (data.length/2); i++){
+		for(int i = 0; i < (data.length/2); i++) {
 			if(data[i] > max){
 				max = data[i];
 				toReturn = i;
 			}
 		}
+		
+		
 		
 		return toReturn;
 	}

@@ -99,12 +99,16 @@ public class Manager {
   public void soundCommand(List<String> tokens, String cmd) {
 	  if (tokens.size() == 2) {	     
 	   //read file
-		//  SoundRead sr = new SoundRead((1.0/24.0));
-		  //sr.read(tokens.get(1));
 		  
 		  SoundEngine se = new SoundEngine(tokens.get(1));
 		  se.setSoundReader((1.0/24.0));
-		 
+		  
+		  List<Double> freq = se.getMetaData(SoundParameter.AMPLITUDE);
+		  
+		  for(Double d: freq){
+			  System.out.println("Freq" + d);
+		  }
+		  
 
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");
