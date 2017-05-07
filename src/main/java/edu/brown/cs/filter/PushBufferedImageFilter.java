@@ -22,12 +22,13 @@ public class PushBufferedImageFilter implements BufferedImageFilter {
 
     int adjustedPushValue = (int) (PUSH_VALUE * sensitivityValue);
 
-    System.out.println("pushing");
     for (int x = 0; x < output.getWidth(); x++) {
       for (int y = 0; y < output.getHeight(); y++) {
-        output.setRGB(x, y, output.getRGB(x, y) + (int) (adjustedPushValue * parameterValue));
+        output.setRGB(x, y, Math.min(input.getRGB(x, y) + (int) (adjustedPushValue * parameterValue), (int) Math.pow(255, 3)));
       }
     }
+
+
 
     return output;
   }

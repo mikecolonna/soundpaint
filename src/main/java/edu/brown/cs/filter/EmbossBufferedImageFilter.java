@@ -55,8 +55,6 @@ public class EmbossBufferedImageFilter implements BufferedImageFilter {
         output.setRGB(j, i, newColor);
       }
 
-
-    System.out.println(input.getType());
     BufferedImage combinedOutput = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
 
     // paint both images, preserving the alpha channels
