@@ -234,7 +234,7 @@ select:invalid { color: gray; }
   -moz-box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
   box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
 }
-#canvas, #transparency, #done, #t_id, #rgb, #frame, #visualizer {
+#canvas, #transparency, #done, #t_id, #rgb, #frame, #visualizer, #video_audio_prompt {
   display: none;
 }
 #empty_black {
@@ -319,14 +319,14 @@ input[type=file], .white, #public_wrap {
 }
 
 /* -----------------------------------empty black drag and drop-------------------------------------------*/
-#audio_drop_area, #video_drop_area {
+#audio_drop_area, #video_drop_area, #video_audio_prompt {
   border: 5px solid #878787;
   border-radius: 10px;
   height: 100%;
   width: 100%;
 }
 
-#audio_drop_area {
+#audio_drop_area, #video_audio_prompt {
   opacity: 0%;
 }
 
@@ -334,13 +334,34 @@ input[type=file], .white, #public_wrap {
   opacity: 100%;
 }
 
-#audio_drop_text, #video_drop_text, #audio_drop_error, #video_drop_error, #choose_filters {
+#audio_drop_text, #video_drop_text, #audio_drop_error, #video_drop_error, #choose_filters, #prompt_text {
   color: #878787;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
 }
+
+#buttons {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+.button {
+  background-color: black;
+  color: #878787;
+  border: 2px solid #878787;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.button:hover {
+  background-color: #878787;
+  color: white;
+}
+
 
 /*----------------------------------------presentation--------------------------------------------------------------*/
 

@@ -42,9 +42,9 @@ public class SendRenderHandler implements Route {
   public Object handle(Request req, Response response) throws Exception {
     String username = req.session().attribute("username");
     
-    File audioFile;
+    File audioFile = null;
     String audioId = AudioDB.generateId();
-    File videoFile;
+    File videoFile = null;
     String videoId = VideoDB.generateId();
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     
@@ -67,6 +67,15 @@ public class SendRenderHandler implements Route {
       outStream.write(buffer);
     }
     
+    // public or private video?
+    String isPublic;
+    try (InputStream is = req.raw().getPart("public").getInputStream()) {
+      byte[] buffer = new byte[is.available()];
+      is.read(buffer);
+      
+      isPublic = new String(buffer);
+    }
+    
     // save thumbnail for video
     RenderEngine.saveThumbnail(videoFile.getAbsolutePath(), thumbFilepath);
     
@@ -74,31 +83,56 @@ public class SendRenderHandler implements Route {
     
     // put video in database
     VideoDB video = 
-        VideoDB.createVideo(videoId, userId, outputVideoFilepath, thumbFilepath, "true");
+        VideoDB.createVideo(videoId, userId, outputVideoFilepath, thumbFilepath, isPublic);
     
-    // extract audio and store in file system
-    String outputAudioFilepath;
-    try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
+    // using audio from video?
+    boolean usingAudioFromVideo;
+    try (InputStream is = req.raw().getPart("usingAudioFromVideo").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
       
+      usingAudioFromVideo = (new String(buffer).equals("true")) ? true : false;
+    }
+    
+    // AUDIO EXTRACTION (from video file or given audio file)
+    String outputAudioFilepath = null;
+    if (usingAudioFromVideo) {
       String filepath = "./src/main/resources/static/users/" + username + "/" + videoId + "/audio";
       if (!new File(filepath).exists()) {
         new File(filepath).mkdir();
       }
-   
       outputAudioFilepath = filepath + "/extracted_wav_audio.wav";
-      audioFile = new File(filepath + "/src_audio.wav");
-      OutputStream outStream = new FileOutputStream(audioFile);
-      outStream.write(buffer);
+      
+      // extract audio from video
+      ExtractWav.extractWav(videoFile.getAbsolutePath(), outputAudioFilepath);
+      
+      // put TRANSCODED audio in database
+      AudioDB audio = 
+          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
+    } else {
+      // extract audio and store in file system
+      try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
+        byte[] buffer = new byte[is.available()];
+        is.read(buffer);
+        
+        String filepath = "./src/main/resources/static/users/" + username + "/" + videoId + "/audio";
+        if (!new File(filepath).exists()) {
+          new File(filepath).mkdir();
+        }
+     
+        outputAudioFilepath = filepath + "/extracted_wav_audio.wav";
+        audioFile = new File(filepath + "/src_audio.wav");
+        OutputStream outStream = new FileOutputStream(audioFile);
+        outStream.write(buffer);
+      }
+      
+      // TRANSCODE audio as a wav
+      ExtractWav.extractWav(audioFile.getAbsolutePath(), outputAudioFilepath);
+      
+      // put TRANSCODED audio in database
+      AudioDB audio = 
+          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
     }
-    
-    // TRANSCODE audio as a wav
-    ExtractWav.extractWav(audioFile.getAbsolutePath(), outputAudioFilepath);
-    
-    // put TRANSCODED audio in database
-    AudioDB audio = 
-        AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
 
     // extract filters
     List<String> filters;
@@ -154,7 +188,7 @@ public class SendRenderHandler implements Route {
     }
 
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
-    SoundEngine soundEngine = new SoundEngine(audioFile.getAbsolutePath());
+    SoundEngine soundEngine = new SoundEngine(outputAudioFilepath);
     RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, outputVideoFilepath);
 
     JsonObject videoAudioInfo = new JsonObject();

@@ -23,11 +23,12 @@ public class VideoDBProxy implements VideoDB {
     // all info from <form> fields must be passed to VideoDBProxy
     try (Connection conn = Database.getConnection()) {
       try (PreparedStatement prep = conn.prepareStatement(
-          "INSERT OR IGNORE INTO \"video\" VALUES (?, ?, ?, ?);")) {
+          "INSERT OR IGNORE INTO video VALUES (?, ?, ?, ?, ?);")) {
         prep.setString(1, id);
         prep.setString(2, userId);
         prep.setString(3, filepath);
-        prep.setString(4, pub);
+        prep.setString(4, thumbfilepath);
+        prep.setString(5, pub);
         prep.addBatch();
         prep.executeBatch();
       }

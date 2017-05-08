@@ -96,14 +96,17 @@
 </canvas>
 <div id="empty_black">
   <div id="video_drop_area">
-    <p id="video_drop_text">To begin, drag a video file onto the canvas.</p>>
+    <p id="video_drop_text">To begin, drag a video file onto the canvas.</p>
     <p id="video_drop_error" style="display:none">File type not accepted (.mp4 and .mov are accepted).</p>
   </div>
 
   <div id="video_audio_prompt">
     <p id="prompt_text">Would you like to use the audio from this video or provide a new audio file?</p>
-    <button id="prompt_use"></button>
-    <button id="prompt_dont_use"></button>
+    <br>
+    <div id="buttons">
+      <button id="prompt_use" class="button">Use Audio from Video</button>
+      <button id="prompt_dont_use" class="button">Use Different Audio</button>
+    </div>
   </div>
 
   <div id="audio_drop_area" style="display:none">
@@ -123,6 +126,7 @@
 <script type="text/javascript">
   let audioFile;
   let videoFile;
+  let usingAudioFromVideo = "false";
   function resize_canvas() {
     canvas = document.getElementById("canvas");
     canvas.width = "87%";
@@ -130,7 +134,6 @@
   };
   $(document).ready(function() {
     let fd = new FormData();  //to send to backend upon render
-    let usingAudioFromVideo = false;
 
     let max_fields = 5; //maximum input boxes allowed
     let wrapper = $("#filters"); //Fields wrapper
@@ -219,6 +222,7 @@
       // encode the file
       fd.append('audioName', audioFile);
       fd.append('videoName', videoFile);
+      fd.append('usingAudioFromVideo', usingAudioFromVideo);
       fd.append('filters', JSON.stringify(filter_choices));
       fd.append('public', public);
 
@@ -304,7 +308,7 @@
       $("#video_drop_area").fadeOut("slow", function() {
         // Animation complete.
 
-        $("#audio_drop_area").fadeIn("slow", function() {
+        $("#video_audio_prompt").fadeIn("slow", function() {
           // Animation complete.
         })
       })
@@ -312,6 +316,25 @@
       console.log("didn't work");
       $("#video_drop_error").show();
     }
+  })
+
+  $("#prompt_use").click(function(e) {
+    usingAudioFromVideo = "true";
+    console.log("HERE");
+    console.log(usingAudioFromVideo);
+    $("#video_audio_prompt").fadeOut("slow", function() {
+      $("#choose_filters").fadeIn("slow", function() {
+        // Animation complete.
+      })
+    })
+  })
+
+  $("#prompt_dont_use").click(function(e) {
+    $("#video_audio_prompt").fadeOut("slow", function() {
+      $("#audio_drop_area").fadeIn("slow", function() {
+        // Animation complete.
+      })
+    })
   })
 
   $("#audio_drop_area").hover(function(e) {
