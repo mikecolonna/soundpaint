@@ -1,4 +1,4 @@
-package main.java.edu.brown.cs.sound;
+package edu.brown.cs.sound;
 
 import java.util.List;
 //import org.json.*;

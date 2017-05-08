@@ -1,18 +1,19 @@
-$(document).ready(() => {
+function startVisualizer() {
+  // AUDIO HANDLING
   const ctx = new AudioContext();
   const audio = document.getElementById('myAudio');
   const audioSrc = ctx.createMediaElementSource(audio);
   const analyser = ctx.createAnalyser();
   const binCount = analyser.frequencyBinCount;
-
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
   let dataArray = new Uint8Array(binCount);
   let frequencyData = new Uint8Array(binCount);
+
+  // VISUALS
   let scene;
   let renderer;
   let camera;
-
   let lineHolder;
   let cubeHolder;
   const LINE_COUNT = 25;
@@ -40,7 +41,7 @@ $(document).ready(() => {
     addLines();
     addCubes();
 
-    // COMPOSERS
+    // COMPOSER
     composer = new THREE.EffectComposer(renderer);
 
     // PASSES
@@ -51,9 +52,6 @@ $(document).ready(() => {
     const bloomPass = new THREE.BloomPass(1, 25, 5, 256);
     //bloomPass.renderToScreen = true;
     composer.addPass(bloomPass);
-
-    /*const glitchPass = new THREE.GlitchPass(0);
-    composer.addPass(glitchPass);*/
 
     const effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     effectCopy.renderToScreen = true;
@@ -180,5 +178,4 @@ $(document).ready(() => {
 
   init();
   animate();
-  audio.play();
-});
+}

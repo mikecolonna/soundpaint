@@ -17,6 +17,7 @@ import edu.brown.cs.database.AudioDB;
 import edu.brown.cs.database.VideoDB;
 import edu.brown.cs.soundpaint.GuiProcessor;
 import edu.brown.cs.soundpaint.VideoSoundParameterMapping;
+import edu.brown.cs.video.ExtractWav;
 import edu.brown.cs.video.RenderEngine;
 import edu.brown.cs.video.VideoParameter;
 import edu.brown.cs.sound.SoundEngine;
@@ -67,9 +68,10 @@ public class SendRenderHandler implements Route {
     String userId = guiProcessor.getSessionsToUsers().get(req.session().id());
     
     // put video in database
-    VideoDB video = VideoDB.createVideo(videoId, userId, videoFile.getAbsolutePath(), "true");
+    VideoDB video = VideoDB.createVideo(videoId, userId, outputVideoFilepath, "true");
     
     // extract audio and store in file system
+    String outputAudioFilepath;
     try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
@@ -79,14 +81,18 @@ public class SendRenderHandler implements Route {
         new File(filepath).mkdir();
       }
    
+      outputAudioFilepath = filepath + "/extracted_wav_audio.wav";
       audioFile = new File(filepath + "/src_audio.wav");
       OutputStream outStream = new FileOutputStream(audioFile);
       outStream.write(buffer);
     }
     
-    // put audio in database
+    // TRANSCODE audio as a wav
+    ExtractWav.extractWav(audioFile.getAbsolutePath(), outputAudioFilepath);
+    
+    // put TRANSCODED audio in database
     AudioDB audio = AudioDB.createAudio(
-        audioId, video.getId(), audioFile.getAbsolutePath(), null, null, null);
+        audioId, video.getId(), outputAudioFilepath, null, null, null);
 
     // extract filters
     List<String> filters;
@@ -147,9 +153,9 @@ public class SendRenderHandler implements Route {
 
     JsonObject videoAudioInfo = new JsonObject();
     videoAudioInfo.addProperty("videoid", videoId);
-    videoAudioInfo.addProperty("videofp", videoFile.getPath().substring(28));
+    videoAudioInfo.addProperty("videofp", outputVideoFilepath.substring(28));
     videoAudioInfo.addProperty("audioid", audioId);
-    videoAudioInfo.addProperty("audiofp", audioFile.getPath().substring(28));
+    videoAudioInfo.addProperty("audiofp", outputAudioFilepath.substring(28));
     
     return videoAudioInfo;
   }
