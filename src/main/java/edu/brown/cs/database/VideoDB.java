@@ -8,16 +8,18 @@ public interface VideoDB {
   
   String getUserId();
   
-  String getFilePath();
+  String getFilepath();
+  
+  String getThumbFilepath();
   
   String isPublic();
   
-  static VideoDB createVideo(String id, String userId, String filepath, String pub) {
-    return new VideoDBProxy(id, userId, filepath, pub);
+  static VideoDB createVideo(String id, String userId, String filepath, String thumbfilepath, String pub) {
+    return new VideoDBProxy(id, userId, filepath, thumbfilepath, pub);
   }
   
-  static VideoDB createDummy(String id, String userId, String filepath, String pub) {
-    return new VideoDBDummy(id, userId, filepath, pub);
+  static VideoDB createDummy(String id, String userId, String filepath, String thumbfilepath, String pub) {
+    return new VideoDBDummy(id, userId, filepath, thumbfilepath, pub);
   }
   
   static VideoDB get(String id) {

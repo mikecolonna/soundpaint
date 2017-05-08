@@ -318,6 +318,7 @@ input[type=file], .white, #public_wrap {
   margin-left: 5%;
 }
 
+/* -----------------------------------empty black drag and drop-------------------------------------------*/
 #audio_drop_area, #video_drop_area {
   border: 5px solid #878787;
   border-radius: 10px;

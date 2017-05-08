@@ -49,7 +49,8 @@ public class SendRenderHandler implements Route {
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     
     // extract video and store in file system
-    String outputVideoFilepath;
+    String outputVideoFilepath; // rendered video
+    String thumbFilepath; // video thumbnail
     try (InputStream is = req.raw().getPart("videoName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
@@ -59,16 +60,21 @@ public class SendRenderHandler implements Route {
         new File(filepath).mkdir();
       }
       
+      thumbFilepath = filepath + "/thumbnail.jpeg";
       outputVideoFilepath = filepath + "/output.mp4";
       videoFile = new File(filepath + "/src_video.mp4");
       OutputStream outStream = new FileOutputStream(videoFile);
       outStream.write(buffer);
     }
     
+    // save thumbnail for video
+    RenderEngine.saveThumbnail(videoFile.getAbsolutePath(), thumbFilepath);
+    
     String userId = guiProcessor.getSessionsToUsers().get(req.session().id());
     
     // put video in database
-    VideoDB video = VideoDB.createVideo(videoId, userId, outputVideoFilepath, "true");
+    VideoDB video = 
+        VideoDB.createVideo(videoId, userId, outputVideoFilepath, thumbFilepath, "true");
     
     // extract audio and store in file system
     String outputAudioFilepath;
@@ -91,8 +97,8 @@ public class SendRenderHandler implements Route {
     ExtractWav.extractWav(audioFile.getAbsolutePath(), outputAudioFilepath);
     
     // put TRANSCODED audio in database
-    AudioDB audio = AudioDB.createAudio(
-        audioId, video.getId(), outputAudioFilepath, null, null, null);
+    AudioDB audio = 
+        AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
 
     // extract filters
     List<String> filters;

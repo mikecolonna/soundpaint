@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 public final class Database {
   
   private Database() { }
@@ -63,6 +66,7 @@ public final class Database {
           + "id TEXT PRIMARY KEY,"
           + "user_id TEXT,"
           + "filepath TEXT NOT NULL UNIQUE,"
+          + "thumb TEXT,"
           + "public TEXT,"
           + "FOREIGN KEY (user_id) REFERENCES user (id));")) {
         prep2.executeUpdate();
@@ -167,7 +171,8 @@ public final class Database {
           prep.setString(1, id);
           try (ResultSet rs = prep.executeQuery()) {
             if (rs.next()) {
-              video = VideoDB.createVideo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+              video = VideoDB.createVideo(rs.getString(1), rs.getString(2), 
+                  rs.getString(3), rs.getString(4), rs.getString(5));
               videos.put(id, video);
             }
           }
@@ -210,59 +215,52 @@ public final class Database {
     return aud;
   }
   
-  public static Map<String, String> getPublicThumbnailFilepaths() {
-    Map<String, String> thumbnailsToUsernames = new HashMap<>();
+  public static JsonArray getPublicThumbnailFilepaths() {
+    JsonArray thumbdata = new JsonArray();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       try (PreparedStatement prep = conn.prepareStatement(
-          "SELECT video.filepath, user.username "
+          "SELECT video.thumb, video.id, user.username "
           + "FROM video, user "
           + "WHERE video.user_id = user.id "
           + "AND video.public = 'true'")) {
         try (ResultSet rs = prep.executeQuery()) {
           while (rs.next()) {
-            System.out.println("filepath to video : " + rs.getString(1));
-            System.out.println("username : " + rs.getString(2));
-            
-            String rawfp = rs.getString(1);
-            String thumbfp = rawfp.substring(0, rawfp.lastIndexOf('/')) + "/thumbnail.png";
-            String username = rs.getString(2);
-            thumbnailsToUsernames.put(thumbfp, username);
+            JsonObject thumbinfo = new JsonObject();
+            thumbinfo.addProperty("filepath", rs.getString(1));
+            thumbinfo.addProperty("video_id", rs.getString(2));
+            thumbinfo.addProperty("username", rs.getString(3));
+            thumbdata.add(thumbinfo);
           }
         }
       }
     } catch (SQLException sqle) {
       sqle.printStackTrace();
     }
-    return thumbnailsToUsernames;
+    return thumbdata;
   }
   
-  public static String[] getUserThumbnailFilepaths(String userId) {
-    List<String> rawfilepaths = new ArrayList<>();
+  public static JsonArray getUserThumbnailFilepaths(String userId) {
+    JsonArray thumbdata = new JsonArray();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       try (PreparedStatement prep = conn.prepareStatement(
-          "SELECT video.filepath "
+          "SELECT video.thumb, video.id "
           + "FROM video "
           + "WHERE video.user_id = ?")) {
         prep.setString(1, userId);
         try (ResultSet rs = prep.executeQuery()) {
           while (rs.next()) {
-            rawfilepaths.add(rs.getString(1));
+            JsonObject thumbinfo = new JsonObject();
+            thumbinfo.addProperty("filepath", rs.getString(1));
+            thumbinfo.addProperty("video_id", rs.getString(2));
+            thumbdata.add(thumbinfo);
           }
         }
       }
     } catch (SQLException sqle) {
       sqle.printStackTrace();
     }
-    
-    String[] filepaths = new String[rawfilepaths.size()];
-    
-    for (int i = 0; i < filepaths.length; i++) {
-      String curr = rawfilepaths.get(i);
-      int endIndex = curr.lastIndexOf('/');
-      filepaths[i] = curr.substring(0, endIndex) + "/thumbnail.png";
-    }
-    
-    return filepaths;
+
+    return thumbdata;
   }
 
 }

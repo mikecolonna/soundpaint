@@ -100,6 +100,12 @@
     <p id="video_drop_error" style="display:none">File type not accepted (.mp4 and .mov are accepted).</p>
   </div>
 
+  <div id="video_audio_prompt">
+    <p id="prompt_text">Would you like to use the audio from this video or provide a new audio file?</p>
+    <button id="prompt_use"></button>
+    <button id="prompt_dont_use"></button>
+  </div>
+
   <div id="audio_drop_area" style="display:none">
     <p id="audio_drop_text">Drag an audio file onto the canvas.</p>
     <p id="audio_drop_error" style="display:none">File type not accepted (.wav, .mp3, and .mid are accepted).</p>

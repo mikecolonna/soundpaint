@@ -9,12 +9,14 @@ public class VideoDBProxy implements VideoDB {
   private String id;
   private String userId;
   private String filepath;
+  private String thumbfilepath;
   private String pub;
   
-  public VideoDBProxy(String vId, String vUserId, String vFilepath, String vPub) {
+  public VideoDBProxy(String vId, String vUserId, String vFilepath, String vThumb, String vPub) {
     id = vId;
     userId = vUserId;
     filepath = vFilepath;
+    thumbfilepath = vThumb;
     pub = vPub;
     
     // put in database if not there
@@ -47,13 +49,18 @@ public class VideoDBProxy implements VideoDB {
   }
 
   @Override
-  public String getFilePath() {
+  public String getFilepath() {
     return filepath;
   }
   
   @Override
   public String isPublic() {
     return pub;
+  }
+
+  @Override
+  public String getThumbFilepath() {
+    return thumbfilepath;
   }
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.database.Database;
@@ -45,12 +46,12 @@ public class FrontHandler implements TemplateViewRoute {
       username = req.session().attribute("username");
     }
     
-    Map<String, String> thumbToUser = Database.getPublicThumbnailFilepaths();
+    JsonArray thumbData = Database.getPublicThumbnailFilepaths();
     
     Map<String, Object> variables = ImmutableMap.of(
             "title", "Soundpaint - CS32 Final Project",
             "error", "", "logged", logged, "name", username,
-            "map", gson.toJson(thumbToUser));
+            "thumbs", thumbData);
     return new ModelAndView(variables, "home_news.ftl");
   }
 }
