@@ -80,7 +80,7 @@ a:-webkit-any-link {
 select {
   cursor: pointer;
 }
-input[type=text], input[type=email], input[type=password], input[type=number], input[type=range] {
+input[type=text], input[type=email], input[type=password] {
   font-size: 1.3em;
   width: 100%;
   border: 2px solid #989797 !important;
@@ -89,6 +89,27 @@ input[type=text], input[type=email], input[type=password], input[type=number], i
   -moz-border-radius: 10px !important;
   -o-border-radius: 10px !important;
   outline: none;
+}
+
+input[type=number] {
+  font-size: .75em;
+  width: 25%;
+  border: 2px solid #989797 !important;
+  border-radius: 10px !important;
+  -webkit-border-radius: 10px !important;
+  -moz-border-radius: 10px !important;
+  -o-border-radius: 10px !important;
+  outline: none;
+}
+label > input[type=range] {
+  width: 60% !important;
+  border: 2px solid #989797 !important;
+  border-radius: 10px !important;
+  -webkit-border-radius: 10px !important;
+  -moz-border-radius: 10px !important;
+  -o-border-radius: 10px !important;
+  outline: none;
+  display: inline-block !important;
 }
 
 select  {
@@ -234,7 +255,8 @@ select:invalid { color: gray; }
   -moz-box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
   box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
 }
-#canvas, #transparency, #done, #t_id, #rgb, #frame, #visualizer, #video_audio_prompt {
+
+#canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters, #video_audio_prompt {
   display: none;
 }
 #empty_black {
@@ -242,6 +264,10 @@ select:invalid { color: gray; }
   width: 80%;
   background-color: black;
   display: inline-block;
+}
+
+#transparency {
+  width: 100%;
 }
 
 #frame {
@@ -257,12 +283,10 @@ select:invalid { color: gray; }
   min-height: 23%;
   min-width: 20%;
   opacity: 0.5;
-    /*background-color: #E9E581;*/
 }
 #preview {
   min-width: 100%;
   height: auto;
-  /*display: none;*/
 }
 
 #filters {
@@ -278,8 +302,10 @@ select:invalid { color: gray; }
   border-radius: 5px;
 }
 #new_filter {
-  /*float: right;*/
-  margin-right: 10px;
+  font-size:15pt;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 5px;
   margin-top: 10px;
 }
 
@@ -300,7 +326,7 @@ input[type=file], .white, #public_wrap {
   display: none;
 }
 
-.tab{
+.tab {
   border: 1px solid red;
   background-color: blue;
   width: 100%;

@@ -33,8 +33,6 @@
   ${error}
 </div>
 
-<h1><span>WorkSpace</span></h1>
-
 <div id="work" onresize="resize_canvas()">
   <!-- <input id="audio" type="file" name="audio" accept =".mp3, .wav, .midi, .mid"/>
   <label for="audio" class="white">Audio</label>
@@ -54,29 +52,29 @@
         <option value="Bulge">Bulge</option>
         <option value="Emboss">Emboss</option>
       </select>
-      <span id="new_filter" style="font-size:15pt; cursor: pointer">+</span>
+      <span id="new_filter">+</span>
     </div>
     <ul id="filters">
   	</ul>
   </div>
   <div style="text-align: right" id="public_wrap">
-    <input type="checkbox" id="public" name="public" value="true">Public<br>
+    <input type="checkbox" id="public" name="public" value="true" style="margin-right:5px">Make Public<br>
   </div>
   <button class="my-button red-button" id="render">Render</button>
-  <div id="visualizer">
+  <div id="visualizer" class="after_render">
     <div id="visf" class="tab">Display Options</div>
     <div id="opts">
       <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked><span class ="white">Rainbow</span>
       <input type="radio" id="setRgb" name="viscolor" class="viscolor" value="rgb"><span class="white">RGB</span>
       <div id="rgb">
-        <label class="white">R<input type="range" id="red" min="0" max="1" step="0.1"/></label>
-        <label class="white">G<input type="range" id="green" min="0" max="1" step="0.1"/></label>
-        <label class="white">B<input type="range" id="blue" min="0" max="1" step="0.1"/></label>
+        <label style="color:red; font-size:15pt"><div>R</div><input type="range" id="red" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+        <label style="color:green; font-size:15pt"><div>G</div><input type="range" id="green" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+        <label style="color:blue; font-size:15pt"><div>B</div><input type="range" id="blue" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
       </div>
+      <input type="range" id="transparency" min="0" max="100" />
+      <label for="transparency" class="white" id="t_id">Transparency</label>
     </div>
   </div>
-  <input type="range" id="transparency" min="0" max="100" />
-  <label for="transparency" class="white" id="t_id">Transparency</label>
   <button class="my-button red-button" onclick="location.href='http://google.com';" id="done">Done</button>
 </div>
 
@@ -91,8 +89,8 @@
 <script src="js/three/ConvolutionShader.js"></script>
 <script src="js/visualizer.js"></script>
 
-<audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
-<canvas id="canvas" style="display:none">
+<audio id="myAudio" src=""></audio>
+<canvas id="canvas" class="after_render">
 </canvas>
 <div id="empty_black">
   <div id="video_drop_area">
@@ -109,24 +107,25 @@
     </div>
   </div>
 
-  <div id="audio_drop_area" style="display:none">
+  <div id="audio_drop_area">
     <p id="audio_drop_text">Drag an audio file onto the canvas.</p>
-    <p id="audio_drop_error" style="display:none">File type not accepted (.wav, .mp3, and .mid are accepted).</p>
+    <p id="audio_drop_error">File type not accepted (.wav, .mp3, and .mid are accepted).</p>
   </div>
 
-  <p id="choose_filters" style="display:none">Select your audio-visual filter specifications.</p>
+  <p id="choose_filters">Select your audio-visual filter specifications.</p>
 </div>
 
-<div id="frame">
+<div id="frame" class="after_render">
   <video id="preview" autoplay>
-      <source src="giphy.mp4" type="video/mp4">
+      <source src="" type="video/mp4">
   </video>
 </div>
 
 <script type="text/javascript">
-  let audioFile;
-  let videoFile;
+  let audioFile = null;
+  let videoFile = null;
   let usingAudioFromVideo = "false";
+
   function resize_canvas() {
     canvas = document.getElementById("canvas");
     canvas.width = "87%";
@@ -175,12 +174,7 @@
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
           $("#empty_black").hide();
-          $("#canvas").show();
-          $("#frame").show();
-          $("#visualizer").show();
-          $("#transparency").show();
-          $("#t_id").show();
-          $("#done").show();
+          $(".after_render").show();
           $("#render").prop("disabled",false);
           startVisualizer();
         },
@@ -194,9 +188,15 @@
     $("#render").click(function(e) {
       e.preventDefault();
       //check if files have been uploaded or not!!!-------------------------------------------------------------------------------------------
-      // if(document.getElementById("uploadBox").value != "") {
-      //   // you have a file
-      // }
+      if(videoFile == null) {
+        $(".error").html("Please enter a video file.");
+      } else if(usingAudioFromVideo == true) {
+        if(audioFile == null) {
+          $(".error").html("Please enter an audio file.");
+        }
+      }
+      $(".after_render").show();
+      return;
       $("#render").prop("disabled",true);
       let filter_choices = [];
       for(let i=0; i<x; i++) {
@@ -233,10 +233,10 @@
       resize: function(event, ui) {
         if(($(this).width() < ($("body").width()*.79) && $(this).height() < ($("body").height()*.86)) && ($(this).width() > ($("body").width()*.19) && $(this).height() > ($("body").height()*.22))) {
 
-          console.log($(this).height());
-          console.log("bodymin " + $("body").height()*.22);
-          console.log($("body").height());
-          console.log("bodymax " + $("body").height()*.86);
+          // console.log($(this).height());
+          // console.log("bodymin " + $("body").height()*.22);
+          // console.log($("body").height());
+          // console.log("bodymax " + $("body").height()*.86);
           $(this).css({
             'top': parseInt(ui.position.top, 10) + ((ui.originalSize.height - ui.size.height)) / 2,
             'left': parseInt(ui.position.left, 10) + ((ui.originalSize.width - ui.size.width)) / 2
@@ -244,6 +244,7 @@
         }
       }
     });
+    $(".range_compatible").val(.5);
   });
 
   $("#vf").click(function(e) {
@@ -270,6 +271,15 @@
     $("#rgb").slideUp("slow", function() {
     // Animation complete.
     });
+  })
+
+  $(".rgb_range").change(function(e) {
+    let num = $(this).val();
+    $(this).parent().children().last().val(num);
+  });
+  $(".range_compatible").on("change click", function(e) {
+    let num = $(this).val();
+    $(this).parent().children().eq(1).val(num);
   })
 
   $("#video_drop_area").hover(function(e) {
