@@ -38,44 +38,50 @@
   <label for="audio" class="white">Audio</label>
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
   <label for="video" class="white">Video</label> -->
-  <div id="vf" class="tab">Video Filters</div>
-  <div id="moveable_vf">
-    <div class="filter_pair" id="filter_selector">
-  		<select>
-        <option value="Amplitude">Amplitude</option>
-        <option value="Tempo">Tempo</option>
-        <option value="Frequency">Frequency</option>
-      </select>
-  		<select>
-        <option value="Tint">Tint</option>
-        <option value="Push">Push</option>
-        <option value="Bulge">Bulge</option>
-        <option value="Emboss">Emboss</option>
-      </select>
-      <span id="new_filter">+</span>
+  <div class="dropper">
+    <div id="vf" class="tab">Video Filters</div>
+    <div id="moveable_vf">
+      <div class="filter_pair" id="filter_selector">
+    		<select>
+          <option value="" disabled selected>Sound Param</option>
+          <option value="Amplitude">Amplitude</option>
+          <option value="Tempo">Tempo</option>
+          <option value="Frequency">Frequency</option>
+        </select>
+    		<select>
+          <option value="" disabled selected>Filter</option>
+          <option value="Tint">Tint</option>
+          <option value="Push">Push</option>
+          <option value="Bulge">Bulge</option>
+          <option value="Emboss">Emboss</option>
+        </select>
+        <span id="new_filter">+</span>
+        <label><div>Sensitivity</div><input type="range" min="0" max="1" step="0.1" id="sensitivity" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+      </div>
+      <ul id="filters">
+    	</ul>
     </div>
-    <ul id="filters">
-  	</ul>
   </div>
   <div style="text-align: right" id="public_wrap">
     <input type="checkbox" id="public" name="public" value="true" style="margin-right:5px">Make Public<br>
   </div>
   <button class="my-button red-button" id="render">Render</button>
-  <div id="visualizer" class="after_render">
+  <div class="front_error">
+  </div>
+  <div id="visualizer" class="after_render dropper">
     <div id="visf" class="tab">Display Options</div>
     <div id="opts">
-      <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked><span class ="white">Rainbow</span>
+      <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked><span class="white">Rainbow</span>
       <input type="radio" id="setRgb" name="viscolor" class="viscolor" value="rgb"><span class="white">RGB</span>
       <div id="rgb">
-        <label style="color:red; font-size:15pt"><div>R</div><input type="range" id="red" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
-        <label style="color:green; font-size:15pt"><div>G</div><input type="range" id="green" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
-        <label style="color:blue; font-size:15pt"><div>B</div><input type="range" id="blue" min="0" max="1" step="0.1" class="rgb_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+        <label style="color:red; font-size:15pt"><div>R</div><input type="range" id="red" min="0" max="1" step="0.1" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+        <label style="color:green; font-size:15pt"><div>G</div><input type="range" id="green" min="0" max="1" step="0.1" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
+        <label style="color:blue; font-size:15pt"><div>B</div><input type="range" id="blue" min="0" max="1" step="0.1" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
       </div>
-      <input type="range" id="transparency" min="0" max="100" />
-      <label for="transparency" class="white" id="t_id">Transparency</label>
+      <label for="transparency" class="white" id="t_id"><div>Transparency</div><input type="range" id="transparency" min="0" max="100"/><input type="number" min="0" max="100" class="range_compatible" style="color:#2B2B2B"/></label>
     </div>
   </div>
-  <button class="my-button red-button" onclick="location.href='http://google.com';" id="done">Done</button>
+  <button class="my-button red-button after_render" onclick="location.href='http://google.com';" id="done">Done</button>
 </div>
 
 <script src="js/three/three.js"></script>
@@ -136,12 +142,21 @@
 
     let max_fields = 5; //maximum input boxes allowed
     let wrapper = $("#filters"); //Fields wrapper
-    let x = 1;
+    let x = 0;
     $("#new_filter").click(function(e) {
       e.preventDefault();
+      if($("#filter_selector").children().first().val() == null) {
+        $(".front_error").html("Please choose a sound parameter.");
+        return;
+      } else if($("#filter_selector").children().eq(1).val() == null) {
+        $(".front_error").html("Please choose a video filter.");
+        return;
+      } else {
+        $(".front_error").html("");
+      }
       if(x < max_fields) { //max input box allowed
         x++; //text box increment
-        $(wrapper).append('<li class="filter_pair"><span>'+ $("#filter_selector").children().first().val() +'</span>-----------<span>'+ $("#filter_selector").children().eq(1).val() +'</span><a href="#" class="remove">x</a></li>'); //add new filter space
+        $(wrapper).append('<li class="filter_pair"><span class="sound_param">'+ $("#filter_selector").children().first().val() +'</span>     --     <span class="filter_chosen">'+ $("#filter_selector").children().eq(1).val() +'</span> (<span class="sense">'+ $("#sensitivity").val() +'</span>)<span class="remove">x</span></li>'); //add new filter space
         $(".remove").on("click", function(e) { //user click on remove text
           e.preventDefault();
           $(this).parent('li').remove();
@@ -174,7 +189,7 @@
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
           $("#empty_black").hide();
-          $(".after_render").show();
+          $(".after_render").slideDown();
           $("#render").prop("disabled",false);
           startVisualizer();
         },
@@ -188,20 +203,25 @@
     $("#render").click(function(e) {
       e.preventDefault();
       //check if files have been uploaded or not!!!-------------------------------------------------------------------------------------------
-      if(videoFile == null) {
-        $(".error").html("Please enter a video file.");
-      } else if(usingAudioFromVideo == true) {
-        if(audioFile == null) {
-          $(".error").html("Please enter an audio file.");
-        }
-      }
-      $(".after_render").show();
-      return;
+      // if(videoFile == null) {
+      //   $(".front_error").html("Please enter a video file.");
+      //   return;
+      // } else if(usingAudioFromVideo == true) {
+      //   if(audioFile == null) {
+      //     $(".front_error").html("Please enter an audio file.");
+      //     return;
+      //   }
+      // } else {
+      //   $(".front_error").html("");
+      // }
       $("#render").prop("disabled",true);
       let filter_choices = [];
-      for(let i=0; i<x; i++) {
-        filter_choices.push($($(".filter_pair").toArray()[i]).children().first().val());
-        filter_choices.push($($(".filter_pair").toArray()[i]).children().eq(1).val());
+      let $pairs = $(".filter_pair").toArray();
+      console.log($pairs);
+      for(let i=1; i<x; i++) {
+        filter_choices.push($($pairs[i]).children().first().html());
+        filter_choices.push($($pairs[i]).children().eq(1).html());
+        filter_choices.push($($pairs[i]).children().eq(2).html());
       }
       // get a reference to the fileInput
       //let audioInput = $("#audio");
@@ -209,11 +229,11 @@
       // so that you can get the file you wanted to upload
       //let audioFile = audioInput[0].files[0];
       //let videoFile = videoInput[0].files[0];
-      let public;
+      let pub;
       if($('#checkArray:checkbox:checked').length > 0) {
-        public = "true";
+        pub = "true";
       } else {
-        public = "false";
+        pub = "false";
       }
       // create the container for our file data
       //let fd = new FormData();
@@ -224,7 +244,7 @@
       fd.append('videoName', videoFile);
       fd.append('usingAudioFromVideo', usingAudioFromVideo);
       fd.append('filters', JSON.stringify(filter_choices));
-      fd.append('public', public);
+      fd.append('pub', pub);
 
       sendFileWhenDone(fd);
     })
@@ -245,6 +265,7 @@
       }
     });
     $(".range_compatible").val(.5);
+    $(".range_transparency").val(50);
   });
 
   $("#vf").click(function(e) {
@@ -273,14 +294,38 @@
     });
   })
 
-  $(".rgb_range").change(function(e) {
+  // range bars and respective input fields
+  $(".one_range").change(function(e) {
+    console.log("herer");
     let num = $(this).val();
     $(this).parent().children().last().val(num);
   });
   $(".range_compatible").on("change click", function(e) {
     let num = $(this).val();
+    if(num > 1) {
+      $(this).val(1);
+      num = 1;
+    } else if(num < 0) {
+      $(this).val(0);
+      num = 0;
+    }
     $(this).parent().children().eq(1).val(num);
-  })
+  });
+  $(".range_transparency").on("change click", function(e) {
+    let num = $(this).val();
+    if(num > 100) {
+      $(this).val(100);
+      num = 100;
+    } else if(num < 0) {
+      $(this).val(0);
+      num = 0;
+    }
+    $("#transparency").val(num);
+  });
+  $("#transparency").change(function(e) {
+    let num = $(this).val();
+    $(".range_transparency").val(num);
+  });
 
   $("#video_drop_area").hover(function(e) {
     $("#video_drop_area").css("border-color", "white");

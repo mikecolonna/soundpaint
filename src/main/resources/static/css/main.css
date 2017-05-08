@@ -52,6 +52,7 @@ a:-webkit-any-link {
   -o-border-radius: 25px;
   cursor: pointer;
   text-transform: uppercase;
+  outline: none;
 }
 
 .red-button {
@@ -92,7 +93,7 @@ input[type=text], input[type=email], input[type=password] {
 }
 
 input[type=number] {
-  font-size: .75em;
+  font-size: 12pt;
   width: 25%;
   border: 2px solid #989797 !important;
   border-radius: 10px !important;
@@ -100,6 +101,7 @@ input[type=number] {
   -moz-border-radius: 10px !important;
   -o-border-radius: 10px !important;
   outline: none;
+  padding-left: 10px;
 }
 label > input[type=range] {
   width: 60% !important;
@@ -110,6 +112,8 @@ label > input[type=range] {
   -o-border-radius: 10px !important;
   outline: none;
   display: inline-block !important;
+  padding-left: 3px;
+  margin-right: 10px;
 }
 
 select  {
@@ -123,7 +127,7 @@ select  {
   outline: none;
 }
 
-input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, input[type=number]:focus, select:focus {
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, select:focus {
   border-color: #333a4a !important;
 }
 
@@ -259,15 +263,15 @@ select:invalid { color: gray; }
 #canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters, #video_audio_prompt {
   display: none;
 }
+#opts {
+  padding-left: 5px;
+}
+
 #empty_black {
   height: 87%;
   width: 80%;
   background-color: black;
   display: inline-block;
-}
-
-#transparency {
-  width: 100%;
 }
 
 #frame {
@@ -301,12 +305,15 @@ select:invalid { color: gray; }
   padding: 5px;
   border-radius: 5px;
 }
-#new_filter {
+#new_filter, .remove {
   font-size:15pt;
   cursor: pointer;
-  margin-left: 10px;
-  margin-right: 5px;
-  margin-top: 10px;
+  float: right;
+  margin-top: -10px;
+}
+#new_filter:hover, .remove:hover {
+  text-decoration: none;
+  color: #afafaf;
 }
 
 .navbar {
@@ -338,8 +345,11 @@ input[type=file], .white, #public_wrap {
   margin-bottom: 2px;
   cursor: pointer;
 }
+.dropper {
+  background-color: #555555;
+}
 
-.error {
+.error, .front_error {
   color: red;
   margin-left: 5%;
 }
