@@ -96,7 +96,7 @@
 </canvas>
 <div id="empty_black">
   <div id="video_drop_area">
-    <p id="video_drop_text">Drag a video file onto the canvas.</p>>
+    <p id="video_drop_text">To begin, drag a video file onto the canvas.</p>>
     <p id="video_drop_error" style="display:none">File type not accepted (.mp4 and .mov are accepted).</p>
   </div>
 
@@ -104,6 +104,8 @@
     <p id="audio_drop_text">Drag an audio file onto the canvas.</p>
     <p id="audio_drop_error" style="display:none">File type not accepted (.wav, .mp3, and .mid are accepted).</p>
   </div>
+
+  <p id="choose_filters" style="display:none">Select your audio-visual filter specifications.</p>
 </div>
 
 <div id="frame">
@@ -295,10 +297,10 @@
 
       $("#video_drop_area").fadeOut("slow", function() {
         // Animation complete.
-      })
 
-      $("#audio_drop_area").fadeIn("slow", function() {
-        // Animation complete.
+        $("#audio_drop_area").fadeIn("slow", function() {
+          // Animation complete.
+        })
       })
     } else {
       console.log("didn't work");
@@ -340,6 +342,9 @@
 
       $("#audio_drop_area").fadeOut("slow", function() {
         // Animation complete.
+        $("#choose_filters").fadeIn("slow", function() {
+          // Animation complete.
+        })
       })
     } else {
       console.log("didn't work");
