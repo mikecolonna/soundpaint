@@ -42,24 +42,22 @@
   <label for="video" class="white">Video</label> -->
   <div id="vf" class="tab">Video Filters</div>
   <div id="moveable_vf">
-  	<ul id="filters">
-  		<li class="filter_pair">
-  			<select>
-          <option value="Amplitude">Amplitude</option>
-          <option value="Tempo">Tempo</option>
-          <option value="Frequency">Frequency</option>
-        </select>
-  			<select>
-          <option value="Tint">Tint</option>
-          <option value="Push">Push</option>
-          <option value="Bulge">Bulge</option>
-          <option value="Emboss">Emboss</option>
-        </select>
-      </li>
-  	</ul>
-    <div style="text-align: right">
-      <button class="my-button" id="new_filter">Add Filter Pair</button>
+    <div class="filter_pair" id="filter_selector">
+  		<select>
+        <option value="Amplitude">Amplitude</option>
+        <option value="Tempo">Tempo</option>
+        <option value="Frequency">Frequency</option>
+      </select>
+  		<select>
+        <option value="Tint">Tint</option>
+        <option value="Push">Push</option>
+        <option value="Bulge">Bulge</option>
+        <option value="Emboss">Emboss</option>
+      </select>
+      <span id="new_filter" style="font-size:15pt; cursor: pointer">+</span>
     </div>
+    <ul id="filters">
+  	</ul>
   </div>
   <div style="text-align: right" id="public_wrap">
     <input type="checkbox" id="public" name="public" value="true">Public<br>
@@ -129,11 +127,11 @@
     let max_fields = 5; //maximum input boxes allowed
     let wrapper = $("#filters"); //Fields wrapper
     let x = 1;
-    $("#new_filter").on("click", function(e) {
+    $("#new_filter").click(function(e) {
       e.preventDefault();
       if(x < max_fields) { //max input box allowed
         x++; //text box increment
-        $(wrapper).append('<li class="filter_pair"><select><option value="Amplitude">Amplitude</option><option value="Tempo">Tempo</option><option value="Frequency">Frequency</option></select><select><option value="Tint">Tint</option><option value="Push">Push</option><option value="Bulge">Bulge</option><option value="Emboss">Emboss</option></select><br><a href="#" class="remove">remove</a></li>'); //add new filter space
+        $(wrapper).append('<li class="filter_pair"><span>'+ $("#filter_selector").children().first().val() +'</span>-----------<span>'+ $("#filter_selector").children().eq(1).val() +'</span><a href="#" class="remove">x</a></li>'); //add new filter space
         $(".remove").on("click", function(e) { //user click on remove text
           e.preventDefault();
           $(this).parent('li').remove();
