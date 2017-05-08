@@ -48,9 +48,8 @@ The user flow for the application will be as follows:
     3. Alter parameters, change sound files
     4. Preview their changes
     5. Save their changes
-    6. Share their content
+    6. Share their content in app
   - Watch other people's media
-  - Update older media on their account
     1. View source
 	  2. Alter parameters
 	  3. Preview changes
@@ -70,18 +69,18 @@ Copyright may also be a limitation, if users seek to upload content they do not 
 
 To receive a passing grade for our project we specify the following:
   - A way for users to upload a video.
-  - A way for users to view the filtered video (either in app or by downloading a file)
+  - A way for users to view the filtered video in app
     - The filter should modify a copy of the original video and modify properties of that video stream (distortion, noise, hue, saturation etc.) in response to properties of the audio stream (frequency, volume).
     - user interface with a reasonable number of options and presets (at least 5 of each).
 
 To receive an A for our project we specify implementing all 3 of the following:
-  - A way for users to share their content
+  - A way for users to share their content in application with other users
   - A way for users to make their content private
-  - A way to view statistics about properties in the audio or video streams
+  - A way to view filtering parameters about properties in the audio or video streams and change them
 
 And either of the following:
   - A way to preview content while editing it
-  - A way to add a MIDI file or a youtube link
+  - A way to add a mp3, mp4, mov or wav file
 
 
 ## Project Specs and Mockup
