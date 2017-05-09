@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
 
+import edu.brown.cs.database.Database;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 
 import edu.brown.cs.database.AudioDB;
@@ -107,7 +108,7 @@ public class SendRenderHandler implements Route {
       
       // put TRANSCODED audio in database
       AudioDB audio = 
-          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
+          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath);
     } else {
       // extract audio and store in file system
       try (InputStream is = req.raw().getPart("audioName").getInputStream()) {
@@ -130,7 +131,7 @@ public class SendRenderHandler implements Route {
       
       // put TRANSCODED audio in database
       AudioDB audio = 
-          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath, null, null, null);
+          AudioDB.createAudio(audioId, video.getId(), outputAudioFilepath);
     }
 
     // extract filters
@@ -208,13 +209,15 @@ public class SendRenderHandler implements Route {
     // save thumbnail for video
     RenderEngine.saveThumbnail(outputVideoFilepath, thumbFilepath);
 
+    // retrieve animation data for visualizer
+    JsonObject animationData = soundEngine.getAnimationAsJson();
+
     JsonObject videoAudioInfo = new JsonObject();
     videoAudioInfo.addProperty("videoid", videoId);
     videoAudioInfo.addProperty("videofp", outputVideoFilepath.substring(28));
     videoAudioInfo.addProperty("audioid", audioId);
     videoAudioInfo.addProperty("audiofp", outputAudioFilepath.substring(28));
-    //videoAudioInfo.addProperty("audiodata", value);
-
+    videoAudioInfo.add("animationdata", animationData);
 
     return videoAudioInfo;
   }

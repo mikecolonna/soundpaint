@@ -77,9 +77,6 @@ public final class Database {
           + "id TEXT PRIMARY KEY,"
           + "video_id TEXT,"
           + "src TEXT,"
-          + "amp TEXT,"
-          + "freq TEXT,"
-          + "tempo TEXT,"
           + "FOREIGN KEY (video_id) REFERENCES video (id));")) {
         prep3.executeUpdate();
       }
@@ -97,7 +94,7 @@ public final class Database {
   /**
    * Stores a UserDB in the User cache.
    * @param id String ID of the User to store
-   * @param actor User to store
+   * @param user User to store
    */
   public static void putUserInCache(String id, UserDB user) {
     users.putIfAbsent(id, user);
@@ -201,8 +198,8 @@ public final class Database {
           prep.setString(1, id);
           try (ResultSet rs = prep.executeQuery()) {
             if (rs.next()) {
-              aud = AudioDB.createAudio(rs.getString(1), rs.getString(2), rs.getString(3),
-                  rs.getString(4), rs.getString(5), rs.getString(6));
+              aud = AudioDB.createAudio(rs.getString(1),
+                  rs.getString(2), rs.getString(3));
               audio.put(id, aud);
             }
           }

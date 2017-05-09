@@ -204,6 +204,7 @@
           $("#empty_black").hide();
           $(".after_render").slideDown();
           $("#render").prop("disabled",false);
+          console.log(parsed.animationdata);
           initVisualizer();
           startVisualizer();
         },
