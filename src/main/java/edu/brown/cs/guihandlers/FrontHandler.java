@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +47,7 @@ public class FrontHandler implements TemplateViewRoute {
       username = req.session().attribute("username");
     }
     
-    JsonArray thumbData = Database.getPublicThumbnailFilepaths();
+    List<ThumbnailData> thumbData = Database.getPublicThumbnailFilepaths();
     
     Map<String, Object> variables = ImmutableMap.of(
             "title", "Soundpaint - CS32 Final Project",

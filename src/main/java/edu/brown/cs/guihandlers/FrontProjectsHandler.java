@@ -1,5 +1,6 @@
 package edu.brown.cs.guihandlers;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -33,7 +34,7 @@ public class FrontProjectsHandler implements TemplateViewRoute {
     
     String userId = guiProcessor.getSessionsToUsers().get(seshId);
     
-    JsonArray thumbData = Database.getUserThumbnailFilepaths(userId);
+    List<ThumbnailData> thumbData = Database.getUserThumbnailFilepaths(userId);
     
     String username = req.session().attribute("username");
     Map<String, Object> variables = ImmutableMap.of(

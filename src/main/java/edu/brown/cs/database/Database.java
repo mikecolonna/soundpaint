@@ -13,6 +13,8 @@ import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import edu.brown.cs.guihandlers.ThumbnailData;
+
 public final class Database {
   
   private Database() { }
@@ -215,8 +217,8 @@ public final class Database {
     return aud;
   }
   
-  public static JsonArray getPublicThumbnailFilepaths() {
-    JsonArray thumbdata = new JsonArray();
+  public static List<ThumbnailData> getPublicThumbnailFilepaths() {
+    List<ThumbnailData> thumbList = new ArrayList<>();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       System.out.println("HERE");
       try (PreparedStatement prep = conn.prepareStatement(
@@ -227,25 +229,19 @@ public final class Database {
         try (ResultSet rs = prep.executeQuery()) {
           System.out.println("GOT RESULT SET");
           while (rs.next()) {
-            System.out.println("thumbfp : " + rs.getString(1));
-            System.out.println("v_id : " + rs.getString(2));
-            System.out.println("username : " + rs.getString(3));
-            JsonObject thumbinfo = new JsonObject();
-            thumbinfo.addProperty("filepath", rs.getString(1));
-            thumbinfo.addProperty("video_id", rs.getString(2));
-            thumbinfo.addProperty("username", rs.getString(3));
-            thumbdata.add(thumbinfo);
+            thumbList
+              .add(new ThumbnailData(rs.getString(1), rs.getString(2), rs.getString(3)));
           }
         }
       }
     } catch (SQLException sqle) {
       sqle.printStackTrace();
     }
-    return thumbdata;
+    return thumbList;
   }
   
-  public static JsonArray getUserThumbnailFilepaths(String userId) {
-    JsonArray thumbdata = new JsonArray();
+  public static List<ThumbnailData> getUserThumbnailFilepaths(String userId) {
+    List<ThumbnailData> thumbList = new ArrayList<>();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       try (PreparedStatement prep = conn.prepareStatement(
           "SELECT video.thumb, video.id "
@@ -254,10 +250,8 @@ public final class Database {
         prep.setString(1, userId);
         try (ResultSet rs = prep.executeQuery()) {
           while (rs.next()) {
-            JsonObject thumbinfo = new JsonObject();
-            thumbinfo.addProperty("filepath", rs.getString(1));
-            thumbinfo.addProperty("video_id", rs.getString(2));
-            thumbdata.add(thumbinfo);
+            thumbList
+              .add(new ThumbnailData(rs.getString(1), rs.getString(2), null));
           }
         }
       }
@@ -265,7 +259,7 @@ public final class Database {
       sqle.printStackTrace();
     }
 
-    return thumbdata;
+    return thumbList;
   }
 
 }
