@@ -12,7 +12,7 @@ import edu.brown.cs.database.AudioDBProxy;
 
 public class SoundEngine {
 
-	private double id;
+	private String audio_id;
 	private String path;
 	private SoundRead sr = null;
 	List<Double> ampData = new ArrayList<Double>();
@@ -26,9 +26,10 @@ public class SoundEngine {
 	private double SCALE_BOUND_HIGH = 1;
 	
 	
-	public SoundEngine(String path) {
+	public SoundEngine(String path, String audio_id) {
 		//TODO: save metadata to database appropriately
 		this.path = path;
+		this.audio_id = audio_id;
 	}
 	
 	public List<Double> getMetaData(SoundParameter sp) {
