@@ -23,8 +23,10 @@ public class SoundRead {
 	
 	//the total number of frames in the uploaded audio file
 	private int totalSoundFrames = 0;
-	
 
+  private double animationTimeResolution = (1.0/60.0);
+  private int animationNumFramesTime = 736;
+  List<float []> animationfftData = new ArrayList<float []>();
 
 	private boolean metadataPopulated = false;
 
@@ -126,19 +128,31 @@ public class SoundRead {
 	         origSampleRate = sampleRate;
 	         
 	         int frameCount = 0;
-
+            float [] toAdd =  new float [animationNumFramesTime];
 	         do {
 	            // Read frames into buffer
 	            framesRead = wavFile.readFrames(buffer, 100);
 
 	            // Loop through frames and look for minimum and maximum value
 	            for (int s = 0; s < framesRead * numChannels; s++) {
+
+                toAdd[(frameCount % animationNumFramesTime)] = (float) buffer[s];
+
 	            	//checks to find amount of audio frames that correlate to 
 	            	//amount of video frames
 	            	if (frameCount / sampleRate <= timeResolution + (1/sampleRate) &&
 	            			frameCount / sampleRate > timeResolution) {
                   soundFramesPerVideoFrame = frameCount;
 	            	}
+
+                if((frameCount % animationNumFramesTime == 0) && frameCount != 0) {
+                  FFT transform = new FFT(toAdd.length,new HammingWindow());
+
+                  transform.forwardTransform(toAdd);
+
+                  animationfftData.add(toAdd);
+                  toAdd = new float [animationNumFramesTime];
+                }
 	            	
 	            	//add amplitude data
 	            	rawAmplitudes.add((buffer[s]));
@@ -250,6 +264,9 @@ public class SoundRead {
 	public List<Double> getSpecificAmplitudesByVideoFrame() {
 		return specificAmplitudesByVideoFrame;
 	}
+  public List<float []> getAnimationData() {
+    return animationfftData;
+  }
 
 	public List<Double> getGeneralAmplitudesByVideoFrame() {
 		return generalAmplitudesByVideoFrame;

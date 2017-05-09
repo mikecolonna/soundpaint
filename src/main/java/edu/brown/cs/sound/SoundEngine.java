@@ -2,9 +2,11 @@ package edu.brown.cs.sound;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonObject;
 import edu.brown.cs.database.AudioDB;
 import edu.brown.cs.database.AudioDBProxy;
 
@@ -16,7 +18,7 @@ public class SoundEngine {
 	List<Double> ampData = new ArrayList<Double>();
 	List<Double> freqData = new ArrayList<Double>();
 	List<Double> tempoData = new ArrayList<Double>();
-
+	List<float []> animationFreqData = new ArrayList<float []>();
 	//the lowest number for scaled values
 	private double SCALE_BOUND_LOW = 0;
 
@@ -56,7 +58,20 @@ public class SoundEngine {
 	public void setSoundReader(double framerate) {
 		sr = new SoundRead(framerate);
 		sr.read(path);
-		//sendToDataBase();
+		ampData = getGeneralAmpData();
+		freqData = getFreqData();
+		tempoData = getTempoData();
+		animationFreqData = getAnimationData();
+		sendToDataBase();
+	}
+
+	private List<float []> getAnimationData() {
+		if (sr == null) {
+			System.out.println("ERROR: Set a sound reader for the framerate.");
+			return null;
+		} else {
+			return sr.getAnimationData();
+		}
 	}
 	
 	private List<Double> getFreqData() {
@@ -142,48 +157,101 @@ public class SoundEngine {
 	 * Sends sound meta-data to database
 	 */
 	private void sendToDataBase() {
-		//TODO: Fill this function!
 		//remember to make make class that packages information in JSON
 		String a_id = AudioDB.generateId();
-		String v_id = null;
+		String v_id = "";
 		String srcFilepath = path;
 		File soundMetaDataDir = new File("soundMetaData");
-		File ampDataF = new File("ampData");
-		File freqDataF = new File("freqData");
-		File tempoDataF = new File("tempoData");
+		File ampDataF = new File("soundMetaData/ampData");
+		File freqDataF = new File("soundMetaData/freqData");
+		File tempoDataF = new File("soundMetaData/tempoData");
+		File animationF = new File("soundMetaData/animationData");
 		try{
 			soundMetaDataDir.mkdir();
 			ampDataF.mkdir();
 			freqDataF.mkdir();
 			tempoDataF.mkdir();
+			animationF.mkdir();
 		}catch(SecurityException e) {
-			
+			System.out.println("ERROR: Security Exception");
 		}
-//		JSONObject ampObj = JSONBuilder.convert(ampData);
-//		try (FileWriter file = new FileWriter("/soundMetaData/ampData/" + "amp_"+ a_id + ".txt")) {
-//			file.write(ampObj.toJSONString());
-//			System.out.println("Successfully Copied JSON Object to File...");
-//			System.out.println("\nJSON Object: " + ampObj);
-//		}
-//		JSONObject freqObj = JSONBuilder.convert(freqData);
-//		try (FileWriter file = new FileWriter("/soundMetaData/freqData/"+ "freq_"+ a_id + ".txt")) {
-//			file.write(freqObj.toJSONString());
-//			System.out.println("Successfully Copied JSON Object to File...");
-//			System.out.println("\nJSON Object: " + freqObj);
-//		}
-//		JSONObject tempoObj = JSONBuilder.convert(tempoData);
-//		try (FileWriter file = new FileWriter("/soundMetaData/freqData/"+ "tempo_"+ a_id + ".txt")) {
-//			file.write(tempoObj.toJSONString());
-//			System.out.println("Successfully Copied JSON Object to File...");
-//			System.out.println("\nJSON Object: " + tempoObj);
-//		}
-//		
-//	    String ampFilepath = "/soundMetaData/ampData/"+ "amp_" + a_id + ".txt";
-//	    String freqFilepath = "/soundMetaData/freqData/"+ "freq_"+ a_id + ".txt";
-//	    String tempoFilepath = "/soundMetaData/freqData/"+ "tempo_"+ a_id + ".txt";
-//		AudioDB.createAudio(a_id, v_id, srcFilepath,
-//			     ampFilepath, freqFilepath,tempoFilepath);
-//	
-			     
+		String ampFilePath = "soundMetaData/ampData/" + "amp_"+ a_id + ".txt";
+		String freqFilePath = "soundMetaData/freqData/" + "freq_"+ a_id + ".txt";
+		String tempoFilePath = "soundMetaData/tempoData/"+ "tempo_"+ a_id + ".txt";
+		String animationFilePath = "soundMetaData/animationData/"+ "animation_"+ a_id + ".txt";
+		//File for amp
+		File ampFile =  new File(ampFilePath);
+		if(!ampFile.exists()) {
+			try {
+				ampFile.createNewFile();
+			} catch (IOException e) {
+				System.out.println("ERROR: Cannot create new file.");
+			}
+		}
+		//File for freq
+		File freqFile = new File(freqFilePath);
+		if(!freqFile.exists()) {
+			try {
+				freqFile.createNewFile();
+			} catch (IOException e) {
+				System.out.println("ERROR: Cannot create new file.");
+			}
+		}
+		//File for tempo
+		File tempoFile = new File(tempoFilePath);
+		if(!tempoFile.exists()) {
+			try {
+				tempoFile.createNewFile();
+			} catch (IOException e) {
+				System.out.println("ERROR: Cannot create new file.");
+			}
+		}
+		//File for animation freq
+		File animationFile = new File(animationFilePath);
+		if(!animationFile.exists()) {
+			try {
+				animationFile.createNewFile();
+			} catch (IOException e) {
+				System.out.println("ERROR: Cannot create new file.");
+			}
+		}
+		JsonObject ampObj = JSONBuilder.convert(ampData);
+		try (FileWriter file = new FileWriter(ampFilePath)) {
+			file.write(ampObj.toString());
+			System.out.println("Successfully Copied AMP JSON Object to File...");
+		} catch (IOException e) {
+			System.out.println("ERROR: Cannot write sound data to file");
+		}
+		JsonObject freqObj = JSONBuilder.convert(freqData);
+		try (FileWriter file = new FileWriter(freqFilePath)) {
+			file.write(freqObj.toString());
+			System.out.println("Successfully Copied FREQ JSON Object to File...");
+		} catch (IOException e) {
+			System.out.println("ERROR: Cannot write sound data to file");
+		}
+		JsonObject tempoObj = JSONBuilder.convert(tempoData);
+		try (FileWriter file = new FileWriter(tempoFilePath)) {
+			file.write(tempoObj.toString());
+			System.out.println("Successfully Copied TEMPO JSON Object to File...");
+		} catch (IOException e) {
+			System.out.println("ERROR: Cannot write sound data to file");
+		}
+		JsonObject animationObj = JSONBuilder.convert(animationFreqData);
+		try (FileWriter file = new FileWriter(animationFilePath)) {
+			file.write(animationObj.toString());
+			System.out.println("Successfully Copied ANIMATION_FREQ JSON Object to File...");
+		} catch (IOException e) {
+			System.out.println("ERROR: Cannot write sound data to file");
+		}
+
+		String ampFilepath = "soundMetaData/ampData/"+ "amp_" + a_id + ".txt";
+		String freqFilepath = "soundMetaData/freqData/"+ "freq_"+ a_id + ".txt";
+		String tempoFilepath = "soundMetaData/tempoData/"+ "tempo_"+ a_id + ".txt";
+		AudioDB.createAudio(a_id, v_id, srcFilepath,
+				ampFilepath, freqFilepath,tempoFilepath);
+
+		System.out.println("Done writing sound data :) ");
+
+
 	}
 }
