@@ -116,7 +116,9 @@ function addCubes() {
 function render() {
   // scale lines on levels
   for (let i = 0; i < LINE_COUNT; i++) {
+    console.log("CALCULATED : " + frequencyData[i] * frequencyData[i] * 0.00001);
     lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+    console.log("NEW LINE WIDTH : " + lineHolder.children[i].width);
 
     if ($("#setRgb").is(':checked')) {
       const r = $("#red").val();

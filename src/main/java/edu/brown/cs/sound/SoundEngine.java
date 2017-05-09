@@ -159,7 +159,7 @@ public class SoundEngine {
 	 */
 	private void sendToDataBase() {
 		//remember to make make class that packages information in JSON
-		String a_id = AudioDB.generateId();
+		String a_id = audio_id;
 		String v_id = "";
 		String srcFilepath = path;
 		File soundMetaDataDir = new File("soundMetaData");
@@ -248,8 +248,8 @@ public class SoundEngine {
 		String ampFilepath = "soundMetaData/ampData/"+ "amp_" + a_id + ".txt";
 		String freqFilepath = "soundMetaData/freqData/"+ "freq_"+ a_id + ".txt";
 		String tempoFilepath = "soundMetaData/tempoData/"+ "tempo_"+ a_id + ".txt";
-		AudioDB.createAudio(a_id, v_id, srcFilepath,
-				ampFilepath, freqFilepath,tempoFilepath);
+		//AudioDB.createAudio(a_id, v_id, srcFilepath,
+				//ampFilepath, freqFilepath,tempoFilepath);
 
 		System.out.println("Done writing sound data :) ");
 
