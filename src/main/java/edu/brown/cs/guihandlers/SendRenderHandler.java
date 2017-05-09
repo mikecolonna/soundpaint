@@ -174,7 +174,7 @@ public class SendRenderHandler implements Route {
     for (int i = 0; i < filters.size(); i += 3) {
       SoundParameter sp = null;
       switch (filters.get(i)) {
-        case "Amplitude":
+        case "Volume":
           sp = SoundParameter.GENERAL_AMPLITUDE;
           break;
         case "Frequency":
@@ -183,16 +183,13 @@ public class SendRenderHandler implements Route {
         case "Tempo":
           sp = SoundParameter.TEMPO;
           break;
-        case "Volume":
+        case "Amplitude":
           sp = SoundParameter.SPECIFIC_AMPLITUDE;
           break;
       }
       
       VideoParameter vp = null;
       switch (filters.get(i + 1)) {
-        case "Tint":
-          vp = VideoParameter.TINT;
-          break;
         case "Push":
           vp = VideoParameter.PUSH;
           break;
@@ -210,6 +207,12 @@ public class SendRenderHandler implements Route {
           break;
         case "Blue":
           vp = VideoParameter.BLUE_TINT;
+          break;
+        case "Pinch":
+          vp = VideoParameter.PINCH;
+          break;
+        case "Blur":
+          vp = VideoParameter.BLUR;
           break;
       }
       

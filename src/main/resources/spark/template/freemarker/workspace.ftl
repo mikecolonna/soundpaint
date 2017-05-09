@@ -54,10 +54,11 @@
           <option value="Bulge">Bulge</option>
           <option value="Emboss">Emboss</option>
           <option value="Push">Push</option>
-          <option value="Tint">Tint</option>
           <option value="Red">Red-Tint</option>
           <option value="Green">Green-Tint</option>
           <option value="Blue">Blue-Tint</option>
+          <option value="Push">Push</option>
+          <option value="Pinch">Pinch</option>
         </select>
         <span class="glyphicon glyphicon-plus" id ="new_filter"></span>
         <label><div>Sensitivity</div><input type="range" min="0" max="1" step="0.1" id="sensitivity" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>

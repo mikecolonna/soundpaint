@@ -68,10 +68,6 @@ public class RenderEngine {
             System.out.println("PARAMETER: " + parameter);
 
             switch (videoParameter) {
-              case TINT:
-                BufferedImageFilter tintFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
-                currentImage = tintFilter.filter(currentImage, parameter, sensitivity);
-                break;
               case PUSH:
                 BufferedImageFilter pushFilter = new PushBufferedImageFilter();
                 currentImage = pushFilter.filter(currentImage, parameter, sensitivity);
