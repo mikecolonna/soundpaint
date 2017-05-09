@@ -34,7 +34,7 @@ public class FrontProjectsHandler implements TemplateViewRoute {
     
     String userId = guiProcessor.getSessionsToUsers().get(seshId);
     
-    List<ThumbnailData> thumbData = Database.getUserThumbnailFilepaths(userId);
+    List<List<String>> thumbData = Database.getUserThumbnailFilepaths(userId);
     
     String username = req.session().attribute("username");
     Map<String, Object> variables = ImmutableMap.of(

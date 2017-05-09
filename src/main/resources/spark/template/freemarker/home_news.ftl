@@ -36,7 +36,11 @@
 </nav>
 
 <h1><span>Home/NewsFeed - Welcome to soundpaint</span></h1>
-  ${thumbs}
+<ul>
+<#list thumbs as thumb> 
+  <li><a href="/${thumb[1]}"><img src="${thumb[0]}">${thumb[2]}</a></li>
+</#list>
+</ul>
 
 
 </#assign>
