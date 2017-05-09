@@ -130,7 +130,7 @@ public class SoundRead {
 	         int frameCount = 0;
             float [] toAdd =  new float [animationNumFramesTime];
 	         do {
-	            // Read frames into buffer
+						 // Read frames into buffer
 	            framesRead = wavFile.readFrames(buffer, 100);
 
 	            // Loop through frames and look for minimum and maximum value
@@ -187,6 +187,11 @@ public class SoundRead {
 	
 
 	public void populateMetadata() {
+
+		if (soundFramesPerVideoFrame == 0) {
+			metadataPopulated = true;
+		}
+
 		if (!metadataPopulated) {
 
 			//List of video frame chunks/ frames that have
