@@ -1,5 +1,5 @@
 <#assign content>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/">
-        <img src="images/panda_before.jpg" style="height: 27px">
+        <img src="images/panda_after.png" style="height: 27px">
       </a>
     </div>
 
@@ -39,7 +39,7 @@
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
   <label for="video" class="white">Video</label> -->
   <div class="dropper">
-    <div id="vf" class="tab">Video Filters</div>
+    <div id="vf" class="tab">Video Filters<span class="glyphicon glyphicon-envelope" style="float: right; "></span></div>
     <div id="moveable_vf">
       <div class="filter_pair" id="filter_selector">
     		<select>
@@ -59,7 +59,7 @@
           <option value="Green">Green-Tint</option>
           <option value="Blue">Blue-Tint</option>
         </select>
-        <span id="new_filter">+</span>
+        <span class="glyphicon glyphicon-plus" id ="new_filter"></span>
         <label><div>Sensitivity</div><input type="range" min="0" max="1" step="0.1" id="sensitivity" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
       </div>
       <ul id="filters">
@@ -169,7 +169,7 @@
       }
       if(x < max_fields) { //max input box allowed
         x++; //text box increment
-        $(wrapper).append('<li class="filter_pair"><span class="sound_param">'+ $("#filter_selector").children().first().val() +'</span>     --     <span class="filter_chosen">'+ $("#filter_selector").children().eq(1).val() +'</span> (<span class="sense">'+ $("#sensitivity").val() +'</span>)<span class="remove">x</span></li>'); //add new filter space
+        $(wrapper).append('<li class="filter_pair"><span class="sound_param">'+ $("#filter_selector").children().first().val() +'</span>     --     <span class="filter_chosen">'+ $("#filter_selector").children().eq(1).val() +'</span> (<span class="sense">'+ $("#sensitivity").val() +'</span>)<span class="glyphicon glyphicon-remove remove"></span></li>'); //add new filter space
         $(".remove").on("click", function(e) { //user click on remove text
           e.preventDefault();
           $(this).parent('li').remove();

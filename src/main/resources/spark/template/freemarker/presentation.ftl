@@ -1,6 +1,6 @@
 <#assign content>
 <#assign log=logged/>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -11,7 +11,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/">
-        <img src="images/panda_before.jpg" style="height: 27px">
+        <img src="images/panda_after.png" style="height: 27px">
       </a>
     </div>
 
@@ -25,7 +25,7 @@
       <ul class="nav navbar-nav navbar-right">
         <#if log=="true">
           <li><a>${name}</a></li>
-          <li><a href="/logout">Logout</a></li> 
+          <li><a href="/logout">Logout</a></li>
         <#else>
           <li><a href="/login">Login</a></li>
           <li><a href="/register">Register</a></li>

@@ -1,5 +1,5 @@
 <#assign content>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/">
-        <img src="images/panda_before.jpg" style="height: 27px">
+        <img src="images/panda_after.png" style="height: 27px">
       </a>
     </div>
 
@@ -34,7 +34,7 @@
 </div>
 
 <div class="container">
-    <form action="/register" method="post">
+    <form action="/register" method="post" id="r_form">
         <ul class="flex-outer">
           <li>
             <p style="margin-bottom=2%;"> Please fill in the fields with your information</p>
@@ -60,7 +60,7 @@
             <label for="password2" class="my-error">required</label>
           </li>
           <li style="justify-content: center; margin-top: 3%">
-            <input class="my-button red-button" type="submit" value="Register">
+            <input class="my-button red-button" type="submit" value="Register" id="register">
           </li>
         </ul>
     </form>
@@ -98,7 +98,7 @@
     }
 });
 
-$('form').submit(function(e) {
+$('#register').click(function(e) {
   e.preventDefault();
   var email = $('#email').val();
   var password = $('#password').val();
@@ -153,8 +153,8 @@ $('form').submit(function(e) {
       $("#password2").parent().children().eq(2).animate({ opacity: 0 });
     }
   }
-  if(!($("#username").hasClass("required-field") || $("#email").hasClass("required-field") || $("#password").hasClass("required-field") || $("#password2").hasClass("required-field") || $("#student-mentor").hasClass("required-field"))) {
-    $(this).unbind('submit').submit();
+  if(!($("#username").hasClass("required-field") || $("#email").hasClass("required-field") || $("#password").hasClass("required-field") || $("#password2").hasClass("required-field"))) {
+    $("#r_form").submit();
   }
 });
 </script>

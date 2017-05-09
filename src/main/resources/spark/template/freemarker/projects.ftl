@@ -1,5 +1,5 @@
 <#assign content>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/">
-        <img src="images/panda_before.jpg" style="height: 27px">
+        <img src="images/panda_after.png" style="height: 27px">
       </a>
     </div>
 
@@ -29,10 +29,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<h1><span>Personal Projects - USER</span></h1>
-<ul>
-<#list thumbs as thumb> 
-  <li><a href="/${thumb[1]}"><img src="${thumb[0]}"></a></li>
+<ul class="flexing">
+<#list thumbs as thumb>
+  <a href="/${thumb[1]}" class="tn"><li><div class="thumb_wrapper"><img class="thumb_image" src="${thumb[0]}" alt="NO IMAGE"></div></li></a>
 </#list>
 </ul>
 

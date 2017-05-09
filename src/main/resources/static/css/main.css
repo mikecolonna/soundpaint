@@ -1,24 +1,7 @@
-.flex-outer > li > .my-cb-label{
-  margin: 0;
-  position: absolute !important;
-  top: 50%;
-  font-size: 1.3em;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  text-align: center;
-  transition: font-size 0.05s linear;
-  width: 100%;
-  cursor: pointer;
-}
-
 .my-label {
-  color: #333a4a;
+  color: #ededed;
   opacity:0;
   pointer-events: none;
-}
-
-.required-field::-webkit-input-placeholder {
-  color: #c65c58;
 }
 .my-error {
   color: #c65c58;
@@ -26,6 +9,14 @@
   pointer-events: none;
 }
 
+.gen_a {
+  color: #878787;
+}
+
+.gen_a:hover {
+  color: #ededed;
+  text-decoration: none;
+}
 
 html, body {
   margin: 0;
@@ -33,15 +24,9 @@ html, body {
   font-family: "PT Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   line-height: 1.3;
-  height: 100vh; }
-
-a {
-  color: #00B7FF;
-}
-
-a:-webkit-any-link {
-	text-decoration: none;
-}
+  min-height: 100%;
+  min-width: 100%;
+ }
 
 /*buttons*/
 .my-button {
@@ -60,11 +45,8 @@ a:-webkit-any-link {
   float: right;
   box-shadow: 0px 5px 0px 2px #af4646;
   font-size: 30px;
-  min-width: 210.5px;
-} @media only screen and (max-width: 1212px) {
-  .red-button {
-    margin-right: 0;
-    width:100%;} }
+  min-width: 100%;
+}
 .red-button:hover {
   background-color: #af4646;
   float: right;
@@ -133,6 +115,27 @@ input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, sel
 
 select:invalid { color: gray; }
 
+/*-----------------------------------background and nav---------------------------------------*/
+.navbar-custom {
+  background-color: #2d2d2d !important;
+  border-width: 0px !important;
+}
+
+.nav > li:not(.active) > a:hover {
+  color: #e2e2e2 !important;
+}
+
+body:not(.no_panda) {
+  background-image: url(../images/paint.png);
+  background-size: 100% auto;
+  background-repeat: repeat;
+}
+
+.no_panda {
+  background-image: url(../images/paint_no.png);
+  background-size: 100% auto;
+  background-repeat: repeat;
+}
 
 /*---------------------------------------------------------------------------------*/
 .container {
@@ -142,24 +145,18 @@ select:invalid { color: gray; }
   margin-bottom: 25px;
 }
 
-.container * {
+.container > * {
   box-sizing: border-box;
 }
 
-.flex-outer,
-.flex-inner {
+.flex-outer, .flexing {
   list-style-type: none;
   padding: 0;
-
-}
-
-.flex-outer {
   max-width: 800px;
   margin: 0 auto;
 }
 
-.flex-outer li,
-.flex-inner {
+.flex-outer > li, .flexing {
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
@@ -167,78 +164,30 @@ select:invalid { color: gray; }
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-} @media only screen and (max-width: 1240px) {
-  .flex-inner {
-    flex-direction: column;
-    justify-content: flex-start;} }
-    @media only screen and (max-width: 551px) {
-  .flex-inner {
-    flex-direction: row;
-    justify-content: center;} }
-
-.flex-inner li {
-    box-sizing: border-box;
-    padding: 20px;
-    flex: 1;
-    overflow: hidden;
-}
-
-.center-flex {
-  justify-content: space-around !important;
-  overflow: scroll;
-  max-height: 500px;
-}
-
-/* button hover*/
-.flex-inner > div:hover {
-	background-color: #7f7f7f;
 }
 
 .flex-outer > li:not(:last-child) {
   margin-bottom: 1% !important;
 }
 
-.flex-outer li label,
-.flex-outer li p {
+.flex-outer > li > label {
   padding: 8px;
   font-weight: 300;
   letter-spacing: .09em;
   text-transform: uppercase;
 }
 
-.flex-outer > li > label,
-.flex-outer li p {
-  flex: 1 0 120px;
-  /*max-width: 300px;*/
+.flex-outer > li > p {
+  color: #ededed;
 }
 
-.flex-outer > li > label + *,
-.flex-inner {
-  flex: 1 0 220px;
-}
 
-.flex-outer li p {
-  margin: 0;
-}
-
-.flex-outer li button {
-  padding: 8px 16px;
-  border: none;
-  color: #f2f2f2;
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  border-radius: 2px;
-}
-
-.flex-inner li {
-  width: 100px;
-}
 
 /*-----------------------------------WORKSPACE----------------------------------------------*/
 
 #work {
-  height: 87%;
-  width: 19%;
+  height: 87vh;
+  width: 19vw;
   background-color: #2B2B2B;
   display: inline-block;
   float: left;
@@ -251,10 +200,10 @@ select:invalid { color: gray; }
 }
 
 #canvas, #empty_black {
-  max-height: 87%;
-  max-width: 80%;
-  min-height: 87%;
-  min-width: 80%;
+  max-height: 87vh;
+  max-width: 80vw;
+  min-height: 87vh;
+  min-width: 80vw;
   display: inline-block;
   float: right;
   border-radius: 10px;
@@ -271,10 +220,7 @@ select:invalid { color: gray; }
 }
 
 #empty_black {
-  height: 87%;
-  width: 80%;
   background-color: black;
-  display: inline-block;
 }
 
 #frame {
@@ -320,7 +266,7 @@ select:invalid { color: gray; }
   font-size:15pt;
   cursor: pointer;
   float: right;
-  margin-top: -10px;
+  /*margin-top: -10px;*/
 }
 #new_filter:hover, .remove:hover {
   text-decoration: none;
@@ -369,13 +315,13 @@ input[type=file], .white, #public_wrap {
 #audio_drop_area, #video_drop_area, #video_audio_prompt {
   border: 5px solid #878787;
   border-radius: 10px;
-  height: 100%;
-  width: 100%;
+  height: 87vh;
+  width: 80vw;
 }
 
 #choose_filters_area {
-  height: 100%;
-  width: 100%;
+  height: 87vh;
+  width: 80vw;
 }
 
 #audio_drop_area, #video_audio_prompt, #choose_filters_area {
@@ -419,17 +365,44 @@ input[type=file], .white, #public_wrap {
   text-decoration: underline;
   padding-left: 5px;
   padding-top: 5px;
+  cursor: pointer;
 }
 
 .go_back:hover {
-  color: white;
+  color: #ededed;
 }
 
 
-/*----------------------------------------presentation--------------------------------------------------------------*/
+/*----------------------------------------presentation-------------------------------------------------------*/
 
 #bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+/*--------------------------------------home-page and projects-------------------------------------------------*/
+
+.thumb_wrapper {
+  width:200px;
+  height:100px;
+  overflow: hidden;
+  background-color: black;
+}
+
+.tn {
+  margin:10px;
+  background-color: gray;
+  padding: 5px;
+  -webkit-box-shadow: 0px 0px 7px 7px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 7px 7px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 7px 7px rgba(0,0,0,0.75);
+  color: #cecece;
+}
+.tn:hover {
+  text-decoration: none;
+  color: #ededed;
+  -webkit-box-shadow: 0px 0px 7px 10px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 7px 10px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 7px 10px rgba(0,0,0,0.75);
 }

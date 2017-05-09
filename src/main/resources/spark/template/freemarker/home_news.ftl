@@ -1,6 +1,6 @@
 <#assign content>
 <#assign log=logged/>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -11,7 +11,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/">
-        <img src="images/panda_before.jpg" style="height: 27px">
+        <img src="images/panda_after.png" style="height: 27px">
       </a>
     </div>
 
@@ -25,7 +25,7 @@
       <ul class="nav navbar-nav navbar-right">
         <#if log=="true">
           <li><a>${name}</a></li>
-          <li><a href="/logout">Logout</a></li> 
+          <li><a href="/logout">Logout</a></li>
         <#else>
           <li><a href="/login">Login</a></li>
           <li><a href="/register">Register</a></li>
@@ -35,10 +35,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<h1><span>Home/NewsFeed - Welcome to soundpaint</span></h1>
-<ul>
-<#list thumbs as thumb> 
-  <li><a href="/${thumb[1]}"><img src="${thumb[0]}">${thumb[2]}</a></li>
+<ul class="flexing">
+<#list thumbs as thumb>
+  <a href="/${thumb[1]}" class="tn"><li><div class="thumb_wrapper"><img class="thumb_image" src="${thumb[0]}"></div>${thumb[2]}</li></a>
 </#list>
 </ul>
 
