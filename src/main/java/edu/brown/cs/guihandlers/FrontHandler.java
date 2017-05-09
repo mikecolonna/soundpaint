@@ -47,7 +47,7 @@ public class FrontHandler implements TemplateViewRoute {
       username = req.session().attribute("username");
     }
     
-    List<ThumbnailData> thumbData = Database.getPublicThumbnailFilepaths();
+    List<List<String>> thumbData = Database.getPublicThumbnailFilepaths();
     
     Map<String, Object> variables = ImmutableMap.of(
             "title", "Soundpaint - CS32 Final Project",

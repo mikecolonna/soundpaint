@@ -13,8 +13,6 @@ import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import edu.brown.cs.guihandlers.ThumbnailData;
-
 public final class Database {
   
   private Database() { }
@@ -217,10 +215,9 @@ public final class Database {
     return aud;
   }
   
-  public static List<ThumbnailData> getPublicThumbnailFilepaths() {
-    List<ThumbnailData> thumbList = new ArrayList<>();
+  public static List<List<String>> getPublicThumbnailFilepaths() {
+    List<List<String>> thumbList = new ArrayList<>();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
-      System.out.println("HERE");
       try (PreparedStatement prep = conn.prepareStatement(
           "SELECT video.thumb, video.id, user.username "
           + "FROM video, user "
@@ -228,9 +225,13 @@ public final class Database {
           + "AND video.public = 'true'")) {
         try (ResultSet rs = prep.executeQuery()) {
           System.out.println("GOT RESULT SET");
+          List<String> currList;
           while (rs.next()) {
-            thumbList
-              .add(new ThumbnailData(rs.getString(1), rs.getString(2), rs.getString(3)));
+            currList = new ArrayList<>();
+            currList.add(rs.getString(1).substring(28));
+            currList.add(rs.getString(2));
+            currList.add(rs.getString(3));
+            thumbList.add(currList);
           }
         }
       }
@@ -240,8 +241,8 @@ public final class Database {
     return thumbList;
   }
   
-  public static List<ThumbnailData> getUserThumbnailFilepaths(String userId) {
-    List<ThumbnailData> thumbList = new ArrayList<>();
+  public static List<List<String>> getUserThumbnailFilepaths(String userId) {
+    List<List<String>> thumbList = new ArrayList<>();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
       try (PreparedStatement prep = conn.prepareStatement(
           "SELECT video.thumb, video.id "
@@ -249,9 +250,13 @@ public final class Database {
           + "WHERE video.user_id = ?")) {
         prep.setString(1, userId);
         try (ResultSet rs = prep.executeQuery()) {
+          List<String> currList;
           while (rs.next()) {
-            thumbList
-              .add(new ThumbnailData(rs.getString(1), rs.getString(2), null));
+            currList = new ArrayList<>();
+            currList.add(rs.getString(1).substring(28));
+            currList.add(rs.getString(2));
+            currList.add("");
+            thumbList.add(currList);
           }
         }
       }
