@@ -1,7 +1,9 @@
 package edu.brown.cs.sound;
 
 import java.io.File;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import be.tarsos.dsp.pitch.AMDF;
@@ -9,6 +11,8 @@ import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HammingWindow;
 
 public class SoundRead {
+
+	private int PEAK_WINDOW_WIDTH = 50;
 	
 	//original sample rate of uploaded audio file
 	private double origSampleRate = 0;
@@ -32,6 +36,8 @@ public class SoundRead {
 
 	//List of amplitudes from audio file in db (scaled)
 	private List<Double> rawAmplitudes = new ArrayList<>();
+
+	private double rawAmplitudeSum;
 	
 	//List of frequency data from audio file in kilohertz(scaled)
 	private List<Double> frequenciesByVideoFrame = new ArrayList<>();
@@ -156,6 +162,7 @@ public class SoundRead {
 	            	
 	            	//add amplitude data
 	            	rawAmplitudes.add((buffer[s]));
+	            	rawAmplitudeSum += Math.abs(buffer[s]);
 
 	               if (buffer[s] > max) {
 	            	   max = buffer[s];
@@ -170,13 +177,10 @@ public class SoundRead {
 	         
 	         //set total amount of frames in audio file
           totalSoundFrames = frameCount;
-	        System.out.println();
 	         // Close the wavFile
 	         wavFile.close();
-	      // Output the minimum and maximum value
-	         System.out.println(min + " : " + max);
-	         
-	         //get rest of meta data, this populates internal instance variables
+
+					//get rest of meta data, this populates internal instance variables
 					populateMetadata();
 	      }
 	      catch (Exception e)
@@ -202,20 +206,51 @@ public class SoundRead {
 			int lastAddedSoundFrameIndex = 0;
 
 			//loops through every chunk of video frame data from sound data
+			Deque<Double> precedingFramesAmplitudeDeque = new ArrayDeque<>();
+
 			while(lastAddedSoundFrameIndex + (soundFramesPerVideoFrame - 1) < totalSoundFrames){
 				//	System.out.println(lastAdd + " / " + totalNumFrames);
 				//define video frame rate chunk
 				float[] sampleValue = new float [soundFramesPerVideoFrame ];
 
 				double averageLoudness = 0;
+
+				double frameAmplitudeSum = 0;
+
 				for(int i = 0; i < soundFramesPerVideoFrame ;i++) {
 					sampleValue[i] = rawAmplitudes.get(lastAddedSoundFrameIndex + i).floatValue();
 					double amplitudeSampleValue = Math.abs(sampleValue[i]);
+					frameAmplitudeSum += amplitudeSampleValue;
 					averageLoudness += Math.pow(amplitudeSampleValue, 2);
 				}
 
+				double precedingFramesAmplitudeSum = 0;
+
+				for (Double value : precedingFramesAmplitudeDeque) {
+					precedingFramesAmplitudeSum += value;
+				}
+
+				double precedingframesAmplitudeAverage = precedingFramesAmplitudeSum / precedingFramesAmplitudeDeque.size();
+				double frameAmplitudeAverage = frameAmplitudeSum / soundFramesPerVideoFrame;
+
+
+				if (frameAmplitudeAverage > precedingframesAmplitudeAverage) {
+					beatsByVideoFrame.add(1.0);
+				} else {
+					beatsByVideoFrame.add(0.0);
+				}
+
+				precedingFramesAmplitudeDeque.addLast(frameAmplitudeAverage);
+
+				if (precedingFramesAmplitudeDeque.size() > PEAK_WINDOW_WIDTH) {
+					precedingFramesAmplitudeDeque.poll();
+					if (precedingFramesAmplitudeDeque.size() > PEAK_WINDOW_WIDTH) {
+						throw new IllegalArgumentException();
+					}
+				}
+
 				// Taking the square root three times allows the data to fit the range better
-				generalAmplitudesByVideoFrame.add(Math.sqrt(Math.sqrt(Math.sqrt(averageLoudness))));
+				generalAmplitudesByVideoFrame.add(Math.sqrt(Math.sqrt(averageLoudness)));
 
 				//add video chunk to fft samples list
         sampleValuesByVideoFrame.add(sampleValue);
@@ -226,6 +261,7 @@ public class SoundRead {
 
 			//loop through each video chunk to transform via fft the
 			//sound data in each chunk
+			int fn = 0;
 			for(float [] f: sampleValuesByVideoFrame) {
 
 				//Define FFT object
@@ -239,26 +275,15 @@ public class SoundRead {
 
 				double frequencyWithHighestAmplitude = transform.binToHz(maxIndex,
 						(float)origSampleRate);
-				//System.out.println("f size: " + f.length + " maxIndex: " + maxIndex);
-
 
 				specificAmplitudesByVideoFrame.add((double) f[maxIndex]);
 
-
-				//tempo defined as beats per minute
-				//find tempo in certain amplitude range
-				if(f[maxIndex] >= lowBeatAmp
-						&& f[maxIndex] <= highBeatAmp) {
-					//1 khz is equal to 60000 beats per minute
-					beatsByVideoFrame.add(frequencyWithHighestAmplitude*60000);
-				}else{
-					beatsByVideoFrame.add(0.0);
-				}
-
 				frequenciesByVideoFrame.add(frequencyWithHighestAmplitude);
+				fn++;
 			}
 
 			metadataPopulated = true;
+
 		}
 	}
 

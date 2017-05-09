@@ -148,7 +148,7 @@ public class Manager {
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
 //    mappings.add(new VideoSoundParameterMapping(VideoParameter.EMBOSS, SoundParameter.GENERAL_AMPLITUDE,1.0));
 //    mappings.add(new VideoSoundParameterMapping(VideoParameter.TINT, SoundParameter.GENERAL_AMPLITUDE,1.0));
-    mappings.add(new VideoSoundParameterMapping(VideoParameter.PUSH, SoundParameter.FREQUENCY,1.0));
+    mappings.add(new VideoSoundParameterMapping(VideoParameter.RED_TINT, SoundParameter.TEMPO,1.0));
 //    mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.GENERAL_AMPLITUDE,1.0));
 //        mappings.add(new VideoSoundParameterMapping(VideoParameter.BULGE, SoundParameter.AMPLITUDE,1.0));
 
