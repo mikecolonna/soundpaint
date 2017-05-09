@@ -13,6 +13,7 @@ let animationData;
 let scene;
 let renderer;
 let camera;
+let light;
 let lineHolder;
 let cubeHolder;
 let currFrame;
@@ -46,11 +47,33 @@ function stopVisualizer() {
   cancelAnimationFrame(animationId);
 }
 
+function destroyScene() {
+  for (let i = 0; i < LINE_COUNT; i++) {
+    lineHolder.remove(children[i]);
+    lineHolder.children[i].mesh.dispose();
+    lineHolder.children[i].geometry.dispose();
+    lineHolder.children[i].material.dispose();
+  }
+
+  for (let j = 0; j < CUBE_COUNT; j++) {
+    cubeHolder.remove(children[j]);
+    cubeHolder.children[j].mesh.dispose();
+    cubeHolder.children[j].geometry.dispose();
+    cubeHolder.children[j].material.dispose();
+  }
+  scene.remove(lineHolder);
+  lineHolder.dispose();
+  scene.remove(cubeHolder);
+  cubeHolder.dispose();
+  scene.remove(light);
+  light.dispose();
+}
+
 function initVisualizer() {
   dataArray = new Uint8Array(binCount);
   frequencyData = new Uint8Array(binCount);
   currFrame = 0;
-  
+
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
   camera.position.set(0, 0, 100);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -60,9 +83,11 @@ function initVisualizer() {
   renderer.autoClear = false;
   document.body.appendChild(renderer.domElement);
 
-  scene = new THREE.Scene();
+  if (scene === null) {
+    scene = new THREE.Scene();
+  }
 
-  const light = new THREE.PointLight(0xffffff, 2.0, 120);
+  light = new THREE.PointLight(0xffffff, 2.0, 120);
   light.position.set(0, 0, 100);
   scene.add(light);
 
