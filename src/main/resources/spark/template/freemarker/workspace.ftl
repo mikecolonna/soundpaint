@@ -57,7 +57,7 @@
           <option value="Red">Red-Tint</option>
           <option value="Green">Green-Tint</option>
           <option value="Blue">Blue-Tint</option>
-          <option value="Push">Push</option>
+          <option value="Blur">Blur</option>
           <option value="Pinch">Pinch</option>
         </select>
         <span class="glyphicon glyphicon-plus" id ="new_filter"></span>
