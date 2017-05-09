@@ -263,5 +263,27 @@ public final class Database {
 
     return thumbList;
   }
+  
+  public static List<String> getVideoInfo(String vid) {
+    List<String> videoInfo = new ArrayList<>();
+    try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      try (PreparedStatement prep = conn.prepareStatement(
+          "SELECT * from video, audio"
+          + "WHERE video.id = audio.video_id"
+          + "AND video.id = ?")) {
+        prep.setString(1, vid);
+        try (ResultSet rs = prep.executeQuery()) {
+          // video fp
+          videoInfo.add(rs.getString(3).substring(28));
+          // audio src fp
+          videoInfo.add(rs.getString(8).substring(28));
+        }
+      }
+    } catch (SQLException sqle) {
+      sqle.printStackTrace();
+    }
+
+    return videoInfo;
+  }
 
 }
