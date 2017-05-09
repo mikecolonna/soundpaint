@@ -18,6 +18,7 @@ let lineHolder;
 let cubeHolder;
 let currFrame;
 let totalFrames;
+let all_objects = [];
 const LINE_COUNT = 25;
 const CUBE_COUNT = 6;
 const fillFactor = 2;
@@ -48,25 +49,26 @@ function stopVisualizer() {
 }
 
 function destroyScene() {
-  for (let i = 0; i < LINE_COUNT; i++) {
-    lineHolder.remove(children[i]);
-    lineHolder.children[i].mesh.dispose();
-    lineHolder.children[i].geometry.dispose();
-    lineHolder.children[i].material.dispose();
-  }
-
-  for (let j = 0; j < CUBE_COUNT; j++) {
-    cubeHolder.remove(children[j]);
-    cubeHolder.children[j].mesh.dispose();
-    cubeHolder.children[j].geometry.dispose();
-    cubeHolder.children[j].material.dispose();
-  }
+  // for (let i = 0; i < LINE_COUNT; i++) {
+  //   lineHolder.remove(children[i]);
+  //   lineHolder.children[i].mesh.dispose();
+  //   lineHolder.children[i].geometry.dispose();
+  //   lineHolder.children[i].material.dispose();
+  // }
+  //
+  // for (let j = 0; j < CUBE_COUNT; j++) {
+  //   cubeHolder.remove(children[j]);
+  //   cubeHolder.children[j].mesh.dispose();
+  //   cubeHolder.children[j].geometry.dispose();
+  //   cubeHolder.children[j].material.dispose();
+  // }
+    all_objects.forEach(function (obj) {
+        scene.remove(obj);
+    });
   scene.remove(lineHolder);
-  lineHolder.dispose();
   scene.remove(cubeHolder);
-  cubeHolder.dispose();
-  scene.remove(light);
-  light.dispose();
+
+
 }
 
 function initVisualizer() {
@@ -83,13 +85,13 @@ function initVisualizer() {
   renderer.autoClear = false;
   document.body.appendChild(renderer.domElement);
 
-  if (scene === null) {
-    scene = new THREE.Scene();
-  }
+  scene = new THREE.Scene();
+
 
   light = new THREE.PointLight(0xffffff, 2.0, 120);
   light.position.set(0, 0, 100);
   scene.add(light);
+  all_objects.push(light);
 
   addLines();
   addCubes();
@@ -127,6 +129,7 @@ function addLines() {
     mesh.rotateZ(rotation);
     mesh.scale.x = (i + 1) / LINE_COUNT * fillFactor;
     mesh.scale.y = 1000;
+    all_objects.push(mesh);
     lineHolder.add(mesh);
   }
 }
@@ -143,6 +146,7 @@ function addCubes() {
     cube.receiveShadow = true;
     cube.name = i;
     cube.position.z = i * -20;
+    all_objects.push(cube);
     cubeHolder.add(cube);
   }
 }
@@ -209,6 +213,10 @@ function render() {
     } else {
       console.log(totalFrames);
     }
+}
+
+function resetSoundCounter() {
+  currFrame = 0;
 }
 
 function animate() {

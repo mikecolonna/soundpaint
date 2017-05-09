@@ -239,7 +239,7 @@
       let filter_choices = [];
       let $pairs = $(".filter_pair").toArray();
       console.log($pairs);
-      for(let i=1; i<x; i++) {
+      for(let i=1; i<x+1; i++) {
         filter_choices.push($($pairs[i]).children().first().html());
         filter_choices.push($($pairs[i]).children().eq(1).html());
         filter_choices.push($($pairs[i]).children().eq(2).html());
@@ -289,11 +289,10 @@
       $('#myAudio')[0].pause;
       $('#myAudio')[0].currentTime = 0;
       $(this)[0].currentTime = 0;
-      destroyScene();
-      initVisualizer();
-      startVisualizer();
+      resetSoundCounter();
       $('#myAudio')[0].play();
       $(this)[0].play();
+
 
     });
   });
