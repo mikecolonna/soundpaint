@@ -28,7 +28,8 @@ public class FrontPresentationHandler implements TemplateViewRoute {
       logged = "true";
       username = req.session().attribute("username");
     }
-   
+   String vid = req.params(":id");
+   //use video id to query to video and its associated sound filepaths
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
         "message","Created by Brendan, Mike, Tymani, and Tynan",

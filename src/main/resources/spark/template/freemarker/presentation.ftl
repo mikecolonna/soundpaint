@@ -46,12 +46,13 @@
 <script src="js/three/ConvolutionShader.js"></script>
 <script src="js/test2.js"></script>
 
-<audio id="myAudio" src="01 Ultralight Beam.mp3"></audio>
+<audio id="myAudio" src="${audiofile}"></audio>
+<span class="go_back" id="go_back_3">&larr; Go Back</span>
 <canvas id="presentation_canvas">
 </canvas>
 <div id="frame">
   <video id="preview">
-      <source src="giphy.mp4" type="video/mp4">
+      <source src="${videofile}" type="video/mp4">
   </video>
 </div>
 

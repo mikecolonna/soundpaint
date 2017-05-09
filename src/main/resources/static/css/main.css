@@ -212,7 +212,7 @@ body:not(.no_panda) {
   box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
 }
 
-#canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters_area, #video_audio_prompt {
+#canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters_area, #video_audio_prompt, #restart {
   display: none;
 }
 #opts {
@@ -291,8 +291,8 @@ input[type=file], .white, #public_wrap {
 }
 
 .tab {
-  border: 1px solid red;
-  background-color: blue;
+  border: 1px solid #878787;
+  background-color: #111111;
   width: 100%;
   color: white;
   padding: 3px;
@@ -353,6 +353,7 @@ input[type=file], .white, #public_wrap {
   border: 2px solid #878787;
   border-radius: 10px;
   padding: 6px 10px;
+  outline: none;
 }
 
 .button:hover {
@@ -375,10 +376,14 @@ input[type=file], .white, #public_wrap {
 
 /*----------------------------------------presentation-------------------------------------------------------*/
 
-#bottom {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+#presentation_canvas {
+  height: 87vh;
+  width: 100vw;
+}
+#pres_slider {
+  position: absolute;
+  top: 20vw;
+
 }
 
 /*--------------------------------------home-page and projects-------------------------------------------------*/

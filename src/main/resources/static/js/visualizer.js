@@ -15,7 +15,7 @@ let renderer;
 let camera;
 let lineHolder;
 let cubeHolder;
-let currFrame = 0;
+let currFrame;
 let totalFrames;
 const LINE_COUNT = 25;
 const CUBE_COUNT = 6;
@@ -23,7 +23,7 @@ const fillFactor = 2;
 const planeWidth = 20;
 const segments = 10;
 
-function initVisualizer(animdata) {
+function initVisualizerAudio() {
   ctx = new AudioContext();
   audio = document.getElementById('myAudio');
   audioSrc = ctx.createMediaElementSource(audio);
@@ -31,11 +31,11 @@ function initVisualizer(animdata) {
   binCount = analyser.frequencyBinCount;
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
-  dataArray = new Uint8Array(binCount);
-  frequencyData = new Uint8Array(binCount);
+}
+
+function setAnimationData(animdata) {
   animationData = animdata;
   totalFrames = Object.keys(animationData).length;
-  init();
 }
 
 function startVisualizer() {
@@ -46,7 +46,11 @@ function stopVisualizer() {
   cancelAnimationFrame(animationId);
 }
 
-function init() {
+function initVisualizer() {
+  dataArray = new Uint8Array(binCount);
+  frequencyData = new Uint8Array(binCount);
+  currFrame = 0;
+  
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 500);
   camera.position.set(0, 0, 100);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
