@@ -17,7 +17,7 @@ let light;
 let lineHolder;
 let cubeHolder;
 let currFrame;
-let totalFrames;
+let totalFrames = 1;
 let all_objects = [];
 const LINE_COUNT = 25;
 const CUBE_COUNT = 6;
@@ -154,12 +154,13 @@ function addCubes() {
 
 function render() {
   // scale lines on levels
-  if (currFrame < totalFrames) {
-  let currData = animationData[currFrame.toString()];
+    if (currFrame < totalFrames) {
+
   for (let i = 0; i < LINE_COUNT; i++) {
     if ($("#pulse").is(':checked')) {
         lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
     } else if ($("#strobe").is(':checked')) {
+        let currData = animationData[currFrame.toString()];
         lineHolder.children[i].scale.x = currData[i.toString()] * currData[i.toString()] * 0.0001;
     }
 
@@ -221,7 +222,9 @@ function resetSoundCounter() {
 }
 
 function animate() {
-  currFrame++;
+  if($("#strobe").is(':checked')) {
+    currFrame++;
+  }
   animationId = requestAnimationFrame(animate);
   render();
   composer.render();
