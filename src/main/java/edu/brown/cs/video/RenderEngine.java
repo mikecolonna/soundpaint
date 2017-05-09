@@ -98,6 +98,9 @@ public class RenderEngine {
                 BufferedImageFilter blueFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.BLUE);
                 currentImage = blueFilter.filter(currentImage, parameter, sensitivity);
                 break;
+              case BLUR:
+                BufferedImageFilter blurFilter = new BlurBufferedImageFilter();
+                currentImage = blurFilter.filter(currentImage, parameter, sensitivity);
               default:
                 break;
             }
