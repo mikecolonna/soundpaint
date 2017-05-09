@@ -39,7 +39,7 @@
   <input id="video" type="file" name="video" accept =".mp4, .mov"/>
   <label for="video" class="white">Video</label> -->
   <div class="dropper">
-    <div id="vf" class="tab">Video Filters<span class="glyphicon glyphicon-envelope" style="float: right; "></span></div>
+    <div id="vf" class="tab">Video Filters<span class="glyphicon glyphicon-triangle-right" style="float: right;"></span></div>
     <div id="moveable_vf">
       <div class="filter_pair" id="filter_selector">
     		<select>
@@ -73,7 +73,7 @@
   <div class="front_error">
   </div>
   <div id="visualizer" class="after_render dropper">
-    <div id="visf" class="tab">Display Options</div>
+    <div id="visf" class="tab">Display Options<span class="glyphicon glyphicon-triangle-bottom" style="float: right;"></span></div>
     <div id="opts">
         <input type="radio" id="pulse" name="vistype" value="pulse" checked><span class="white">Pulse</span>
         <input type="radio" id="strobe" name="vistype" value="strobe"><span class="white">Strobe</span><br>
@@ -87,7 +87,8 @@
       <label for="transparency" class="white" id="t_id"><div>Transparency</div><input type="range" id="transparency" class="one_range" min="0" max="1" step="0.1"/><input type="number" min="0" max="1" step="0.1" id="transparency_num" class="range_compatible" style="color:#2B2B2B"/></label>
     </div>
   </div>
-  <button class="my-button red-button after_render" onclick="location.href='http://google.com';" id="done">Done</button>
+  <button class="my-button red-button after_render" onclick="location.href='/';" id="done">Done</button>
+  <a id="restart" class="after_render gen_a" href="#">Upload Different Files</a>
 </div>
 
 <script src="js/three/three.js"></script>
@@ -143,6 +144,7 @@
 <script type="text/javascript">
   let audioFile = null;
   let videoFile = null;
+  let vid = "none";
   let usingAudioFromVideo = "false";
 
   function resize_canvas() {
@@ -198,6 +200,8 @@
         success: function(JSONsentFromServer) {
           // what do you do went it goes through
           let parsed = JSON.parse(JSONsentFromServer);
+          vid = parsed.videoid;
+          $("#done").attr("onclick","/video/" + vid);
           $('#myAudio').attr('src', parsed.audiofp);
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
@@ -205,7 +209,9 @@
           $(".after_render").slideDown();
           $("#render").prop("disabled",false);
           //console.log(parsed.animationdata);
-          initVisualizer(parsed.animationdata);
+          setAnimationData(parsed.animationdata);
+          initVisualizerAudio();
+          initVisualizer();
           startVisualizer();
         },
         error: function(errorSentFromServer) {
@@ -260,6 +266,7 @@
       fd.append('usingAudioFromVideo', usingAudioFromVideo);
       fd.append('filters', JSON.stringify(filter_choices));
       fd.append('pub', pub);
+      fd.append('vid', vid);
 
       sendFileWhenDone(fd);
     })
@@ -277,18 +284,45 @@
       }
     });
     $(".range_compatible").val(.5);
+    $('#preview').on('ended',function(){
+      console.log("here");
+      $('#myAudio')[0].pause;
+      $('#myAudio')[0].currentTime = 0;
+      $(this)[0].currentTime = 0;
+      initVisualizer();
+      startVisualizer();
+      $('#myAudio')[0].play();
+      $(this)[0].play();
+
+    });
   });
 
   $("#vf").click(function(e) {
     e.preventDefault();
+    let $tab = $(this).children().first();
     $("#moveable_vf").slideToggle("slow", function() {
     // Animation complete.
+      if($tab.hasClass("glyphicon-triangle-right")) {
+        $tab.removeClass("glyphicon-triangle-right");
+        $tab.addClass("glyphicon-triangle-bottom");
+      } else {
+        $tab.removeClass("glyphicon-triangle-bottom");
+        $tab.addClass("glyphicon-triangle-right");
+      }
     });
   })
   $("#visf").click(function(e) {
     e.preventDefault();
+    let $tab = $(this).children().first();
     $("#opts").slideToggle("slow", function() {
     // Animation complete.
+      if($tab.hasClass("glyphicon-triangle-right")) {
+        $tab.removeClass("glyphicon-triangle-right");
+        $tab.addClass("glyphicon-triangle-bottom");
+      } else {
+        $tab.removeClass("glyphicon-triangle-bottom");
+        $tab.addClass("glyphicon-triangle-right");
+      }
     });
   })
   $("#setRgb").change(function(e) {
@@ -448,6 +482,17 @@
   })
   $("#transparency_num").on("click change", function() {
     $("#frame").css("opacity", $(this).val());
+  })
+
+  $("#restart").click(function(e) {
+    e.preventDefault();
+    audioFile = null;
+    videoFile = null;
+    $('#myAudio').attr('src', "");
+    $('#preview').attr('src', "");
+    $("#empty_black").show();
+    $("#video_drop_area").fadeIn("slow", function(e) {});
+    $(".after_render").slideUp();
   })
 </script>
 </#assign>

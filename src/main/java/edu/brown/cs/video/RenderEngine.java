@@ -1,7 +1,6 @@
 package edu.brown.cs.video;
 
 import edu.brown.cs.filter.*;
-import edu.brown.cs.sound.SoundData;
 import edu.brown.cs.sound.SoundEngine;
 import edu.brown.cs.sound.SoundParameter;
 import edu.brown.cs.soundpaint.VideoSoundParameterMapping;
@@ -13,7 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.List;
 
 /**
@@ -101,6 +99,11 @@ public class RenderEngine {
               case BLUR:
                 BufferedImageFilter blurFilter = new BlurBufferedImageFilter();
                 currentImage = blurFilter.filter(currentImage, parameter, sensitivity);
+                break;
+              case PINCH:
+                BufferedImageFilter pinchFilter = new PinchBufferedImageFilter();
+                currentImage = pinchFilter.filter(currentImage, parameter, sensitivity);
+                break;
               default:
                 break;
             }

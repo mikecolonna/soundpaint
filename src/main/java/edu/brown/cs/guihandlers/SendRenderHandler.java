@@ -41,17 +41,38 @@ public class SendRenderHandler implements Route {
   @SuppressWarnings("unchecked")
   @Override
   public Object handle(Request req, Response response) throws Exception {
+    System.out.println("server-side");
     String username = req.session().attribute("username");
     
     File audioFile = null;
     String audioId = AudioDB.generateId();
     File videoFile = null;
-    String videoId = VideoDB.generateId();
+    System.out.println("audio-generated");
+    String videoId;
+    try {
+      InputStream hi = req.raw().getPart("vid").getInputStream();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    try (InputStream is = req.raw().getPart("vid").getInputStream()) {
+      System.out.println("begin");
+      byte[] buffer = new byte[is.available()];
+      is.read(buffer);
+      System.out.println("a");
+      videoId = new String(buffer);
+      System.out.println(videoId);
+      if (videoId.equals("none")) {
+        videoId = VideoDB.generateId();
+        System.out.println(videoId);
+      }
+    }
+    System.out.println("b");
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
     // extract video and store in file system
     String outputVideoFilepath; // rendered video
     String thumbFilepath; // video thumbnail
+    System.out.println("c");
     try (InputStream is = req.raw().getPart("videoName").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
