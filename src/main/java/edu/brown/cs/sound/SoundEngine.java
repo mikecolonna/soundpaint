@@ -16,6 +16,12 @@ public class SoundEngine {
 	List<Double> ampData = new ArrayList<Double>();
 	List<Double> freqData = new ArrayList<Double>();
 	List<Double> tempoData = new ArrayList<Double>();
+
+	//the lowest number for scaled values
+	private double SCALE_BOUND_LOW = 0;
+
+	//the highest number for scaled values
+	private double SCALE_BOUND_HIGH = 1;
 	
 	
 	public SoundEngine(String path) {
@@ -58,7 +64,7 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getScaledFrequencyData();
+			return scaleData(sr.getFrequenciesByVideoFrame());
 		}
 	}
 	
@@ -67,7 +73,7 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getScaledGeneralAmplitudeData();
+			return scaleData(sr.getGeneralAmplitudesByVideoFrame());
 		}
 	}
 
@@ -76,7 +82,7 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getScaledSpecificAmplitudeData();
+			return scaleData(sr.getSpecificAmplitudesByVideoFrame());
 		}
 	}
 	
@@ -85,9 +91,53 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getScaledTempoData();
+			return scaleData(sr.getBeatsByVideoFrame());
 		}
 	}
+
+	/**
+	 * Scales sound data within pre-
+	 * determined scaleMag
+	 * @param toScale - list of data to be scaled
+	 * @return scaled data
+	 */
+	private List<Double> scaleData(List<Double> toScale) {
+
+		double max = findMaxValue(toScale);
+		double min = findMinValue(toScale);
+
+		double scaleFactor = SCALE_BOUND_HIGH/(max - min);
+		List<Double> toReturn = new ArrayList<Double>();
+		for(double d: toScale){
+			toReturn.add(((d - min) + SCALE_BOUND_LOW)*scaleFactor);
+		}
+		return toReturn;
+
+	}
+
+	private double findMaxValue(List<Double> lst) {
+		Double max = Double.MIN_VALUE;
+		for(double d: lst) {
+			if(d > max) {
+				max = d;
+			}
+		}
+
+		return max;
+	}
+
+	private double findMinValue(List<Double> lst) {
+		Double min = Double.MAX_VALUE;
+		for(double d: lst) {
+			if(d < min) {
+				min = d;
+			}
+		}
+
+		return min;
+	}
+
+
 	/**
 	 * Sends sound meta-data to database
 	 */

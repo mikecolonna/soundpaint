@@ -13,36 +13,34 @@ public class SoundRead {
 	//original sample rate of uploaded audio file
 	private double origSampleRate = 0;
 	
-	//the amount of seconds needed needed to be 
+	//the amount of seconds needed to be
 	//sampled for video frame rate
 	private double timeResolution;
 	
 	//the amount of sound frames that 
 	//correspond to the timeResolution
-	private int numFramesTime = 0;
+	private int soundFramesPerVideoFrame = 0;
 	
 	//the total number of frames in the uploaded audio file
-	private int totalNumFrames = 0;
+	private int totalSoundFrames = 0;
 	
-	//the lowest number for scaled values
-	private double scaleLow = 0;
-	
-	//the highest number for scaled values
-	private double scaleHigh = 1;
-	//List of amplitudes from audio file in db (scaled)
-	private List<Double> specificAmp = new ArrayList<Double>();
 
-	private List<Double> generalAmp = new ArrayList<Double>();
-		
+
+	private boolean metadataPopulated = false;
+
 	//List of amplitudes from audio file in db (scaled)
-	private List<Double> ampData = new ArrayList<Double>();
+	private List<Double> rawAmplitudes = new ArrayList<>();
 	
 	//List of frequency data from audio file in kilohertz(scaled)
-	private List<Double> freqData = new ArrayList<Double>();
+	private List<Double> frequenciesByVideoFrame = new ArrayList<>();
 	
 	//List of tempoData from audio file in beats per minute (scaled)
-	private List<Double> tempoData = new ArrayList<Double>();
-	
+	private List<Double> beatsByVideoFrame = new ArrayList<>();
+
+  private List<Double> specificAmplitudesByVideoFrame = new ArrayList<Double>();
+
+  private List<Double> generalAmplitudesByVideoFrame = new ArrayList<>();
+
 	//highest amplitude to be considered a beat
 	private double highBeatAmp = 1;
 	
@@ -127,27 +125,23 @@ public class SoundRead {
 	         double sampleRate = wavFile.getSampleRate();
 	         origSampleRate = sampleRate;
 	         
-	         int count = 0;
-	         
-	         do
-	         {
+	         int frameCount = 0;
+
+	         do {
 	            // Read frames into buffer
 	            framesRead = wavFile.readFrames(buffer, 100);
 
-	            
 	            // Loop through frames and look for minimum and maximum value
-	          
-	            for (int s=0 ; s<framesRead * numChannels ; s++)
-	            {
+	            for (int s = 0; s < framesRead * numChannels; s++) {
 	            	//checks to find amount of audio frames that correlate to 
 	            	//amount of video frames
-	            	if(count/sampleRate <= timeResolution+(1/sampleRate) && 
-	            			count/sampleRate > timeResolution) {
-	            		numFramesTime = count;
+	            	if (frameCount / sampleRate <= timeResolution + (1/sampleRate) &&
+	            			frameCount / sampleRate > timeResolution) {
+                  soundFramesPerVideoFrame = frameCount;
 	            	}
 	            	
 	            	//add amplitude data
-	            	ampData.add((buffer[s]));
+	            	rawAmplitudes.add((buffer[s]));
 
 	               if (buffer[s] > max) {
 	            	   max = buffer[s];
@@ -156,13 +150,12 @@ public class SoundRead {
 	               if (buffer[s] < min) {
 	            	   min = buffer[s];
 	               }
-	               count++;
+	               frameCount++;
 	            }
-	         }
-	         while (framesRead != 0);
+	         } while (framesRead != 0);
 	         
-	         //set total amount of frame sin audio file
-	         totalNumFrames = count;
+	         //set total amount of frames in audio file
+          totalSoundFrames = frameCount;
 	        System.out.println();
 	         // Close the wavFile
 	         wavFile.close();
@@ -170,7 +163,7 @@ public class SoundRead {
 	         System.out.println(min + " : " + max);
 	         
 	         //get rest of meta data, this populates internal instance variables
-			getScaledFrequencyData();
+					populateMetadata();
 	      }
 	      catch (Exception e)
 	      {
@@ -178,131 +171,102 @@ public class SoundRead {
 	      }
 	}
 	
-	
-	/**
-	 * Returns amplitude data 
-	 * @return
-	 */
-	public List<Double> getScaledSpecificAmplitudeData() {
-		return scaleData(specificAmp);
-	}
 
-	public List<Double> getScaledGeneralAmplitudeData() {
-		return scaleData(generalAmp);
-	}
-	/**
-	 * Returns tempo data
-	 * @return
-	 */
-	public List<Double> getScaledTempoData() {
-		return scaleData(tempoData);
-	}
-	/**
-	 * Collects and sets frequency and tempo data
-	 * @return
-	 */
-	public List<Double> getScaledFrequencyData() {
+	public void populateMetadata() {
+		if (!metadataPopulated) {
 
-		//check if frequency Data is cached 
-		if(freqData.isEmpty()) {
-			
-			//define overlap of frame sound samples
-			double overlap = 0.5;
-			
-			//List of video frame chunks/ frames that have 
+			//List of video frame chunks/ frames that have
 			// been transformed by fft
-			List<float []> fftData = new ArrayList<float []>();
-			
+			List<float []> sampleValuesByVideoFrame = new ArrayList<>();
+
 			//counter to find the beginning of every video frame sample
-			int lastAdd = 0;
-			
+			int lastAddedSoundFrameIndex = 0;
+
 			//loops through every chunk of video frame data from sound data
-			while(lastAdd+(numFramesTime-1) < totalNumFrames){
+			while(lastAddedSoundFrameIndex + (soundFramesPerVideoFrame - 1) < totalSoundFrames){
 				//	System.out.println(lastAdd + " / " + totalNumFrames);
-					//define video frame rate chunk
-					float [] toAdd = new float [numFramesTime];
+				//define video frame rate chunk
+				float[] sampleValue = new float [soundFramesPerVideoFrame ];
 
-					double averageLoudness = 0;
-					for(int i = 0; i < numFramesTime;i++) {
-						toAdd[i] = ampData.get(lastAdd + i).floatValue();
-						double amplitudeSampleValue = Math.abs(toAdd[i]);
-						averageLoudness += Math.pow(amplitudeSampleValue, 2);
-					}
+				double averageLoudness = 0;
+				for(int i = 0; i < soundFramesPerVideoFrame ;i++) {
+					sampleValue[i] = rawAmplitudes.get(lastAddedSoundFrameIndex + i).floatValue();
+					double amplitudeSampleValue = Math.abs(sampleValue[i]);
+					averageLoudness += Math.pow(amplitudeSampleValue, 2);
+				}
 
-					averageLoudness = Math.sqrt(averageLoudness);
-					generalAmp.add(Math.sqrt(Math.sqrt(averageLoudness)));
+				// Taking the square root three times allows the data to fit the range better
+				generalAmplitudesByVideoFrame.add(Math.sqrt(Math.sqrt(Math.sqrt(averageLoudness))));
 
-					//add video chunk to fft samples list
-					fftData.add(toAdd);
+				//add video chunk to fft samples list
+        sampleValuesByVideoFrame.add(sampleValue);
 
-					//find next start of video frame chunk
-					lastAdd = (int) Math.ceil(lastAdd+(numFramesTime-1));
+				//find next start of video frame chunk
+        lastAddedSoundFrameIndex = (int) Math.ceil(lastAddedSoundFrameIndex + (soundFramesPerVideoFrame - 1));
 			}
-			
-			//List of FFT Objects indexed according to fftData
-			List<FFT> fftList = new ArrayList<FFT>();
-		
-			//loop through each video chunk to transform via fft the 
+
+			//loop through each video chunk to transform via fft the
 			//sound data in each chunk
-			
-			int count = 0;
-			int len = fftData.size();
-			for(float [] f: fftData) {
-				
+			for(float [] f: sampleValuesByVideoFrame) {
+
 				//Define FFT object
 				FFT transform = new FFT(f.length,new HammingWindow());
 				//System.out.println(count + " / " + len + " " + ((double) count/(double)len)*100 + "%");
 				//FFT forward transform on f in fftData
 				transform.forwardTransform(f);
-				count++;
+
 				//find which index/freq has highest amp value
 				int maxIndex = findMaxIndex(f);
-				
-				double toAdd = transform.binToHz(maxIndex, 
+
+				double frequencyWithHighestAmplitude = transform.binToHz(maxIndex,
 						(float)origSampleRate);
 				//System.out.println("f size: " + f.length + " maxIndex: " + maxIndex);
 
 
-				specificAmp.add((double) f[maxIndex]);
-				
+				specificAmplitudesByVideoFrame.add((double) f[maxIndex]);
+
 
 				//tempo defined as beats per minute
 				//find tempo in certain amplitude range
-				if(f[maxIndex] >= lowBeatAmp 
+				if(f[maxIndex] >= lowBeatAmp
 						&& f[maxIndex] <= highBeatAmp) {
 					//1 khz is equal to 60000 beats per minute
-					tempoData.add(toAdd*60000);
+					beatsByVideoFrame.add(frequencyWithHighestAmplitude*60000);
 				}else{
-					tempoData.add(0.0);
+					beatsByVideoFrame.add(0.0);
 				}
-				
-				freqData.add(toAdd);
+
+				frequenciesByVideoFrame.add(frequencyWithHighestAmplitude);
 			}
-			
 
-			
+			metadataPopulated = true;
 		}
+	}
 
-		return scaleData(freqData);
+	/**
+	 * Returns amplitude data 
+	 * @return
+	 */
+	public List<Double> getSpecificAmplitudesByVideoFrame() {
+		return specificAmplitudesByVideoFrame;
+	}
+
+	public List<Double> getGeneralAmplitudesByVideoFrame() {
+		return generalAmplitudesByVideoFrame;
 	}
 	/**
-	 * Scales sound data within pre-
-	 * determined scaleMag
-	 * @param toScale - list of data to be scaled
-	 * @return scaled data
+	 * Returns tempo data
+	 * @return
 	 */
-	private List<Double> scaleData(List<Double> toScale) {
-
-		double max = findMaxValue(toScale);
-		double min = findMinValue(toScale);
-
-		double scaleFactor = scaleHigh/(max - min);
-		List<Double> toReturn = new ArrayList<Double>();
-		for(double d: toScale){
-			toReturn.add(((d - min) + scaleLow)*scaleFactor);
-		}
-		return toReturn;
-		
+	public List<Double> getBeatsByVideoFrame() {
+		return beatsByVideoFrame;
+	}
+	/**
+	 * Collects and sets frequency and tempo data
+	 * @return
+	 */
+	public List<Double> getFrequenciesByVideoFrame() {
+    return frequenciesByVideoFrame;
 	}
 	
 	private int findMaxIndex(float[] data){
@@ -320,29 +284,7 @@ public class SoundRead {
 		
 		return toReturn;
 	}
-	
-	private double findMaxValue(List<Double> lst) {
-		Double max = Double.MIN_VALUE;
-		for(double d: lst) {
-			if(d > max) {
-				max = d;
-			}
-		}
-		
-		return max;
-	}
-	
-	private double findMinValue(List<Double> lst) {
-		Double min = Double.MAX_VALUE;
-		for(double d: lst) {
-			if(d < min) {
-				min = d;
-			}
-		}
-		
-		return min;
-	}
-	
+
 	
 
 }
