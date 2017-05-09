@@ -223,7 +223,7 @@ body:not(.no_panda) {
   background-color: black;
 }
 
-#frame {
+#frame, #frame_play {
   position: absolute;
   margin-left: 20%;
   overflow: hidden;
@@ -312,7 +312,7 @@ input[type=file], .white, #public_wrap {
 }
 
 /* -----------------------------------empty black drag and drop-------------------------------------------*/
-#audio_drop_area, #video_drop_area, #video_audio_prompt {
+#audio_drop_area, #video_drop_area, #video_audio_prompt, #loading {
   border: 5px solid #878787;
   border-radius: 10px;
   height: 87vh;
@@ -332,7 +332,7 @@ input[type=file], .white, #public_wrap {
   opacity: 100%;
 }
 
-#audio_drop_text, #video_drop_text, #audio_drop_error, #video_drop_error, #choose_filters, #prompt_text {
+#audio_drop_text, #video_drop_text, #audio_drop_error, #video_drop_error, #choose_filters, #prompt_text, #loading_text {
   color: #878787;
   position: relative;
   top: 50%;
@@ -376,15 +376,11 @@ input[type=file], .white, #public_wrap {
 
 /*----------------------------------------presentation-------------------------------------------------------*/
 
-#presentation_canvas {
-  height: 87vh;
-  width: 100vw;
-}
-#pres_slider {
-  position: absolute;
-  top: 20vw;
+/*#pres_slider {*/
+  /*position: absolute;*/
+  /*top: 20vw;*/
 
-}
+/*}*/
 
 /*--------------------------------------home-page and projects-------------------------------------------------*/
 

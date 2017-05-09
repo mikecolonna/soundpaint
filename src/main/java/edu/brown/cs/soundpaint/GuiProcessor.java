@@ -58,7 +58,7 @@ public class GuiProcessor {
     Spark.get("/logout", new LogoutHandler(this), fme);
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/projects", new FrontProjectsHandler(this), fme);
-    Spark.get("/video/:id", new FrontPresentationHandler(this), fme);
+    Spark.get("/:id", new FrontPresentationHandler(this), fme);
     
     Spark.post("/register", new SendRegisterHandler(this), fme);
     Spark.post("/login", new SendLoginHandler(this), fme);

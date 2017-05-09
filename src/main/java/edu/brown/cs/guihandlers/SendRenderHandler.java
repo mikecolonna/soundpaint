@@ -230,15 +230,14 @@ public class SendRenderHandler implements Route {
     RenderEngine.saveThumbnail(outputVideoFilepath, thumbFilepath);
 
     // retrieve animation data for visualizer
-    JsonObject animationData = soundEngine.getAnimationAsJson();
-    System.out.println("grabbed animation data");
+//    JsonObject animationData = soundEngine.getAnimationAsJson();
 
     JsonObject videoAudioInfo = new JsonObject();
     videoAudioInfo.addProperty("videoid", videoId);
     videoAudioInfo.addProperty("videofp", outputVideoFilepath.substring(28));
     videoAudioInfo.addProperty("audioid", audioId);
     videoAudioInfo.addProperty("audiofp", outputAudioFilepath.substring(28));
-    videoAudioInfo.add("animationdata", animationData);
+//    videoAudioInfo.add("animationdata", animationData);
 
     return videoAudioInfo;
   }

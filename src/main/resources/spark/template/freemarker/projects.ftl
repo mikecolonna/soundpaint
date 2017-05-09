@@ -31,7 +31,7 @@
 
 <ul class="flexing">
 <#list thumbs as thumb>
-  <a href="/video/${thumb[1]}" class="tn"><li><div class="thumb_wrapper"><img class="thumb_image" src="${thumb[0]}" alt="NO IMAGE"></div></li></a>
+  <a href="/${thumb[1]}" class="tn"><li><div class="thumb_wrapper"><img class="thumb_image" src="${thumb[0]}" alt="NO IMAGE"></div></li></a>
 </#list>
 </ul>
 

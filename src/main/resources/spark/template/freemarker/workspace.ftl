@@ -76,8 +76,8 @@
   <div id="visualizer" class="after_render dropper">
     <div id="visf" class="tab">Display Options<span class="glyphicon glyphicon-triangle-bottom" style="float: right;"></span></div>
     <div id="opts">
-        <input type="radio" id="pulse" name="vistype" value="pulse" checked><span class="white">Pulse</span>
-        <input type="radio" id="strobe" name="vistype" value="strobe"><span class="white">Strobe</span><br>
+        <input type="radio" id="pulse" name="vistype" value="pulse" checked style="display:none"><span class="white">Pulse</span>
+        <#--<input type="radio" id="strobe" name="vistype" value="strobe"><span class="white">Strobe</span><br>-->
       <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked><span class="white">Rainbow</span>
       <input type="radio" id="setRgb" name="viscolor" class="viscolor" value="rgb"><span class="white">RGB</span>
       <div id="rgb">
@@ -88,7 +88,7 @@
       <label for="transparency" class="white" id="t_id"><div>Transparency</div><input type="range" id="transparency" class="one_range" min="0" max="1" step="0.1"/><input type="number" min="0" max="1" step="0.1" id="transparency_num" class="range_compatible" style="color:#2B2B2B"/></label>
     </div>
   </div>
-  <button class="my-button red-button after_render" onclick="location.href='/';" id="done">Done</button>
+  <button class="my-button red-button after_render" onclick="location.href='/'" id="done">Done</button>
   <a id="restart" class="after_render gen_a" href="#">Upload Different Files</a>
 </div>
 
@@ -124,12 +124,15 @@
   <div id="audio_drop_area">
     <span class="go_back" id="go_back_2">&larr; Go Back</span>
     <p id="audio_drop_text">Drag an audio file onto the canvas.</p>
-    <p id="audio_drop_error">File type not accepted (.wav, .mp3, and .mid are accepted).</p>
+    <p id="audio_drop_error">File type not accepted (.wav, and .mp3 are accepted).</p>
   </div>
 
   <div id="choose_filters_area">
     <span class="go_back" id="go_back_3">&larr; Go Back</span>
     <p id="choose_filters">Select your audio-visual filter specifications.</p>
+  </div>
+  <div id="loading">
+      <p id="loading_text">Loading...</p>
   </div>
 
 </div>
@@ -203,7 +206,7 @@
           // what do you do went it goes through
           let parsed = JSON.parse(JSONsentFromServer);
           vid = parsed.videoid;
-          $("#done").attr("onclick","location.href='/video/" + vid +";'");
+          $("#done").attr("onclick","location.href='/" + vid +"'");
           $('#myAudio').attr('src', parsed.audiofp);
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
@@ -211,7 +214,7 @@
           $(".after_render").slideDown();
           $("#render").prop("disabled",false);
           //console.log(parsed.animationdata);
-          setAnimationData(parsed.animationdata);
+//          setAnimationData(parsed.animationdata);
           initVisualizer();
           startVisualizer();
         },
@@ -237,6 +240,11 @@
         $(".front_error").html("");
       }
       $("#render").prop("disabled",true);
+      $("#choose_filters_area").fadeOut("slow", function(e) {
+          $("#loading").fadeIn("slow", function(e) {  })
+      });
+        $("#empty_black").show();
+        $(".after_render").hide();
       let filter_choices = [];
       let $pairs = $(".filter_pair").toArray();
       console.log($pairs);
@@ -295,8 +303,6 @@
       resetSoundCounter();
       $('#myAudio')[0].play();
       $(this)[0].play();
-
-
     });
   });
 
@@ -441,8 +447,7 @@
 
     dropped = e.originalEvent.dataTransfer.files[0];
 
-    if (dropped.type === "audio/wav" || dropped.type === "audio/mp3"
-      || dropped.type === "audio/mid") {
+    if (dropped.type === "audio/wav" || dropped.type === "audio/mp3") {
       audioFile = dropped;
 
       $("#audio_drop_area").fadeOut("slow", function() {
