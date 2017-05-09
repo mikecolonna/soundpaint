@@ -97,3 +97,6 @@ Link to design document: https://docs.google.com/document/d/1hOBbtX_IHccqkQDJ4ct
 
 ## How to Build and Run
 _A necessary part of any README!_
+
+## End User Documentation
+https://docs.google.com/document/d/1RhxHhSGVLdinzQACggG_XZppQL-_K3X_90fYgzLX1TM/edit?usp=sharing
