@@ -1,5 +1,6 @@
 package edu.brown.cs.guihandlers;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +22,10 @@ public class FrontPresentationHandler implements TemplateViewRoute {
 
   @Override
   public ModelAndView handle(Request req, Response res) throws Exception {
+    if (!Database.isConnected()) {
+      res.redirect("/error");
+      return null;
+    }
     String logged = "false";
     String seshId = req.session().id();
     String username = "";
@@ -29,11 +34,12 @@ public class FrontPresentationHandler implements TemplateViewRoute {
       username = req.session().attribute("username");
     }
    String vid = req.params(":id");
+   List<String> vidaud = Database.getVideoInfo(vid);
    //use video id to query to video and its associated sound filepaths
     Map<String, Object> variables = ImmutableMap.of(
         "title", "Soundpaint - CS32 Final Project",
-        "message","Created by Brendan, Mike, Tymani, and Tynan",
-        "error", "", "name", username, "logged", logged);
+        "message", "Created by Brendan, Mike, Tymani, and Tynan",
+        "name", username, "logged", logged, "vidaud", vidaud);
     return new ModelAndView(variables, "presentation.ftl");
   }
 

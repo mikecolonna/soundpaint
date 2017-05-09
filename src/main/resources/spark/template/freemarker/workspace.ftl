@@ -202,7 +202,7 @@
           // what do you do went it goes through
           let parsed = JSON.parse(JSONsentFromServer);
           vid = parsed.videoid;
-          $("#done").attr("onclick","/video/" + vid);
+          $("#done").attr("onclick","location.href='/video/" + vid +";'");
           $('#myAudio').attr('src', parsed.audiofp);
           document.getElementById("myAudio").play();
           $('#preview').attr('src', parsed.videofp);
