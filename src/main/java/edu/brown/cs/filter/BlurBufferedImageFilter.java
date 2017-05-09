@@ -75,6 +75,7 @@ public class BlurBufferedImageFilter implements BufferedImageFilter {
     float opacity = (float) (parameterValue * sensitivityValue);
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
     g.drawImage(output, 0, 0, null);
+    g.dispose();
 
     return combinedOutput;
   }

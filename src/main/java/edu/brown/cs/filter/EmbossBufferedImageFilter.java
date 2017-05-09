@@ -66,6 +66,7 @@ public class EmbossBufferedImageFilter implements BufferedImageFilter {
     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
     g.drawImage(output, 0, 0, null);
 
+    g.dispose();
     return combinedOutput;
   }
 }
