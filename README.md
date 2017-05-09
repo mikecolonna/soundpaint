@@ -89,7 +89,11 @@ Link to specifications document: https://docs.google.com/a/brown.edu/document/d/
 Link to mockup: https://drive.google.com/a/brown.edu/file/d/0B_pACDIkRt1KNEN4ejE0c05Eb1k/view?usp=sharing
 
 ## Project Design Presentation
-_A link to your design presentation/document will go here!_
+Link to slides: https://docs.google.com/presentation/d/1hZ_CHeDIkWk6YHuNqeIFijCxhqpxoGB6dlJXI7woM54/edit#slide=id.p
+
+Link to design document: https://docs.google.com/document/d/1hOBbtX_IHccqkQDJ4cta6Wf1UuBJqWfdkLJO7WXDAE4/edit
+
+
 
 ## How to Build and Run
 _A necessary part of any README!_
