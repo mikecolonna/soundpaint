@@ -69,15 +69,13 @@ public class SendRenderHandler implements Route {
     
     // public or private video?
     String isPublic;
-    try (InputStream is = req.raw().getPart("public").getInputStream()) {
+    try (InputStream is = req.raw().getPart("pub").getInputStream()) {
       byte[] buffer = new byte[is.available()];
       is.read(buffer);
       
       isPublic = new String(buffer);
+      System.out.println("public?: " + isPublic);
     }
-    
-    // save thumbnail for video
-    RenderEngine.saveThumbnail(videoFile.getAbsolutePath(), thumbFilepath);
     
     String userId = guiProcessor.getSessionsToUsers().get(req.session().id());
     
@@ -154,7 +152,7 @@ public class SendRenderHandler implements Route {
     
     // map audio – video filters
     List<VideoSoundParameterMapping> mappings = new ArrayList<>();
-    for (int i = 0; i < filters.size(); i += 2) {
+    for (int i = 0; i < filters.size(); i += 3) {
       SoundParameter sp = null;
       switch (filters.get(i)) {
         case "Amplitude":
@@ -165,6 +163,9 @@ public class SendRenderHandler implements Route {
           break;
         case "Tempo":
           sp = SoundParameter.TEMPO;
+          break;
+        case "Volume":
+          sp = SoundParameter.SPECIFIC_AMPLITUDE;
           break;
       }
       
@@ -182,14 +183,28 @@ public class SendRenderHandler implements Route {
         case "Emboss":
           vp = VideoParameter.EMBOSS;
           break;
+        case "Red":
+          vp = VideoParameter.RED_TINT;
+          break;
+        case "Green":
+          vp = VideoParameter.GREEN_TINT;
+          break;
+        case "Blue":
+          vp = VideoParameter.BLUE_TINT;
+          break;
       }
       
-      mappings.add(new VideoSoundParameterMapping(vp, sp, 0.5));
+      double sensitivity = Double.parseDouble(filters.get(i + 2));
+      
+      mappings.add(new VideoSoundParameterMapping(vp, sp, sensitivity));
     }
 
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
     SoundEngine soundEngine = new SoundEngine(outputAudioFilepath);
     RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, outputVideoFilepath);
+    
+    // save thumbnail for video
+    RenderEngine.saveThumbnail(outputVideoFilepath, thumbFilepath);
 
     JsonObject videoAudioInfo = new JsonObject();
     videoAudioInfo.addProperty("videoid", videoId);

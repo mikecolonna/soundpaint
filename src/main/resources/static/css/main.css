@@ -247,11 +247,14 @@ select:invalid { color: gray; }
   box-shadow: 6px 2px 16px 1px rgba(0,0,0,0.75);
   border-radius: 10px;
   padding: 5px;
+  overflow: scroll;
 }
 
 #canvas, #empty_black {
   max-height: 87%;
   max-width: 80%;
+  min-height: 87%;
+  min-width: 80%;
   display: inline-block;
   float: right;
   border-radius: 10px;
@@ -260,7 +263,7 @@ select:invalid { color: gray; }
   box-shadow: -6px 2px 16px 1px rgba(0,0,0,0.75);
 }
 
-#canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters, #video_audio_prompt {
+#canvas, #done, #rgb, #frame, #visualizer, #video_drop_error, #audio_drop_area, #audio_drop_error, #choose_filters_area, #video_audio_prompt {
   display: none;
 }
 #opts {
@@ -276,21 +279,29 @@ select:invalid { color: gray; }
 
 #frame {
   position: absolute;
-  margin-left: 45%;
-  margin-top: 18%;
-  width: 30%;
-  height: auto;
+  margin-left: 20%;
   overflow: hidden;
   border-radius: 25px;
   max-height: 87%;
   max-width: 80%;
-  min-height: 23%;
-  min-width: 20%;
+  min-height: 87%;
+  min-width: 80%;
   opacity: 0.5;
 }
+
+#resize_wrapper {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
 #preview {
+  max-width: 100%;
+  /*max-height: 100%;*/
   min-width: 100%;
+  /*min-height: 100%;*/
   height: auto;
+  position: relative;
 }
 
 #filters {
@@ -362,7 +373,12 @@ input[type=file], .white, #public_wrap {
   width: 100%;
 }
 
-#audio_drop_area, #video_audio_prompt {
+#choose_filters_area {
+  height: 100%;
+  width: 100%;
+}
+
+#audio_drop_area, #video_audio_prompt, #choose_filters_area {
   opacity: 0%;
 }
 
@@ -395,6 +411,17 @@ input[type=file], .white, #public_wrap {
 
 .button:hover {
   background-color: #878787;
+  color: white;
+}
+
+.go_back {
+  color: #878787;
+  text-decoration: underline;
+  padding-left: 5px;
+  padding-top: 5px;
+}
+
+.go_back:hover {
   color: white;
 }
 

@@ -45,15 +45,19 @@
     		<select>
           <option value="" disabled selected>Sound Param</option>
           <option value="Amplitude">Amplitude</option>
-          <option value="Tempo">Tempo</option>
           <option value="Frequency">Frequency</option>
+          <option value="Tempo">Tempo</option>
+          <option value="Volume">Volume</option>
         </select>
     		<select>
           <option value="" disabled selected>Filter</option>
-          <option value="Tint">Tint</option>
-          <option value="Push">Push</option>
           <option value="Bulge">Bulge</option>
           <option value="Emboss">Emboss</option>
+          <option value="Push">Push</option>
+          <option value="Tint">Tint</option>
+          <option value="Red">Red-Tint</option>
+          <option value="Green">Green-Tint</option>
+          <option value="Blue">Blue-Tint</option>
         </select>
         <span id="new_filter">+</span>
         <label><div>Sensitivity</div><input type="range" min="0" max="1" step="0.1" id="sensitivity" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
@@ -78,7 +82,7 @@
         <label style="color:green; font-size:15pt"><div>G</div><input type="range" id="green" min="0" max="1" step="0.1" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
         <label style="color:blue; font-size:15pt"><div>B</div><input type="range" id="blue" min="0" max="1" step="0.1" class="one_range"/><input type="number" min="0" max="1" step="0.1" class="range_compatible"/></label>
       </div>
-      <label for="transparency" class="white" id="t_id"><div>Transparency</div><input type="range" id="transparency" min="0" max="100"/><input type="number" min="0" max="100" class="range_compatible" style="color:#2B2B2B"/></label>
+      <label for="transparency" class="white" id="t_id"><div>Transparency</div><input type="range" id="transparency" class="one_range" min="0" max="1" step="0.1"/><input type="number" min="0" max="1" step="0.1" id="transparency_num" class="range_compatible" style="color:#2B2B2B"/></label>
     </div>
   </div>
   <button class="my-button red-button after_render" onclick="location.href='http://google.com';" id="done">Done</button>
@@ -99,12 +103,14 @@
 <canvas id="canvas" class="after_render">
 </canvas>
 <div id="empty_black">
+
   <div id="video_drop_area">
     <p id="video_drop_text">To begin, drag a video file onto the canvas.</p>
     <p id="video_drop_error" style="display:none">File type not accepted (.mp4 and .mov are accepted).</p>
   </div>
 
   <div id="video_audio_prompt">
+    <span class="go_back" id="go_back_1">&larr; Go Back</span>
     <p id="prompt_text">Would you like to use the audio from this video or provide a new audio file?</p>
     <br>
     <div id="buttons">
@@ -114,17 +120,24 @@
   </div>
 
   <div id="audio_drop_area">
+    <span class="go_back" id="go_back_2">&larr; Go Back</span>
     <p id="audio_drop_text">Drag an audio file onto the canvas.</p>
     <p id="audio_drop_error">File type not accepted (.wav, .mp3, and .mid are accepted).</p>
   </div>
 
-  <p id="choose_filters">Select your audio-visual filter specifications.</p>
+  <div id="choose_filters_area">
+    <span class="go_back" id="go_back_3">&larr; Go Back</span>
+    <p id="choose_filters">Select your audio-visual filter specifications.</p>
+  </div>
+
 </div>
 
 <div id="frame" class="after_render">
-  <video id="preview" autoplay>
-      <source src="" type="video/mp4">
-  </video>
+  <div id="resize_wrapper">
+    <video id="preview" autoplay>
+        <source src="" type="video/mp4">
+    </video>
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -191,6 +204,7 @@
           $("#empty_black").hide();
           $(".after_render").slideDown();
           $("#render").prop("disabled",false);
+          initVisualizer();
           startVisualizer();
         },
         error: function(errorSentFromServer) {
@@ -203,17 +217,17 @@
     $("#render").click(function(e) {
       e.preventDefault();
       //check if files have been uploaded or not!!!-------------------------------------------------------------------------------------------
-      // if(videoFile == null) {
-      //   $(".front_error").html("Please enter a video file.");
-      //   return;
-      // } else if(usingAudioFromVideo == true) {
-      //   if(audioFile == null) {
-      //     $(".front_error").html("Please enter an audio file.");
-      //     return;
-      //   }
-      // } else {
-      //   $(".front_error").html("");
-      // }
+      if(videoFile == null) {
+        $(".front_error").html("Please upload a video file.");
+        return;
+      } else if(usingAudioFromVideo == true) {
+        if(audioFile == null) {
+          $(".front_error").html("Please upload an audio file.");
+          return;
+        }
+      } else {
+        $(".front_error").html("");
+      }
       $("#render").prop("disabled",true);
       let filter_choices = [];
       let $pairs = $(".filter_pair").toArray();
@@ -230,7 +244,7 @@
       //let audioFile = audioInput[0].files[0];
       //let videoFile = videoInput[0].files[0];
       let pub;
-      if($('#checkArray:checkbox:checked').length > 0) {
+      if($('#public:checked').length > 0) {
         pub = "true";
       } else {
         pub = "false";
@@ -248,24 +262,20 @@
 
       sendFileWhenDone(fd);
     })
-    $('#frame').resizable({
+    $('#resize_wrapper').resizable({
       aspectRatio: true,
       resize: function(event, ui) {
-        if(($(this).width() < ($("body").width()*.79) && $(this).height() < ($("body").height()*.86)) && ($(this).width() > ($("body").width()*.19) && $(this).height() > ($("body").height()*.22))) {
-
           // console.log($(this).height());
           // console.log("bodymin " + $("body").height()*.22);
           // console.log($("body").height());
           // console.log("bodymax " + $("body").height()*.86);
-          $(this).css({
-            'top': parseInt(ui.position.top, 10) + ((ui.originalSize.height - ui.size.height)) / 2,
-            'left': parseInt(ui.position.left, 10) + ((ui.originalSize.width - ui.size.width)) / 2
-          });
-        }
+        $(this).css({
+          'top': parseInt(ui.position.top, 10) + ((ui.originalSize.height - ui.size.height)) / 2,
+          'left': parseInt(ui.position.left, 10) + ((ui.originalSize.width - ui.size.width)) / 2
+        });
       }
     });
     $(".range_compatible").val(.5);
-    $(".range_transparency").val(50);
   });
 
   $("#vf").click(function(e) {
@@ -296,7 +306,6 @@
 
   // range bars and respective input fields
   $(".one_range").change(function(e) {
-    console.log("herer");
     let num = $(this).val();
     $(this).parent().children().last().val(num);
   });
@@ -310,21 +319,6 @@
       num = 0;
     }
     $(this).parent().children().eq(1).val(num);
-  });
-  $(".range_transparency").on("change click", function(e) {
-    let num = $(this).val();
-    if(num > 100) {
-      $(this).val(100);
-      num = 100;
-    } else if(num < 0) {
-      $(this).val(0);
-      num = 0;
-    }
-    $("#transparency").val(num);
-  });
-  $("#transparency").change(function(e) {
-    let num = $(this).val();
-    $(".range_transparency").val(num);
   });
 
   $("#video_drop_area").hover(function(e) {
@@ -353,32 +347,23 @@
 
     let dropped = e.originalEvent.dataTransfer.files[0];
 
-    console.log(dropped);
-
     if (dropped.type === "video/mp4" || dropped.type === "video/mov") {
-      //console.log(videoFile);
-
       videoFile = dropped;
-
       $("#video_drop_area").fadeOut("slow", function() {
         // Animation complete.
-
         $("#video_audio_prompt").fadeIn("slow", function() {
           // Animation complete.
         })
       })
     } else {
-      console.log("didn't work");
       $("#video_drop_error").show();
     }
   })
 
   $("#prompt_use").click(function(e) {
     usingAudioFromVideo = "true";
-    console.log("HERE");
-    console.log(usingAudioFromVideo);
     $("#video_audio_prompt").fadeOut("slow", function() {
-      $("#choose_filters").fadeIn("slow", function() {
+      $("#choose_filters_area").fadeIn("slow", function() {
         // Animation complete.
       })
     })
@@ -418,26 +403,50 @@
 
     dropped = e.originalEvent.dataTransfer.files[0];
 
-    console.log(dropped);
-
     if (dropped.type === "audio/wav" || dropped.type === "audio/mp3"
       || dropped.type === "audio/mid") {
       audioFile = dropped;
 
       $("#audio_drop_area").fadeOut("slow", function() {
         // Animation complete.
-        $("#choose_filters").fadeIn("slow", function() {
+        $("#choose_filters_area").fadeIn("slow", function() {
           // Animation complete.
         })
       })
     } else {
-      console.log("didn't work");
       $("#audio_drop_error").show();
     }
   })
 
+  $("#go_back_1").click(function(e) {
+    $("#video_audio_prompt").fadeOut("slow", function(e) {
+      $("#video_drop_area").fadeIn("slow", function(e) {
+        // Animation complete.
+      })
+    })
+  })
+
+  $("#go_back_2").click(function(e) {
+    $("#audio_drop_area").fadeOut("slow", function(e) {
+      $("#video_audio_prompt").fadeIn("slow", function(e) {
+        // Animation complete.
+      })
+    })
+  })
+
+  $("#go_back_3").click(function(e) {
+    $("#choose_filters_area").fadeOut("slow", function(e) {
+      $("#video_audio_prompt").fadeIn("slow", function(e) {
+        // Animation complete.
+      })
+    })
+  })
+
   $("#transparency").change(function() {
-    $("#frame").css("opacity", $(this).val() / 100);
+    $("#frame").css("opacity", $(this).val());
+  })
+  $("#transparency_num").on("click change", function() {
+    $("#frame").css("opacity", $(this).val());
   })
 </script>
 </#assign>

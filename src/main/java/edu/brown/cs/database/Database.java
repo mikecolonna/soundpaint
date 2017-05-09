@@ -218,13 +218,18 @@ public final class Database {
   public static JsonArray getPublicThumbnailFilepaths() {
     JsonArray thumbdata = new JsonArray();
     try (Connection conn = DriverManager.getConnection(urlToDb)) {
+      System.out.println("HERE");
       try (PreparedStatement prep = conn.prepareStatement(
           "SELECT video.thumb, video.id, user.username "
           + "FROM video, user "
           + "WHERE video.user_id = user.id "
           + "AND video.public = 'true'")) {
         try (ResultSet rs = prep.executeQuery()) {
+          System.out.println("GOT RESULT SET");
           while (rs.next()) {
+            System.out.println("thumbfp : " + rs.getString(1));
+            System.out.println("v_id : " + rs.getString(2));
+            System.out.println("username : " + rs.getString(3));
             JsonObject thumbinfo = new JsonObject();
             thumbinfo.addProperty("filepath", rs.getString(1));
             thumbinfo.addProperty("video_id", rs.getString(2));
