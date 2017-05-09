@@ -283,6 +283,7 @@ public class SoundRead {
 			}
 
 			metadataPopulated = true;
+			System.out.println("populated");
 
 		}
 	}
