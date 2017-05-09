@@ -9,6 +9,7 @@ let frequencyData;
 
 // VISUALS
 let animationId;
+let animationData;
 let scene;
 let renderer;
 let camera;
@@ -21,7 +22,7 @@ const planeWidth = 20;
 const segments = 10;
 
 function initVisualizer() {
-  ctx = new AudioContext();
+  /*ctx = new AudioContext();
   audio = document.getElementById('myAudio');
   audioSrc = ctx.createMediaElementSource(audio);
   analyser = ctx.createAnalyser();
@@ -29,11 +30,12 @@ function initVisualizer() {
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
   dataArray = new Uint8Array(binCount);
-  frequencyData = new Uint8Array(binCount);
+  frequencyData = new Uint8Array(binCount);*/
   init();
 }
 
-function startVisualizer() {
+function startVisualizer(animdata) {
+  animationData = animdata;
   animate();
 }
 

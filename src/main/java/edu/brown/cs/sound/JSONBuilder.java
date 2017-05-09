@@ -9,11 +9,16 @@ import java.util.List;
 
 public interface JSONBuilder {
 
-	public static JsonObject convert(List< ? > toConvert) {
+	public static JsonObject convert(List< float [] > toConvert) {
 		JsonObject jo = new JsonObject();
 
 		for(int i = 0; i < toConvert.size();i++) {
-			jo.add(Integer.toString(i),new JsonPrimitive(new Gson().toJson(toConvert.get(i))));
+			JsonObject indexedFreqData = new JsonObject();
+			float [] currentArray = toConvert.get(i);
+			for(int j = 0; j < currentArray.length; j++) {
+				indexedFreqData.add(Integer.toString(j), new JsonPrimitive(currentArray[j]));
+			}
+			jo.add(Integer.toString(i),indexedFreqData);
 		}
 
 		return jo;

@@ -10,22 +10,12 @@ public interface AudioDB {
   
   String getSrcFilepath();
   
-  String getAmpMDFilepath();
-  
-  String getFreqMDFilepath();
-  
-  String getTempoMDFilepath();
-  
-  static AudioDB createAudio(String id, String videoId, String srcFilepath,
-      String ampFilepath, String freqFilepath, String tempoFilepath) {
-    return new AudioDBProxy(id, videoId, srcFilepath, 
-        ampFilepath, freqFilepath, tempoFilepath);
+  static AudioDB createAudio(String id, String videoId, String srcFilepath) {
+    return new AudioDBProxy(id, videoId, srcFilepath);
   }
   
-  static AudioDB createDummy(String id, String videoId, String srcFilepath,
-      String ampFilepath, String freqFilepath, String tempoFilepath) {
-    return new AudioDBDummy(id, videoId, srcFilepath, 
-        ampFilepath, freqFilepath, tempoFilepath);
+  static AudioDB createDummy(String id, String videoId, String srcFilepath) {
+    return new AudioDBDummy(id, videoId, srcFilepath);
   }
   
   static AudioDB get(String id) {
