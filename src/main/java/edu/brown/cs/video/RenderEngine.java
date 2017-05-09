@@ -67,6 +67,8 @@ public class RenderEngine {
               parameter = metadata.get(fn);
             }
 
+            System.out.println("PARAMETER: " + parameter);
+
             switch (videoParameter) {
               case TINT:
                 BufferedImageFilter tintFilter = new TintBufferedImageFilter(TintBufferedImageFilter.FilterColor.GREEN);
