@@ -36,6 +36,7 @@ function initVisualizerAudio() {
 }
 
 function setAnimationData(animdata) {
+
   animationData = animdata;
   totalFrames = Object.keys(animationData).length;
 }
@@ -153,7 +154,7 @@ function addCubes() {
 
 function render() {
   // scale lines on levels
-    if (currFrame < totalFrames) {
+  if (currFrame < totalFrames) {
   let currData = animationData[currFrame.toString()];
   for (let i = 0; i < LINE_COUNT; i++) {
     if ($("#pulse").is(':checked')) {
