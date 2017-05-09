@@ -15,14 +15,16 @@ let renderer;
 let camera;
 let lineHolder;
 let cubeHolder;
+let currFrame = 0;
+let totalFrames;
 const LINE_COUNT = 25;
 const CUBE_COUNT = 6;
 const fillFactor = 2;
 const planeWidth = 20;
 const segments = 10;
 
-function initVisualizer() {
-  /*ctx = new AudioContext();
+function initVisualizer(animdata) {
+  ctx = new AudioContext();
   audio = document.getElementById('myAudio');
   audioSrc = ctx.createMediaElementSource(audio);
   analyser = ctx.createAnalyser();
@@ -30,12 +32,13 @@ function initVisualizer() {
   audioSrc.connect(analyser);
   audioSrc.connect(ctx.destination);
   dataArray = new Uint8Array(binCount);
-  frequencyData = new Uint8Array(binCount);*/
+  frequencyData = new Uint8Array(binCount);
+  animationData = animdata;
+  totalFrames = Object.keys(animationData).length;
   init();
 }
 
-function startVisualizer(animdata) {
-  animationData = animdata;
+function startVisualizer() {
   animate();
 }
 
@@ -117,10 +120,14 @@ function addCubes() {
 
 function render() {
   // scale lines on levels
+    if (currFrame < totalFrames) {
+  let currData = animationData[currFrame.toString()];
   for (let i = 0; i < LINE_COUNT; i++) {
-    console.log("CALCULATED : " + frequencyData[i] * frequencyData[i] * 0.00001);
-    lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
-    console.log("NEW LINE WIDTH : " + lineHolder.children[i].width);
+    if ($("#pulse").is(':checked')) {
+        lineHolder.children[i].scale.x = frequencyData[i] * frequencyData[i] * 0.00001;
+    } else if ($("#strobe").is(':checked')) {
+        lineHolder.children[i].scale.x = currData[i.toString()] * currData[i.toString()] * 0.0001;
+    }
 
     if ($("#setRgb").is(':checked')) {
       const r = $("#red").val();
@@ -158,14 +165,25 @@ function render() {
         cube.position.y -= .1;
       }
     }
-    cube.rotation.x += frequencyData[cube.id]/1000;
-    cube.rotation.z += frequencyData[cube.id]/10000;
+
+    if ($("#pulse").is(':checked')) {
+        cube.rotation.x += frequencyData[cube.id]/1000;
+        cube.rotation.z += frequencyData[cube.id.toString()]/10000;
+    } else if ($("#strobe").is(':checked')) {
+        cube.rotation.x += currData[cube.id.toString()]/1000;
+        cube.rotation.z += currData[cube.id.toString()]/10000;
+    }
   }
 
   analyser.getByteFrequencyData(frequencyData); // amplitude in frequency domain
+    //console.log(frequencyData);
+    } else {
+      console.log(totalFrames);
+    }
 }
 
 function animate() {
+  currFrame++;
   animationId = requestAnimationFrame(animate);
   render();
   composer.render();

@@ -103,7 +103,6 @@ public class Manager {
 		  SoundEngine se = new SoundEngine(tokens.get(1));
 		  se.setSoundReader((1.0/24.0));
 		  
-		  
 
 	  }else {
 	      System.out.println("ERROR: Please input an arguments to the sequence command.");

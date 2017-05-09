@@ -75,6 +75,8 @@
   <div id="visualizer" class="after_render dropper">
     <div id="visf" class="tab">Display Options</div>
     <div id="opts">
+        <input type="radio" id="pulse" name="vistype" value="pulse" checked><span class="white">Pulse</span>
+        <input type="radio" id="strobe" name="vistype" value="strobe"><span class="white">Strobe</span><br>
       <input type="radio" id="setRainbow" name="viscolor" class="viscolor" value="rainbow" checked><span class="white">Rainbow</span>
       <input type="radio" id="setRgb" name="viscolor" class="viscolor" value="rgb"><span class="white">RGB</span>
       <div id="rgb">
@@ -93,8 +95,6 @@
 <script src="js/three/RenderPass.js"></script>
 <script src="js/three/ShaderPass.js"></script>
 <script src="js/three/CopyShader.js"></script>
-<script src="js/three/DigitalGlitch.js"></script>
-<script src="js/three/GlitchPass.js"></script>
 <script src="js/three/BloomPass.js"></script>
 <script src="js/three/ConvolutionShader.js"></script>
 <script src="js/visualizer.js"></script>
@@ -204,8 +204,8 @@
           $("#empty_black").hide();
           $(".after_render").slideDown();
           $("#render").prop("disabled",false);
-          console.log(parsed.animationdata);
-          initVisualizer();
+          //console.log(parsed.animationdata);
+          initVisualizer(parsed.animationdata);
           startVisualizer();
         },
         error: function(errorSentFromServer) {

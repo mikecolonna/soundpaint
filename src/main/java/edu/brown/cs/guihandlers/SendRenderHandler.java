@@ -48,7 +48,7 @@ public class SendRenderHandler implements Route {
     File videoFile = null;
     String videoId = VideoDB.generateId();
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-    
+
     // extract video and store in file system
     String outputVideoFilepath; // rendered video
     String thumbFilepath; // video thumbnail
@@ -68,7 +68,7 @@ public class SendRenderHandler implements Route {
       OutputStream outStream = new FileOutputStream(videoFile);
       outStream.write(buffer);
     }
-    
+
     // public or private video?
     String isPublic;
     try (InputStream is = req.raw().getPart("pub").getInputStream()) {
@@ -93,7 +93,7 @@ public class SendRenderHandler implements Route {
       
       usingAudioFromVideo = (new String(buffer).equals("true")) ? true : false;
     }
-    
+
     // AUDIO EXTRACTION (from video file or given audio file)
     String outputAudioFilepath = null;
     if (usingAudioFromVideo) {

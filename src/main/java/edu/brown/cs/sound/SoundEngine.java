@@ -22,10 +22,10 @@ public class SoundEngine {
 	List<float []> animationFreqData = new ArrayList<float []>();
 	//the lowest number for scaled values
 	private double SCALE_BOUND_LOW = 0;
-
 	//the highest number for scaled values
 	private double SCALE_BOUND_HIGH = 1;
-	
+	private double SCALE_BOUND_HIGH_ANIMATION = 255;
+
 	
 	public SoundEngine(String path) {
 		//TODO: save metadata to database appropriately
@@ -75,7 +75,13 @@ public class SoundEngine {
 			System.out.println("ERROR: Set a sound reader for the framerate.");
 			return null;
 		} else {
-			return sr.getAnimationData();
+			List<float []> toReturn = sr.getAnimationData();
+//			for(float [] f: toReturn) {
+//
+//				f = scaleAnimationData(f);
+//
+//			}
+			return toReturn;
 		}
 	}
 	
@@ -135,6 +141,21 @@ public class SoundEngine {
 
 	}
 
+	private float [] scaleAnimationData(float[] toScale) {
+
+		double max = findMaxValueAnimation(toScale);
+		double min = findMinValueAnimation(toScale);
+
+		double scaleFactor = (SCALE_BOUND_HIGH_ANIMATION/(max - min));
+		float [] toReturn = new float [toScale.length];
+		for(int i = 0; i < toScale.length ; i++){
+			toReturn[i] = (float) (((toScale[i] - min) + SCALE_BOUND_LOW)*scaleFactor);
+		}
+		return toReturn;
+
+	}
+
+
 	private double findMaxValue(List<Double> lst) {
 		Double max = Double.MIN_VALUE;
 		for(double d: lst) {
@@ -157,6 +178,27 @@ public class SoundEngine {
 		return min;
 	}
 
+	private float findMaxValueAnimation(float[] lst) {
+		float max = -Float.MAX_VALUE;
+		for(float d: lst) {
+			if(d > max) {
+				max = d;
+			}
+		}
+
+		return max;
+	}
+
+	private float findMinValueAnimation(float [] lst) {
+		float min = Float.MAX_VALUE;
+		for(float d: lst) {
+			if(d < min) {
+				min = d;
+			}
+		}
+
+		return min;
+	}
 	public JsonObject getAnimationAsJson() {
 		return JSONBuilder.convert(animationFreqData);
 	}
