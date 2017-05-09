@@ -101,3 +101,14 @@ Go to localhost:4567/ to begin using the application.
 
 ## End User Documentation
 https://docs.google.com/document/d/1RhxHhSGVLdinzQACggG_XZppQL-_K3X_90fYgzLX1TM/edit?usp=sharing
+
+## Acknowledgements
+
+Two classes WavFile and WavFileException are by an A.Greensted, with a provided link http://www.labbookpages.co.uk. These files were found open sourced online.
+
+The library at https://github.com/ajmas/JH-Labs-Java-Image-Filters was helpful for certain image filters.
+
+The code for Emboss and Bulge filters are sourced from StackOverflow.
+
+
+
