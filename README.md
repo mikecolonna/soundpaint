@@ -82,7 +82,6 @@ And either of the following:
   - A way to preview content while editing it
   - A way to add a mp3, mp4, mov or wav file
 
-
 ## Project Specs and Mockup
 Link to specifications document: https://docs.google.com/a/brown.edu/document/d/1lnFEAuJiW8MjU71Sb_Z8oBYdg1og1QFHBP-ArPOF-t8/edit?usp=sharing
 
@@ -93,10 +92,12 @@ Link to slides: https://docs.google.com/presentation/d/1hZ_CHeDIkWk6YHuNqeIFijCx
 
 Link to design document: https://docs.google.com/document/d/1hOBbtX_IHccqkQDJ4cta6Wf1UuBJqWfdkLJO7WXDAE4/edit
 
-
-
 ## How to Build and Run
-_A necessary part of any README!_
+'mvn package' will build the latest version of the source. './run --gui [--port XXXX]'  will run the frontend on port 4567 by default. 
+
+'db [DATABASE PATH]' will set a database from which to run the frontend. A nonexistent database path will result in a newly created database that follows the schema.
+
+Go to localhost:4567/ to begin using the application.
 
 ## End User Documentation
 https://docs.google.com/document/d/1RhxHhSGVLdinzQACggG_XZppQL-_K3X_90fYgzLX1TM/edit?usp=sharing
