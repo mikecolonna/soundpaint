@@ -56,10 +56,11 @@ public class SendRenderHandler implements Route {
       is.read(buffer);
       
       String filepath = "./src/main/resources/static/users/" + username + "/" + videoId;
+
       if (!new File(filepath).exists()) {
         new File(filepath).mkdir();
       }
-      
+
       thumbFilepath = filepath + "/thumbnail.jpeg";
       outputVideoFilepath = filepath + "/output.mp4";
       videoFile = new File(filepath + "/src_video.mp4");
@@ -213,7 +214,8 @@ public class SendRenderHandler implements Route {
     videoAudioInfo.addProperty("audioid", audioId);
     videoAudioInfo.addProperty("audiofp", outputAudioFilepath.substring(28));
     //videoAudioInfo.addProperty("audiodata", value);
-    
+
+
     return videoAudioInfo;
   }
 
