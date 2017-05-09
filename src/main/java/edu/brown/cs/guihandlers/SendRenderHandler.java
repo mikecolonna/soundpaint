@@ -200,7 +200,8 @@ public class SendRenderHandler implements Route {
     }
 
     FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoFile.getAbsolutePath());
-    SoundEngine soundEngine = new SoundEngine(outputAudioFilepath, audioId);
+    SoundEngine soundEngine = new SoundEngine(outputAudioFilepath);
+    soundEngine.setAudioId(audioId);
     RenderEngine.renderVideo(mappings, frameGrabber, soundEngine, outputVideoFilepath);
     
     // save thumbnail for video

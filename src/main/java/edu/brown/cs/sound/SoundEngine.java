@@ -26,10 +26,13 @@ public class SoundEngine {
 	private double SCALE_BOUND_HIGH = 1;
 	
 	
-	public SoundEngine(String path, String audio_id) {
+	public SoundEngine(String path) {
 		//TODO: save metadata to database appropriately
 		this.path = path;
-		this.audio_id = audio_id;
+	}
+
+	public void setAudioId(String a_id) {
+		this.audio_id = a_id;
 	}
 	
 	public List<Double> getMetaData(SoundParameter sp) {
