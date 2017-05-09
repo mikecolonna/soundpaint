@@ -289,6 +289,7 @@
       $('#myAudio')[0].pause;
       $('#myAudio')[0].currentTime = 0;
       $(this)[0].currentTime = 0;
+      destroyScene();
       initVisualizer();
       startVisualizer();
       $('#myAudio')[0].play();

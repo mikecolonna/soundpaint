@@ -82,6 +82,7 @@ public class SendRenderHandler implements Route {
       videoFile = new File(filepath + "/src_video.mp4");
       OutputStream outStream = new FileOutputStream(videoFile);
       outStream.write(buffer);
+      outStream.close();
     }
 
     // public or private video?
@@ -139,6 +140,7 @@ public class SendRenderHandler implements Route {
         audioFile = new File(filepath + "/src_audio.wav");
         OutputStream outStream = new FileOutputStream(audioFile);
         outStream.write(buffer);
+        outStream.close();
       }
       
       // TRANSCODE audio as a wav
