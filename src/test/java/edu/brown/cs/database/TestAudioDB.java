@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Ty on 09/05/2017.
  */
-public class AudioDB {
+public class TestAudioDB {
 
   @Test
   public void testInit() {

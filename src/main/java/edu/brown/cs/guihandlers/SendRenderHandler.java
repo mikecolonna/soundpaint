@@ -231,6 +231,7 @@ public class SendRenderHandler implements Route {
 
     // retrieve animation data for visualizer
     JsonObject animationData = soundEngine.getAnimationAsJson();
+    System.out.println("grabbed animation data");
 
     JsonObject videoAudioInfo = new JsonObject();
     videoAudioInfo.addProperty("videoid", videoId);

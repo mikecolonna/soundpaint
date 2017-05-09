@@ -155,6 +155,7 @@
   };
   $(document).ready(function() {
     let fd = new FormData();  //to send to backend upon render
+    initVisualizerAudio();
 
     let max_fields = 5; //maximum input boxes allowed
     let wrapper = $("#filters"); //Fields wrapper
@@ -211,7 +212,6 @@
           $("#render").prop("disabled",false);
           //console.log(parsed.animationdata);
           setAnimationData(parsed.animationdata);
-          initVisualizerAudio();
           initVisualizer();
           startVisualizer();
         },
@@ -245,6 +245,8 @@
         filter_choices.push($($pairs[i]).children().eq(1).html());
         filter_choices.push($($pairs[i]).children().eq(2).html());
       }
+
+      console.log($pairs);
       // get a reference to the fileInput
       //let audioInput = $("#audio");
       //let videoInput = $("#video");
@@ -258,7 +260,7 @@
         pub = "false";
       }
       // create the container for our file data
-      //let fd = new FormData();
+      fd = new FormData();
       console.log(audioFile);
       console.log(videoFile);
       // encode the file
