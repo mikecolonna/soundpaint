@@ -11,26 +11,26 @@ import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HammingWindow;
 
 public class SoundRead {
-
+	public SoundRead () {}
 	private int PEAK_WINDOW_WIDTH = 50;
-	
+
 	//original sample rate of uploaded audio file
 	private double origSampleRate = 0;
-	
+
 	//the amount of seconds needed to be
 	//sampled for video frame rate
 	private double timeResolution;
-	
+
 	//the amount of sound frames that 
 	//correspond to the timeResolution
-	private int soundFramesPerVideoFrame = 0;
-	
+	protected int soundFramesPerVideoFrame = 0;
+
 	//the total number of frames in the uploaded audio file
 	private int totalSoundFrames = 0;
 
-  private double animationTimeResolution = (1.0/60.0);
-  private int animationNumFramesTime = 736;
-  List<float []> animationfftData = new ArrayList<float []>();
+	private double animationTimeResolution = (1.0/60.0);
+	private int animationNumFramesTime = 736;
+	List<float []> animationfftData = new ArrayList<float []>();
 
 	private boolean metadataPopulated = false;
 
@@ -38,24 +38,24 @@ public class SoundRead {
 	private List<Double> rawAmplitudes = new ArrayList<>();
 
 	private double rawAmplitudeSum;
-	
+
 	//List of frequency data from audio file in kilohertz(scaled)
 	private List<Double> frequenciesByVideoFrame = new ArrayList<>();
-	
+
 	//List of tempoData from audio file in beats per minute (scaled)
 	private List<Double> beatsByVideoFrame = new ArrayList<>();
 
-  private List<Double> specificAmplitudesByVideoFrame = new ArrayList<Double>();
+	private List<Double> specificAmplitudesByVideoFrame = new ArrayList<Double>();
 
-  private List<Double> generalAmplitudesByVideoFrame = new ArrayList<>();
+	private List<Double> generalAmplitudesByVideoFrame = new ArrayList<>();
 
 	//highest amplitude to be considered a beat
 	private double highBeatAmp = 1;
-	
+
 	//lowest amplitude to be considered a beat
 	private double lowBeatAmp = 0;
-	
-	
+
+
 	/**
 	 * SoundRead is a class that calculates the 
 	 * meta-data(frequency,tempo, and amplitude) from audio files 
@@ -64,28 +64,28 @@ public class SoundRead {
 	public SoundRead(double frameRate) {
 		this.timeResolution = frameRate;
 	}
-	
-	
+
+
 	/**
 	 * Takes in audio filepaths for mp3 (coming soon), wav, and midi
 	 * files and uploads their data
 	 * @param filename - filepath for audio file
 	 */
 	public void read(String filename) {
-		
+
 		//splitting input to find file type
 		String [] splitInput = filename.split("/");
-	    String fileName = splitInput[splitInput.length - 1];
-	     
-	    if(fileName.contains(".wav")) {
-	    	  readWav(filename);
-	    }else if(fileName.contains(".mid")) {
-	    	  readMidi(filename);
-	    }else if(fileName.contains(".mp3")) {
-	    		readMp(filename); 
-	    }else{
-	    	System.out.println("ERROR: File is not a midi or wave file");
-	    }
+		String fileName = splitInput[splitInput.length - 1];
+
+		if(fileName.contains(".wav")) {
+			readWav(filename);
+		}else if(fileName.contains(".mid")) {
+			readMidi(filename);
+		}else if(fileName.contains(".mp3")) {
+			readMp(filename);
+		}else{
+			System.out.println("ERROR: File is not a midi or wave file");
+		}
 	}
 	//TODO: Abstract read functions into classes, 
 	//and make an interface for frequency and tempo collection
@@ -103,9 +103,9 @@ public class SoundRead {
 	 * @param filename - audio file path
 	 */
 	private void readMidi(String filename){
-		
+
 	}
-	
+
 	/**
 	 * Reads audio file and call functions to 
 	 * collect meta-data
@@ -113,82 +113,84 @@ public class SoundRead {
 	 */
 	private void readWav(String filename){
 		try
-	      {
-	         // Open the wav file specified as the first argument
-	         WavFile wavFile = WavFile.openWavFile(new File(filename));
+		{
+			// Open the wav file specified as the first argument
+			WavFile wavFile = WavFile.openWavFile(new File(filename));
 
-	         // Display information about the wav file
-	         wavFile.display();
+			// Display information about the wav file
+			wavFile.display();
 
-	         // Get the number of audio channels in the wav file
-	         int numChannels = wavFile.getNumChannels();
+			// Get the number of audio channels in the wav file
+			int numChannels = wavFile.getNumChannels();
 
-	         // Create a buffer of 100 frames
-	         double[] buffer = new double[100 * numChannels];
+			// Create a buffer of 100 frames
+			double[] buffer = new double[100 * numChannels];
 
-	         int framesRead;
-	         double min = Double.MAX_VALUE;
-	         double max = Double.MIN_VALUE;
-	         
-	         double sampleRate = wavFile.getSampleRate();
-	         origSampleRate = sampleRate;
-	         
-	         int frameCount = 0;
-            float [] toAdd =  new float [animationNumFramesTime];
-	         do {
-						 // Read frames into buffer
-	            framesRead = wavFile.readFrames(buffer, 100);
+			int framesRead;
+			double min = Double.MAX_VALUE;
+			double max = Double.MIN_VALUE;
 
-	            // Loop through frames and look for minimum and maximum value
-	            for (int s = 0; s < framesRead * numChannels; s++) {
+			double sampleRate = wavFile.getSampleRate();
+			origSampleRate = sampleRate;
 
-                toAdd[(frameCount % animationNumFramesTime)] = (float) buffer[s];
+			int frameCount = 0;
+			float [] toAdd =  new float [animationNumFramesTime];
+			do {
+				// Read frames into buffer
+				framesRead = wavFile.readFrames(buffer, 100);
 
-	            	//checks to find amount of audio frames that correlate to 
-	            	//amount of video frames
-	            	if (frameCount / sampleRate <= timeResolution + (1/sampleRate) &&
-	            			frameCount / sampleRate > timeResolution) {
-                  soundFramesPerVideoFrame = frameCount;
-	            	}
+				// Loop through frames and look for minimum and maximum value
+				for (int s = 0; s < framesRead * numChannels; s++) {
 
-                if((frameCount % animationNumFramesTime == 0) && frameCount != 0) {
-                  FFT transform = new FFT(toAdd.length,new HammingWindow());
+					toAdd[(frameCount % animationNumFramesTime)] = (float) buffer[s];
 
-                  transform.forwardTransform(toAdd);
+					//checks to find amount of audio frames that correlate to
+					//amount of video frames
+					if (frameCount / sampleRate <= timeResolution + (1/sampleRate) &&
+							frameCount / sampleRate > timeResolution) {
+						soundFramesPerVideoFrame = frameCount;
+					}
 
-                  animationfftData.add(toAdd);
-                  toAdd = new float [animationNumFramesTime];
-                }
-	            	
-	            	//add amplitude data
-	            	rawAmplitudes.add((buffer[s]));
-	            	rawAmplitudeSum += Math.abs(buffer[s]);
+					if((frameCount % animationNumFramesTime == 0) && frameCount != 0) {
+						FFT transform = new FFT(toAdd.length,new HammingWindow());
 
-	               if (buffer[s] > max) {
-	            	   max = buffer[s];
-	            	
-	               }
-	               if (buffer[s] < min) {
-	            	   min = buffer[s];
-	               }
-	               frameCount++;
-	            }
-	         } while (framesRead != 0);
-	         
-	         //set total amount of frames in audio file
-          totalSoundFrames = frameCount;
-	         // Close the wavFile
-	         wavFile.close();
+						transform.forwardTransform(toAdd);
 
-					//get rest of meta data, this populates internal instance variables
-					populateMetadata();
-	      }
-	      catch (Exception e)
-	      {
-	         System.err.println(e);
-	      }
+						animationfftData.add(toAdd);
+						toAdd = new float [animationNumFramesTime];
+					}
+
+					//add amplitude data
+					rawAmplitudes.add((buffer[s]));
+					rawAmplitudeSum += Math.abs(buffer[s]);
+
+					if (buffer[s] > max) {
+						max = buffer[s];
+
+					}
+					if (buffer[s] < min) {
+						min = buffer[s];
+					}
+					frameCount++;
+				}
+			} while (framesRead != 0);
+
+			System.out.println("min: " + min + " max: " + max);
+
+			//set total amount of frames in audio file
+			totalSoundFrames = frameCount;
+			// Close the wavFile
+			wavFile.close();
+
+			//get rest of meta data, this populates internal instance variables
+			populateMetadata();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e);
+		}
 	}
-	
+
 
 	public void populateMetadata() {
 
@@ -253,10 +255,10 @@ public class SoundRead {
 				generalAmplitudesByVideoFrame.add(Math.sqrt(Math.sqrt(averageLoudness)));
 
 				//add video chunk to fft samples list
-        sampleValuesByVideoFrame.add(sampleValue);
+				sampleValuesByVideoFrame.add(sampleValue);
 
 				//find next start of video frame chunk
-        lastAddedSoundFrameIndex = (int) Math.ceil(lastAddedSoundFrameIndex + (soundFramesPerVideoFrame - 1));
+				lastAddedSoundFrameIndex = (int) Math.ceil(lastAddedSoundFrameIndex + (soundFramesPerVideoFrame - 1));
 			}
 
 			//loop through each video chunk to transform via fft the
@@ -266,7 +268,7 @@ public class SoundRead {
 
 				//Define FFT object
 				FFT transform = new FFT(f.length,new HammingWindow());
-				//System.out.println(count + " / " + len + " " + ((double) count/(double)len)*100 + "%");
+
 				//FFT forward transform on f in fftData
 				transform.forwardTransform(f);
 
@@ -283,7 +285,9 @@ public class SoundRead {
 			}
 
 			metadataPopulated = true;
-			System.out.println("populated");
+
+			System.out.println("Done reading Sound Data ! ");
+
 
 		}
 	}
@@ -295,9 +299,9 @@ public class SoundRead {
 	public List<Double> getSpecificAmplitudesByVideoFrame() {
 		return specificAmplitudesByVideoFrame;
 	}
-  public List<float []> getAnimationData() {
-    return animationfftData;
-  }
+	public List<float []> getAnimationData() {
+		return animationfftData;
+	}
 
 	public List<Double> getGeneralAmplitudesByVideoFrame() {
 		return generalAmplitudesByVideoFrame;
@@ -314,9 +318,9 @@ public class SoundRead {
 	 * @return
 	 */
 	public List<Double> getFrequenciesByVideoFrame() {
-    return frequenciesByVideoFrame;
+		return frequenciesByVideoFrame;
 	}
-	
+
 	private int findMaxIndex(float[] data){
 		float max = -1;
 		int toReturn = -1;
@@ -327,12 +331,12 @@ public class SoundRead {
 				toReturn = i;
 			}
 		}
-		
-		
-		
+
+
+
 		return toReturn;
 	}
 
-	
+
 
 }
