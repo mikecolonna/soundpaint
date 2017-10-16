@@ -82,15 +82,11 @@ And either of the following:
   - A way to preview content while editing it
   - A way to add a mp3, mp4, mov or wav file
 
-<<<<<<< Updated upstream
-=======
   Note: We altered these last few requirements as a result of design choices made later
     in the development process. We believe that we traded these requirements for requirements
     that are equally challenging and provide a better experience for the user. To
     view the previous version, please view our git changelog.
-
-
->>>>>>> Stashed changes
+    
 ## Project Specs and Mockup
 Link to specifications document: https://docs.google.com/a/brown.edu/document/d/1lnFEAuJiW8MjU71Sb_Z8oBYdg1og1QFHBP-ArPOF-t8/edit?usp=sharing
 
