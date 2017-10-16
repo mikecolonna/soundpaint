@@ -82,6 +82,15 @@ And either of the following:
   - A way to preview content while editing it
   - A way to add a mp3, mp4, mov or wav file
 
+<<<<<<< Updated upstream
+=======
+  Note: We altered these last few requirements as a result of design choices made later
+    in the development process. We believe that we traded these requirements for requirements
+    that are equally challenging and provide a better experience for the user. To
+    view the previous version, please view our git changelog.
+
+
+>>>>>>> Stashed changes
 ## Project Specs and Mockup
 Link to specifications document: https://docs.google.com/a/brown.edu/document/d/1lnFEAuJiW8MjU71Sb_Z8oBYdg1og1QFHBP-ArPOF-t8/edit?usp=sharing
 
@@ -93,7 +102,7 @@ Link to slides: https://docs.google.com/presentation/d/1hZ_CHeDIkWk6YHuNqeIFijCx
 Link to design document: https://docs.google.com/document/d/1hOBbtX_IHccqkQDJ4cta6Wf1UuBJqWfdkLJO7WXDAE4/edit
 
 ## How to Build and Run
-'mvn package' will build the latest version of the source. './run --gui [--port XXXX]'  will run the frontend on port 4567 by default. 
+'mvn package' will build the latest version of the source. './run --gui [--port XXXX]'  will run the frontend on port 4567 by default.
 
 'db [DATABASE PATH]' will set a database from which to run the frontend. A nonexistent database path will result in a newly created database that follows the schema.
 
@@ -109,6 +118,3 @@ Two classes WavFile and WavFileException are by an A.Greensted, with a provided 
 The library at https://github.com/ajmas/JH-Labs-Java-Image-Filters was helpful for certain image filters.
 
 The code for Emboss and Bulge filters are sourced from StackOverflow.
-
-
-
